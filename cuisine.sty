@@ -41,6 +41,9 @@
 % ifind@xing     - Whether writing the recipes to an index file or not
 \newif\ifind@xing
 %
+% iffr@eforming  - Whether in freeform mode
+\newif\iffr@eforming
+%
 % ifh@smethodtext - Whether the method body is empty or not
 %\newif\ifh@smethodtext
 %\h@smethodtextfalse
@@ -77,6 +80,9 @@
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
 %
+% Width of everything but the number
+\newlength{\R@cipeStepWidth}
+%
 % Temporary use
 \newlength{\R@cipeTemp}
 %
@@ -95,7 +101,9 @@
   \addtolength{\R@cipeIQUWidth}{0.5cm}%
   \setlength{\R@cipeIandUWidth}{\R@cipeIQUWidth}%
   \addtolength{\R@cipeIandUWidth}{-\R@cipeQuantityWidth}%
-  \setlength{\R@cipeMethodWidth}{\RecipeWidth}
+  \setlength{\R@cipeStepWidth}{\RecipeWidth}
+  \addtolength{\R@cipeStepWidth}{-\R@cipeNumberWidth}%
+  \setlength{\R@cipeMethodWidth}{\R@cipeStepWidth}
   \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
@@ -180,7 +188,10 @@
 %    \PackageWarning{cuisine}{No text}%  % use for testing
   \else%
 %    \PackageWarning{cuisine}{Method text}%
-    \DisplaySt@p%
+    \iffr@eforming%
+    \else%
+      \DisplaySt@p%
+    \fi%
   \fi%
 }%
 %  And at the end of ingredients (= start of method)
@@ -192,6 +203,7 @@
   %  a \minipage inside this, which fails.  But it does work with 
   %  \begin{lrbox}\minipage...\endminipage\end{lrbox}.  WHY????!!!
   %
+  \fr@eformingfalse%
   \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeMethodWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
@@ -199,44 +211,46 @@
 %
 %  The \m@thodend command (which is \nextstep in the environment)
 \DeclareRobustCommand{\m@thodend}{%
-  %\pr@ingred%  % we don't do this: we want to *force* the new step
+  % we want to *force* the new step unless there is no method AND no 
+  % ingredients
   \endminipage\end{lrbox}%
   % fill in the method box in case there isn't one yet:
   \ifdim\wd\st@pmethodbox=0in%
     \ifnum\value{ingr@dnumber}>0%
       \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
       \DisplaySt@p%
-    \fi
-  \else  
+    \fi%
+  \else%  
     \DisplaySt@p%
   \fi%
-  \ifnum\value{st@pnumber}=0%
-    % don't need to do much here...
-  \else%
-    % 
-  \fi%
-%  \ifnum\value{ingr@dnumber}=0%
-%  \else%
-%  \fi%
   \p@stingred%
 }%
 %
 %
+%  For freeform text.  Like \noalign in tables.
+\DeclareRobustCommand{\fr@eform}{%
+  % we want to *force* the new step unless there is no method AND no 
+  % ingredients  (as for \m@thodend)
+  \endminipage\end{lrbox}%
+  % fill in the method box in case there isn't one yet:
+  \ifdim\wd\st@pmethodbox=0in%
+    \ifnum\value{ingr@dnumber}>0%
+      \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
+      \DisplaySt@p%
+    \fi%
+  \else%  
+    \DisplaySt@p%
+  \fi% 
+  % like \p@stingred
+  \fr@eformingtrue% 
+  \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeStepWidth}%
+  \noindent%    might be sensible...
+  \ignorespaces%
+}%
+%
 %  The \ingredient command
 \DeclareRobustCommand{\ingr@dient}[3][]{%
   \pr@ingred%
-  \ifnum\value{st@pnumber}=0%
-    % don't need to do much here...
-  \else%
-    % 
-  \fi%
-  \ifnum\value{ingr@dnumber}=0%
-    % don't need to do much here...
-  \else%
-    % process the previous method section, if there was one...
-    %
-    % first: is m@thoddetailbox empty?
-  \fi%
 %
 % The following is the main bit to typeset the ingredients list.
 % (Thanks to Ulrike Fischer, comp.text.tex, for help with aligning box 
