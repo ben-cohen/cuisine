@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{637} 
+% \CheckSum{623} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -156,7 +156,6 @@
 % \LaTeX\ commands for changing the page layout.  It is used as follows:
 % \begin{quote}
 %   |\RecipeWidths{|\textit{Total recipe width}|}|%
-%               |{|\textit{Recipe number width}|}|%
 %               |{|\textit{Number of servings width}|}|%
 %               |{|\textit{Step number width}|}|%
 %               |{|\textit{Ingredient width}|}|%
@@ -269,7 +268,7 @@
 % \subsection{A more complex example}
 % We can change the widths of the columns using, for example,
 % \begin{quote}
-% |\RecipeWidths{.75\textwidth}{0.5cm}{3cm}{0.5cm}{1.75cm}{.75cm}{.75cm}|
+% |\RecipeWidths{.75\textwidth}{3cm}{0.5cm}{1.75cm}{.75cm}{.75cm}|
 % \end{quote}
 % \noindent and the |small| environment to produce a different layout.
 % We can also change the fonts, for example:
@@ -330,7 +329,7 @@
 % \renewcommand*{\recipeunitfont}{\sffamily}
 % \renewcommand*{\recipeingredientfont}{\sffamily}
 % \renewcommand*{\recipefreeformfont}{\itshape}
-% \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{0.5cm}{1.75cm}{.75cm}{.75cm}
+% \RecipeWidths{.75\textwidth}{3cm}{0.5cm}{1.75cm}{.75cm}{.75cm}
 % \makeatletter\numb@ringtrue\makeatother ^^A Cheap trick
 % \ResetRecipeCounter
 %
@@ -390,7 +389,8 @@
 %                Labelling of recipes for |\ref|. |\X| (times) macro.
 %                Different index and contents options.
 %                If |recipe|'s |#4| is empty, don't leave a blank line.
-%                Different step and recipe number widths.
+%                The step number width can be changed but the recipe number
+%                width varies.
 % \end{itemize}
 % \end{small}
 %
@@ -475,11 +475,10 @@
 \newlength{\R@cipeWidth}
 %    \end{macrocode}
 %
-% The following are, respectively, the widths of the recipe number box, the 
-% recipe title box, the recipe number-of-servings box, and the total of the
-% recipe title and number-of-servings boxes.  
+% The following are, respectively, the widths of the recipe title box, the
+% recipe number-of-servings box, and the total of the recipe title and
+% number-of-servings boxes.  
 %    \begin{macrocode}
-\newlength{\R@cipeNumberWidth}
 \newlength{\R@cipeTitleWidth}
 \newlength{\R@cipeServingsWidth}
 \newlength{\R@cipeTandSWidth}
@@ -562,15 +561,12 @@
 % \begin{macro}{\R@cipeTitleWidths}
 % |\R@cipeTitleWidths| is to set the widths of the boxes/columns used in
 % the recipe title.
-%   There are two parameters:  |#1| is the recipe number width, 
-% |#2| the number of servings width.
-% The title width is deduced from there.
+%   There are two parameters:  |#1| is the number of servings width.
+% The title width is deduced from that.
 %    \begin{macrocode}
-\DeclareRobustCommand*{\R@cipeTitleWidths}[2]{%
-  \setlength{\R@cipeNumberWidth}{#1}%
-  \setlength{\R@cipeServingsWidth}{#2}%
+\DeclareRobustCommand*{\R@cipeTitleWidths}[1]{%
+  \setlength{\R@cipeServingsWidth}{#1}%
   \setlength{\R@cipeTitleWidth}{\R@cipeWidth}%
-  \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
   \setlength{\R@cipeTandSWidth}{\R@cipeServingsWidth}%
   \addtolength{\R@cipeTandSWidth}{\R@cipeTitleWidth}%
@@ -581,14 +577,14 @@
 % \begin{macro}{\RecipeWidths}
 % |\RecipeWidths| combines the above macros in a useable form.  There are six
 % parameters:
-% |#1| is the recipe width, |#2| the recipe number width, |#3| the number of
-% servings width, |#4| the step number width, |#5| the ingredient width, |#6|
-% the quantity width, |#7| the units width.
+% |#1| is the recipe width, |#2| the number of servings width, |#3| the step
+% number width, |#4| the ingredient width, |#5| the quantity width, |#6| the
+% units width.
 %    \begin{macrocode}
-\DeclareRobustCommand*{\RecipeWidths}[7]{%
+\DeclareRobustCommand*{\RecipeWidths}[6]{%
   \setlength{\R@cipeWidth}{#1}%
-  \R@cipeTitleWidths{#2}{#3}%
-  \R@cipeMethodWidths{#4}{#5}{#6}{#7}%
+  \R@cipeTitleWidths{#2}%
+  \R@cipeMethodWidths{#3}{#4}{#5}{#6}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -602,7 +598,7 @@
 \setlength{\R@cipeOutdent}{0.3cm}%
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.25cm}
-\RecipeWidths{\textwidth}{0.8cm}{3cm}{0.8cm}{3.5cm}{1cm}{1.7cm}
+\RecipeWidths{\textwidth}{3cm}{0.8cm}{3.5cm}{1cm}{1.7cm}
 %    \end{macrocode}
 %
 %^^A ------------------------------------------------
@@ -756,17 +752,13 @@
       \parbox[t]{\R@cipeWidth}{%
         \ifnumb@ring%
           \lineskip0pt\mbox{}\\[-\baselineskip]%
-          \parbox[b]{\R@cipeNumberWidth}{%
-            \rule{0pt}{\baselineskip}%
-            \strut \recipenumberfont\arabic{r@cipenumber}%
-            \strut%
-          }%
           \makebox[\R@cipeTandSWidth][t]{%
             \parbox[t]{\R@cipeTandSWidth}{%
               \lineskip0pt\mbox{}\\[-\baselineskip]%
               \parbox[b]{\R@cipeTitleWidth}{%
                 \rule{0pt}{\baselineskip}%
-                \strut{\recipetitlefont #1}\strut\hfill}%
+                \strut{\recipenumberfont\arabic{r@cipenumber}}%
+                \rule{1em}{0pt}{\recipetitlefont #1}\strut\hfill}%
               \parbox[b]{\R@cipeServingsWidth}{%
                 \strut{\hfill\recipeservingsfont #2}\strut}%
             }%
@@ -776,7 +768,6 @@
           \parbox[b]{\R@cipeTitleWidth}{%
             \rule{0pt}{\baselineskip}%
             \strut{\recipetitlefont #1}\strut\hfill}%
-          \makebox[\R@cipeNumberWidth]{}%
           \parbox[b]{\R@cipeServingsWidth}{%
             \strut{\hfill\recipeservingsfont #2}\strut}%        
         \fi%
