@@ -221,6 +221,9 @@
     % first: is m@thoddetailbox empty?
   \fi%
 %
+%  What follows is the main part of the ingredient typesetting.  It seems to 
+%  be a horrid mess and could probably be tidier.
+%
 % WAS:
 % hack to see if #1 is empty - is there a better way? 
 %  \def\@Raaa{z}\def\@Rbbb{z#1}%
@@ -242,13 +245,16 @@
   \fi%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}{%
-    \begin{minipage}[t]{\R@cipeIQUWidth}%
+    \begin{minipage}[t]{\R@cipeIQUWidth}\lineskip0pt%
       \mbox{}\\[-\baselineskip]%
       \parbox[t]{\R@cipeIQUWidth}{%
         \ifnum\value{ingr@dnumber}>0%
-          \strut\usebox{\m@thodtempbox}\par%
+          \usebox{\m@thodtempbox}\par%
         \fi%
-        \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+        \strut%
+        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}%
+          \usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+          \\\mbox{}}%
         \parbox[t]{\R@cipeIngredientWidth}{#3}%
       }%
     \end{minipage}%
