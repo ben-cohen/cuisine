@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{549} 
+% \CheckSum{559} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -63,9 +63,15 @@
 % recipe title.  (This is the
 % default.) The recipe \emph{steps} will always be numbered.
 % \item{|nonumber|}\ \ Recipes will not be numbered.
-% \item{|index|}\ \ Recipe titles will be written to the contents for the
+% \item{|index|}\ \ Recipe titles will be written to the index for the
 % document.
-% \item{|noindex|}\ \ Recipe titles will not be written to the document contents.
+% \item{|noindex|}\ \ Recipe titles will not be written to the document
+% index.
+% (This is the default.)
+% \item{|contents|}\ \ Recipe titles will be written to the contents for the
+% document.
+% \item{|nocontents|}\ \ Recipe titles will not be written to the document
+% contents.
 % (This is the default.)
 % \end{itemize}
 % You will need the package |nicefrac|; 
@@ -405,6 +411,12 @@
 \newif\ifnumb@ring
 %    \end{macrocode}
 %
+% |ifc@ntentsing| determines whether we are 
+% writing the recipes to an contents file or not.
+%    \begin{macrocode}
+\newif\ifc@ntentsing
+%    \end{macrocode}
+%
 % |ifind@xing| determines whether we are 
 % writing the recipes to an index file or not.
 %    \begin{macrocode}
@@ -607,6 +619,12 @@
 \DeclareOption{nonumber}{\numb@ringfalse}
 %    \end{macrocode}
 %
+% |contents|  --- Should recipes be indexed to a file?      (The default is no.)
+%    \begin{macrocode}
+\DeclareOption{contents}{\c@ntentsingtrue}
+\DeclareOption{nocontents}{\c@ntentsingfalse}
+%    \end{macrocode}
+%
 % |index|  --- Should recipes be indexed to a file?      (The default is no.)
 %    \begin{macrocode}
 \DeclareOption{index}{\ind@xingtrue}
@@ -615,7 +633,7 @@
 %
 % Process the options, using the defaults if necessary.
 %    \begin{macrocode}
-\ExecuteOptions{number,noindex}
+\ExecuteOptions{number,noindex,nocontents}
 \ProcessOptions\relax
 %    \end{macrocode}
 %
@@ -1005,10 +1023,13 @@
   \savebox{\st@pingrbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
 %    \end{macrocode}
-% Next deal with the index entry if we need to.
+% Next deal with the contents/index entry if we need to.
 %    \begin{macrocode}
-  \ifind@xing
+  \ifc@ntentsing
      \addcontentsline{toc}{subsection}{#1}     
+  \fi
+  \ifind@xing
+     \index{#1 (\arabic{r@cipenumber})}
   \fi
 %    \end{macrocode}
 % Display the title and start the method box.
