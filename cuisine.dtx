@@ -845,7 +845,7 @@
 % baseline as the top line of the quantity box.  Use ragged right because the
 % column is too narrow for flush right.
 %    \begin{macrocode}
-    \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
+    \savebox{\st@pIQUbox}[\R@cipeIQUWidth][t]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
         \rule{\R@cipeOutdent}{0cm}%
@@ -869,7 +869,7 @@
 % baseline as the top line of the unit box; then repeat with that box below
 % the quantity box.
 %    \begin{macrocode}
-    \savebox{\st@pingrtmpbox}[\R@cipeIandUWidth]{%
+    \savebox{\st@pingrtmpbox}[\R@cipeIandUWidth][t]{%
       \parbox[t]{\R@cipeIandUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
         \rule{\R@cipeOutdent}{0cm}%
@@ -886,7 +886,7 @@
           #3}%
       }%
     }% 
-    \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
+    \savebox{\st@pIQUbox}[\R@cipeIQUWidth][t]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
         \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill %
@@ -900,13 +900,13 @@
 %    \end{macrocode}
 % Use |\st@pingrtmpbox| as a temporary holding box:
 %    \begin{macrocode}
-  \savebox{\st@pingrtmpbox}{\usebox{\st@pingrbox}}%
-  \savebox{\st@pingrbox}{%
+  \savebox{\st@pingrtmpbox}[\R@cipeIQUWidth][t]{\usebox{\st@pingrbox}}%
+  \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
      \begin{minipage}[t]{\R@cipeIQUWidth}%
          \ifnum\value{ingr@dnumber}>0%
            \usebox{\st@pingrtmpbox}\par%
          \fi%
-         \usebox{\st@pIQUbox}\strut%
+         \fbox{\usebox{\st@pIQUbox}}\strut%
      \end{minipage}%
   }%
 %  \usebox{\st@pingrbox}    % For testing: show cumulative boxes.
