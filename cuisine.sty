@@ -1,0 +1,124 @@
+%% This is file `cuisine.sty'
+%%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Identification section
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{cuisine}[2000/04/11 v0.00 recipe typesetting]
+%
+% Use the nicefrac package for "nice" fractions...
+\RequirePackage{nicefrac}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Variables and counters etc.
+%
+% r@cipenumber   - Recipe number counter
+%                  This could be made dependent on, say, section.
+\newcounter{r@cipenumber}
+%
+% m@thodnumber   - Method counter (within recipes)
+%                  It is zeroed whenever the recipe counter is incremented.
+\newcounter{m@thodnumber}[r@cipenumber]  
+%
+% ifnumb@ring     - Whether or not recipe numbers are printed 
+\newif\ifnumb@ring
+%
+% ifd@bugging    - Debug mode or not
+\newif\ifd@bugging
+%
+% ifind@xing     - Whether writing the recipes to an index file or not
+\newif\ifind@xing
+%
+% And some dimensions:
+%
+% Width of the recipe number box
+\newlength{\R@cipeNumberWidth}
+%
+% Width of the recipe title box
+\newlength{\R@cipeTitleWidth}
+%
+% Width of the recipe number-of-servings box
+\newlength{\R@cipeServingsWidth}
+%
+% Relevant definition for setting this:
+%   #1 is the recipe number width, #2 the number of servings
+%   title width calculated
+\DeclareRobustCommand{\RecipeTitleWidths}[2]{%
+\setlength{\R@cipeNumberWidth}{#1}%
+\setlength{\R@cipeServingsWidth}{#2}%
+\setlength{\R@cipeTitleWidth}{\textwidth}%
+\addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
+\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}}
+%
+% Height of the recipe title to rule adjustment (usually negative)
+\newlength{\R@cipeTitleVerticalAdjust}
+%
+% Width of the ingredients
+\newlength{\R@cipeIngredientWidth}
+\newlength{\R@cipeQuantityWidth}
+\newlength{\R@cipeUnitsWidth}
+\newlength{\R@cipeQandUWidth}
+%
+% Width of the method text
+\newlength{\R@cipeMethodWidth}
+%
+% Relevant definition for setting this:
+\DeclareRobustCommand{\RecipeTitleWidths}[2]{%
+\setlength{\R@cipeNumberWidth}{#1}%
+\setlength{\R@cipeServingsWidth}{#2}%
+\setlength{\R@cipeTitleWidth}{\textwidth}%
+\addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
+\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}}
+%
+% default values:
+\RecipeTitleWidths{0.75cm}{2.5cm}
+\setlength{\R@cipeTitleVerticalAdjust}{-0.2cm}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Options 
+%
+% nonumber - Should recipes be numbered?               Default - yes
+\DeclareOption{number}{\numb@ringtrue}
+\DeclareOption{nonumber}{\numb@ringfalse}
+%
+% index    - Should recipes be indexed to a file?      Default - no
+\DeclareOption{index}{\ind@xingtrue}
+\DeclareOption{noindex}{\ind@xingfalse}
+%
+% debug    - Debugging mode?                           Default - no
+\DeclareOption{debug}{\d@buggingtrue}
+\DeclareOption{nodebug}{\d@buggingfalse}
+%
+% Process the options, using defaults
+\ExecuteOptions{number,noindex,nodebug}
+\ProcessOptions\relax
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The recipe environment
+\newenvironment{recipe}[3]{%
+% These are the things that are put at the start of recipes:
+
+%
+}{%
+% And these are the things put at the end of recipes:
+
+%
+}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Miscellaneous useful macros
+%
+% degrees        - to typeset a degrees symbol
+\DeclareRobustCommand{\degrees}{${}^\circ$}
+%
+% fr             - to typeset fractions, currently using package nicefrac
+\DeclareRobustCommand{\fr}[2]{\nicefrac#1#2}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% That's it...
+%
+\endinput
+%
+% END OF FILE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
