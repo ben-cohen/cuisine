@@ -48,7 +48,7 @@
 % There appear to be two styles of typesetting recipes in general use.  The
 % more common (at least in recipe books in the U.K.)
 % is where the ingredients appear at the top above the method, 
-% like in the class |macros/latex/contrib/other/recipe|. Another
+% as in the class |macros/latex/contrib/other/recipe|. Another
 % way is to have each ingredient next to the method step in which it appears, 
 % as in the package |macros/latex/contrib/supported/cooking|; 
 % the |cuisine| package also uses this style, but closer to the format in 
@@ -368,10 +368,8 @@
 %
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
-% \item{There may be alignment problems if the font for the ingredients is
-% taller than that for the method text.}
-% \item{Vertical alignment of the recipe title: see |\r@cipetitle| on page
-% \pageref{rectitlealign}.}
+% \item{There may be alignment problems if the recipe fonts differ much in
+% height.}
 % \item{There is no support for dual sets of quantities, for example  where two
 % systems of measurement are used or for different numbers of servings.  
 % You can write \verb|\ingredient{<4 oz>/<100 g>}{butter}|, but I 
@@ -732,12 +730,9 @@
 %\end{macro}
 %
 %\begin{macro}{\r@cipetitle}
-%  |\r@cipetitle| displays the recipe title constrution, given the parameters
+%  |\r@cipetitle| displays the recipe title construction, given the parameters
 %  |#1| the title, |#2| the number of servings and |#3| the preparation time.
 %
-%  \label{rectitlealign}
-%  Note: I want to get the recipe number aligned with the TOP of the title
-%  in the case of multi-line titles.
 %    \begin{macrocode}
 \DeclareRobustCommand{\r@cipetitle}[3]{
 
