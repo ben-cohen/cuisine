@@ -19,7 +19,7 @@
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage[nonumber]{cuisine}
+\usepackage[units,nonumber]{cuisine}
 \GetFileInfo{cuisine.sty} % defines \filename, \filedate, \fileversion, 
                           % \fileinfo from cuisine.sty
 \begin{document}
@@ -73,11 +73,15 @@
 % \item{|nocontents|}\ \ Recipe titles will not be written to the document
 % contents.
 % (This is the default.)
+% \item{|nounits|}\ \ The notation |<|\dots|>| for quantities with units 
+% will not be allowed.
+% (This is the default.)
+% \item{|units|}\ \ The notation |<|\dots|>| will be recognised.
 % \end{itemize}
 % You will need the package |nicefrac|; 
 % it comes
 % with current versions of te\TeX\ and is also 
-% available from CTAN as part of the |units| package in 
+% available from CTAN as part of the package |units| in 
 % |macros/latex/|\hskip0cm|contrib/supported/|\hskip0cm|units|.
 % 
 %
@@ -133,14 +137,11 @@
 %
 % \DescribeMacro{\degrees}
 % \DescribeMacro{\0}
+% \DescribeMacro{\X}
+% \DescribeMacro{\%}
 % A degree symbol can be obtained using |\degrees| or the shorter form |\0|;
 % for example |120\0| gives 120${}^\circ$.
-% 
-% \DescribeMacro{\times}
-% \DescribeMacro{\X}
 % A times symbol, ${}\times{}$, can be obtained using |\X|.
-% 
-% \DescribeMacro{\%}
 % As is usual with \LaTeX, to obtain a percent sign, \%, you must use |\%|
 % since |%| on its own starts a comment.
 % 
@@ -193,6 +194,20 @@
 % To typeset text across the whole width of the recipe instead of just the
 % width of the method, use the |\freeform| command.  This is equivalent to 
 % |\noalign| in tables.  Freeform text is not given a step number.
+%
+% \medskip
+% \DescribeMacro{<\dots>}
+% The recipe environment has a command for typesetting quantities with units
+% nicely and easily if the |units| package option has been used; 
+% the syntax is:
+% \begin{quote}
+%   |<|{\it Number\/}{\tt\char`\ }{\it Unit\/}|>|
+% \end{quote}
+% For example, |<4 oz>| gives ``<4 oz>'' (where the number and unit will be
+% in the
+% |\recipequantityfont| and |\recipeunitfont|).
+% Note that this will clash with other uses of the |<| symbol so it is
+% disabled by default.
 %
 % \medskip
 % The recipe environment has an optional first parameter with which you can
@@ -387,9 +402,9 @@
 % \begin{small}
 % \begin{itemize}
 % \item[\sl v0.5]Written---release on CTAN. 
-% \item[\sl v0.6]Fixed vertical alignment problem.\\
-%                Labelling of recipes for |\ref|. |\X| (times) macro.\\
-%                Different index and contents options.\\
+% \item[\sl v0.6]Fixed vertical alignment problem.
+%                Labelling of recipes for |\ref|. |\X| (times) macro.
+%                Different index and contents options. |<|\dots|>| notation.
 %                If |recipe|'s |#4| is empty, don't leave a blank line.
 % \end{itemize}
 % \end{small}
@@ -402,7 +417,7 @@
 % The package declaration follows the standard form.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cuisine}[2000/08/01 v0.5 recipe typesetting]
+\ProvidesPackage{cuisine}[2000/08/01 v0.6 recipe typesetting]
 %    \end{macrocode}
 %
 % We use the |nicefrac| package for ``nice'' fractions.
@@ -468,6 +483,11 @@
 % page.
 %    \begin{macrocode}
 \newif\ifn@wpaging
+%    \end{macrocode}
+%
+% |if@units| determines whether or not to use the |<|\dots|>| notation.
+%    \begin{macrocode}
+\newif\if@units
 %    \end{macrocode}
 %
 % |\R@cipeWidth| is the total width of the recipe.
@@ -667,9 +687,16 @@
 \DeclareOption{noindex}{\ind@xingfalse}
 %    \end{macrocode}
 %
+% This is for typesetting quantities with units if required.  (The default is
+%                                                                       not.)
+%    \begin{macrocode}
+\DeclareOption{nounits}{\@unitsfalse}
+\DeclareOption{units}{\@unitstrue}
+%    \end{macrocode}
+%
 % Process the options, using the defaults if necessary.
 %    \begin{macrocode}
-\ExecuteOptions{number,noindex,nocontents}
+\ExecuteOptions{number,noindex,nocontents,nounits}
 \ProcessOptions\relax
 %    \end{macrocode}
 %
@@ -1016,7 +1043,9 @@
   \fi%
 %    \end{macrocode}
 % Use |\st@pingrtmpbox| as a temporary holding box.  The |\lineskip0pt|
-% ensures that the ingredients and the method text are aligned correctly.
+% and the |\strut|s
+% ensure that the ingredients' and the method text's baselines 
+% are aligned correctly.
 %    \begin{macrocode}
   \savebox{\st@pingrtmpbox}[\R@cipeIQUWidth][t]{\usebox{\st@pingrbox}}%
   \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
@@ -1125,7 +1154,7 @@
 %\end{macro}
 %
 %\begin{macro}{\tim@s}
-% This is to typeset a times symbol (like ${}\times{}$).
+% This is to typeset a times symbol (like ${}\times\!$).
 %    \begin{macrocode}
 \DeclareRobustCommand{\tim@s}{%
   \relax${}\times{}$\relax%
@@ -1136,9 +1165,20 @@
 %\begin{macro}{\fr@ction}
 % This is to typeset fractions, currently using package |nicefrac|.
 %    \begin{macrocode}
+%    \begin{macrocode}
 \DeclareRobustCommand{\fr@ction}[2]{%
   \nicefrac#1#2%
 }%
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{<\dots>}
+% This is to typeset units using the notation |<|\dots|>|.
+%    \begin{macrocode}
+\if@units
+  \catcode`\<=13 %
+  \def<#1 #2>{{\recipequantityfont #1}$\,${\recipeunitfont #2}}%
+\fi
 %    \end{macrocode}
 %\end{macro}
 %
