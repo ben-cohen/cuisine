@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{559} 
+% \CheckSum{572} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -742,7 +742,8 @@
 %    \end{macrocode}
 % Finally we display the text line below the rule if it isn't empty:
 %    \begin{macrocode}
-  \ifx\relax#1\relax%
+  \ifx\relax#3\relax%
+  \else
     \makebox[\R@cipeWidth][r]{\recipetimefont #3}\par%
   \fi
   \nopagebreak
