@@ -902,12 +902,12 @@
 %    \begin{macrocode}
   \savebox{\st@pingrtmpbox}[\R@cipeIQUWidth][t]{\usebox{\st@pingrbox}}%
   \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
-     \begin{minipage}[t]{\R@cipeIQUWidth}%
-         \ifnum\value{ingr@dnumber}>0%
-           \usebox{\st@pingrtmpbox}\par%
-         \fi%
-         \fbox{\usebox{\st@pIQUbox}}\strut%
-     \end{minipage}%
+    \begin{minipage}[t]{\R@cipeIQUWidth}%
+        \ifnum\value{ingr@dnumber}>0%
+          \strut\usebox{\st@pingrtmpbox}\par%
+        \fi%
+        \usebox{\st@pIQUbox}\strut%
+    \end{minipage}%
   }%
 %  \usebox{\st@pingrbox}    % For testing: show cumulative boxes.
   \stepcounter{ingr@dnumber}%
