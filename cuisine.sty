@@ -36,6 +36,8 @@
 % ifind@xing     - Whether writing the recipes to an index file or not
 \newif\ifind@xing
 %
+\newif\ifh@smethodtext
+\h@smethodtextfalse
 % And some dimensions:
 %
 % Width of the recipe number box
@@ -135,6 +137,16 @@
 %  What happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
   \endminipage\endlrbox%
+  % Here we compare the width of the \m@thoddetailbox with zero to determine
+  % whether anything was entered into it.
+  \ifdim\wd\m@thoddetailbox=0in
+    \h@smethodtextfalse%
+     \PackageWarning{cuisine}{FALSE}
+  \else%
+    \h@smethodtexttrue%
+     \PackageWarning{cuisine}{TRUE}
+  \fi%
+%\usebox{\m@thoddetailbox}
 %
 }%
 %  And at the end of ingredients (= start of method)
@@ -149,19 +161,20 @@
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \pr@ingred
+  \pr@ingred%
   \stepcounter{m@thodnumber}%
   \makebox[\textwidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
     \show{\m@thodbox}%
   }%
   \savebox{\m@thodbox}[\R@cipeQandUWidth]{}%
+  \p@stingred%
 }%
 %
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
-  \pr@ingred
+  \pr@ingred%
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
@@ -182,7 +195,7 @@
 %  \def\@Raaa{z}\def\@Rbbb{z#1}%
 %  \ifx\@Raaa\@Rbbb%
 % NOW:  (Patrick Guio, comp.text.tex)
-   \ifx\relax#1\relax%
+  \ifx\relax#1\relax%
     \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
       \parbox[t]{\R@cipeQandUWidth}{#2}%
     }%
@@ -199,9 +212,6 @@
       \strut\usebox{\m@thodqtybox}%
     }%
   }%
-
-
-
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
 %
   \p@stingred%
@@ -255,7 +265,7 @@
   \nopagebreak
   %
   %
-  \p@stingred
+  \p@stingred%
 }%
 {%%%%%%%%%%
   % And these are the things put at the end of recipes:  
@@ -264,12 +274,12 @@
 %  \else%
 %              % do we want this?
 %  \fi%
-  \pr@ingred
+  \pr@ingred%
   %
   % -- tidying up
   \bigskip
   \setlength{\parindent}{\R@cipeTempParindent}
-  %%%% how to undo \\ ?
+  % Undo \let\\  -- but this seems to be handled automatically by LaTeX
 }%
 %
 %
