@@ -14,7 +14,7 @@
   \def\myemailaddress{\texttt{benc@cus.org.uk}}
   \title{The \texttt{cuisine} package}
   \author{Ben Cohen\thanks{My e-mail address is \myemailaddress.}}
-  \date{Version \fileversion, \filedate}
+  \date{\filedate, \fileversion}
   \maketitle
   \DocInput{cuisine.dtx}
 \end{document}
@@ -146,20 +146,142 @@
 % recipes are numbered from 1 again.
 % 
 % \section{Examples}
+% First a simple example.  There is only whitespace between the first three and
+% ingredients, so they are used for the first step with
+% the method text which follows.  (Had
+% there been text before the first ingredient, that text would become the first
+% step and the heating instruction would be the second step.)  The fourth
+% |\ingredient| signals the end of the method text and starts a new step.  The
+% final |\end{recipe}| finishes that step.
+%
+% \begin{small}\noindent
+% |\begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
+% |\ingredient[\fr12]{pt}{milk}|\\
+% |\ingredient[2]{oz}{butter}|\\
+% |\ingredient[5]{oz}{self-raising flour}|\\
+% |Heat the milk and butter until nearly boiling.  Add flour and allow to|\\
+% |seeth over.|\\
+% |\ingredient[3]{}{eggs}|\\
+% |\ingredient{}{salt and pepper}|\\
+% |Add the remaining eggs and whisk again.  Cook at 220\0C for about 1 hour.|\\
+% |\end{recipe}|
+% \end{small}
+% \medskip
+%
+% \noindent This produces:
+%
+% \medskip
+% \begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}
+% \ingredient[\fr12]{pt}{milk}
+% \ingredient[2]{oz}{butter}
+% \ingredient[5]{oz}{self-raising flour}
+% Heat the milk and butter until nearly boiling.  Add flour and
+% allow to seeth over.
+% \ingredient[3]{}{eggs}
+% \ingredient{}{salt and pepper}
+% Add the remaining eggs and whisk again.  Cook at 220\0C
+% for about 1 hour.
+% \end{recipe}
+%
+% We can change the widths of the columns using, for example,
+% \begin{quote}
+% |\RecipeWidths{.75\textwidth}{0.5cm}{5cm}{3cm}{.75cm}{1.25cm}|
+% \end{quote}
+% \noindent and the |small| environment to produce a different layout.
+%
+% The example below demostrates the |\nextstep| command and how to use 
+% |\freeform| to create freeform text and rules.  In this case, recipe
+% numbering has been turned off.
+%
+% \medskip
+% \RecipeWidths{.75\textwidth}{0.5cm}{5cm}{1.5cm}{.75cm}{.75cm}
+% \makeatletter\numb@ringfalse\makeatother
+% \begin{small}\noindent
+% |\begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}|\\
+% |\freeform \textit{This is a well-known Italian recipe which is |\\
+% |great for piling on the calories.}|\\
+% |\ingredient[6]{}{egg yolks}|\\
+% |\ingredient[2]{oz}{granulated sugar}|\\
+% |\ingredient[6--8]{tbsp}{Marsala (or sherry)}|\\
+% |\ingredient[\fr14]{oz}{gelatine}|\\
+% |\ingredient[2]{tbsp}{cold water}|\\
+% |In the top of a double boiler, combine the egg yolks with sugar and Marsala,|\\
+% |and whip the mixture over hot, but not boiling, water until it thickens.|\\
+% |Stir in gelatine, softened in cold water and dissolved over hot water.|\\
+% |\ingredient[3]{tbsp}{brandy}|\\
+% |\ingredient[\fr38]{pt}{double cream}|\\
+% |Put the pan in a bowl of ice and stir the |\\
+% |zabaglione well until it is thick and free of bubbles.  When it is almost |\\
+% |cold, fold in brandy and whipped cream and pour into individual moulds.|\\
+% |\freeform\rule{\textwidth}{0.05pt}|\\
+% |\ingredient[3]{}{egg yolks}|\\
+% |\ingredient[1]{oz}{granulated sugar}|\\
+% |\ingredient[3--4]{tbsp}{Marsala (or sherry)}|\\
+% |\ingredient[1\fr12]{tbsp}{brandy}|\\
+% |To make the sauce, combine egg yolks and sugar in the top of a double |\\
+% |saucepan.  Whisk mixture over hot, but not boiling, water until the|\\
+% |sauce coats |\\
+% |the back of a spoon.  Stir in the Marsala and brandy.|\\
+% |\nextstep|\\
+% |Chill the zabaglione, unmould it, and serve with the sauce immediately.|\\
+% |\freeform\hrulefill|\\
+% |\end{recipe}|
+% \medskip
+% \begin{center}
+% \begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}
+% \freeform \textit{This is a well-known Italian recipe which is 
+% great for piling on the calories.}
+% \ingredient[6]{}{egg yolks}
+% \ingredient[2]{oz}{granulated sugar}
+% \ingredient[6--8]{tbsp}{Marsala (or sherry)}
+% \ingredient[\fr14]{oz}{gelatine}
+% \ingredient[2]{tbsp}{cold water}
+% In the top of a double boiler, combine the egg yolks 
+% with sugar and Marsala, and whip the mixture over hot, but not 
+% boiling, water until it thickens.  Stir in gelatine, softened in cold water 
+% and dissolved over hot water.
+% \ingredient[3]{tbsp}{brandy}
+% \ingredient[\fr38]{pt}{double cream}
+% Put the pan in a bowl of ice and stir the 
+% zabaglione well until it is thick and free of bubbles.  When it is almost 
+% cold, fold in brandy and whipped cream and pour into individual moulds.
+% \freeform\rule{\textwidth}{0.05pt}
+% \ingredient[3]{}{egg yolks}
+% \ingredient[1]{oz}{granulated sugar}
+% \ingredient[3--4]{tbsp}{Marsala (or sherry)}
+% \ingredient[1\fr12]{tbsp}{brandy}
+% To make the sauce, combine egg yolks and sugar in the top of a double 
+% saucepan.  Whisk mixture over hot, but not boiling, water until the
+% sauce coats 
+% the back of a spoon.  Stir in the Marsala and brandy.
+% \nextstep
+% Chill the zabaglione, unmould it, and serve with the sauce immediately.
+% \freeform\hrulefill
+% \end{recipe}
+% \end{center}\end{small}
 %
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
 % \item{Vertical spacing of the boxes:  the ingredients are not uniformly
 % spaced and nor are the method steps.}
-% \item{Test it, test it, and test again.}
+% \item{Page breaking works between the method steps, but method steps will not
+% be split.  There should be a |\pagebreak| command to force the next step onto
+% a new page.}
+% \item{It would be nice if when an ingredient wraps over the end of its box
+% onto the next line, that line started further in.  That is, a negative
+% \item{This documentation needs proofreading and improving.}
+% |\parindent| in effect.}
+%^^A \item{Test it, test it, and test again.}
 % \end{itemize}
 % Please e-mail me at \myemailaddress\ if you find any problems or can solve
 % these ones.
 % 
 % \StopEventually{}
+% \newpage
 % \setlength{\parindent}{0cm}
 %
 % \section{Identification section and initialisation}
+% The package declaration follows the standard form.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
@@ -419,9 +541,7 @@
 %    \begin{macrocode}
 \DeclareRobustCommand{\Fr@eFormStep}{%
   \vskip0.2cm%
-  \makebox[\R@cipeWidth]{%
-    \rule{\R@cipeNumberWidth}{0cm}\usebox{\st@pmethodbox}%
-  }%
+  \usebox{\st@pmethodbox}%
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}%
 }%
 %    \end{macrocode}
@@ -607,7 +727,7 @@
 % The rest is like |\p@stingred|:
 %    \begin{macrocode}
   \fr@eformingtrue% 
-  \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeStepWidth}%
+  \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeWidth}%
   \noindent%
   \ignorespaces%
   \r@cipesloppy%
