@@ -21,13 +21,13 @@
   \setcounter{r@cipenumber}{0}%
 }
 %
-% m@thodnumber   - Method counter (within recipes)
+% st@pnumber   - Method counter (within recipes)
 %                  It is zeroed whenever the recipe counter is incremented.
-\newcounter{m@thodnumber}[r@cipenumber]  
+\newcounter{st@pnumber}[r@cipenumber]  
 %
-% ingr@dnumber   - Ingredeient counter (within recipes)
+% ingr@dnumber   - Ingredient counter (within recipes)
 %                  It is zeroed whenever the method counter is incremented.
-\newcounter{ingr@dnumber}[m@thodnumber]  
+\newcounter{ingr@dnumber}[st@pnumber]  
 %
 % ifnumb@ring    - Whether or not recipe numbers are printed 
 %                  Method numbers will always be printed    
@@ -37,8 +37,8 @@
 \newif\ifind@xing
 %
 % ifh@smethodtext - Whether the method body is empty or not
-\newif\ifh@smethodtext
-\h@smethodtextfalse
+%\newif\ifh@smethodtext
+%\h@smethodtextfalse
 %
 % And some dimensions:
 %
@@ -114,7 +114,7 @@
 \newsavebox{\m@thodbox}
 \newsavebox{\m@thodtempbox}
 \newsavebox{\m@thodqtybox}
-\newsavebox{\m@thoddetailbox}
+\newsavebox{\st@pmethodbox}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options 
@@ -137,24 +137,28 @@
 %  \DisplaySt@p -- Displays the ingredients and method for the current step
 %                  and resets things
 \DeclareRobustCommand{\DisplaySt@p}{%
+  \makebox[\textwidth]{%
+    \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+    \usebox{\m@thodbox}%
+    \usebox{\st@pmethodbox}%
+  }%
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+  \stepcounter{st@pnumber}%
 %
 }%
 %
 %  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
   \endminipage\end{lrbox}%
-  % Here we compare the width of the \m@thoddetailbox with zero to determine
+  % Here we compare the width of the \st@pmethodbox with zero to determine
   % whether anything was entered into it.
-  \ifdim\wd\m@thoddetailbox=0in
-    \h@smethodtextfalse%
-     \PackageWarning{cuisine}{No text}
+  \ifdim\wd\st@pmethodbox=0in
+    \PackageWarning{cuisine}{No text}
   \else%
-    \h@smethodtexttrue%
-     \PackageWarning{cuisine}{Method text}
+    \PackageWarning{cuisine}{Method text}
+    \DisplaySt@p%
   \fi%
-  \usebox{\m@thodbox}\usebox{\m@thoddetailbox}
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
-  \savebox{\m@thoddetailbox}[\R@cipeMethodWidth]{}
 %
 }%
 %  And at the end of ingredients (= start of method)
@@ -166,7 +170,7 @@
   %  a \minipage inside this, which fails.  But it does work with 
   %  \begin{lrbox}\minipage...\endminipage\end{lrbox}.  WHY????!!!
   %
-  \begin{lrbox}{\m@thoddetailbox}\minipage{\R@cipeMethodWidth}%
+  \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeMethodWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
 }%
@@ -174,7 +178,7 @@
 %  The \m@thodend command (which is \\ in the environment)
 \DeclareRobustCommand{\m@thodend}{%
   \pr@ingred%
-  \ifnum\value{m@thodnumber}=0%
+  \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
   \else%
     % 
@@ -182,12 +186,6 @@
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \stepcounter{m@thodnumber}%
-  \makebox[\textwidth]{%
-    \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
-    \show{\m@thodbox}%
-  }%
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}%
   \p@stingred%
 }%
 %
@@ -195,7 +193,7 @@
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
   \pr@ingred%
-  \ifnum\value{m@thodnumber}=0%
+  \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
   \else%
     % 
@@ -250,7 +248,7 @@
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
-  \savebox{\m@thoddetailbox}[\R@cipeMethodWidth]{}
+  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
   %
   % -- and the actual displayed title
 
@@ -290,7 +288,7 @@
 {%%%%%%%%%%
   % And these are the things put at the end of recipes:  
   \pr@ingred%
-  \ifnum\value{m@thodnumber}=0%  then complain!
+  \ifnum\value{st@pnumber}=0%  then complain!
     \PackageWarning{cuisine}{The recipe did not have any method details}
   \else%
   \fi%
