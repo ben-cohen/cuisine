@@ -136,6 +136,10 @@
 % A degree symbol can be obtained using |\degrees| or the shorter form |\0|;
 % for example |120\0| gives 120${}^\circ$.
 % 
+% \DescribeMacro{\times}
+% \DescribeMacro{\X}
+% A times symbol, ${}\times{}$, can be obtained using |\X|.
+% 
 % \section{More advanced usage}
 % The |cuisine| package has been designed so that it is easy to vary the
 % widths of the columns.  \LaTeX\ has very wide margins by default 
@@ -1013,6 +1017,7 @@
   \let\recipen@wpage\newpage
   \let\newpage\r@cipen@wpage
   \let\0\d@grees
+  \let\X\tim@s
   \let\degrees\d@grees
   \let\fr\fr@ction
   \let\ing\ingr@dient
@@ -1070,6 +1075,15 @@
 %    \begin{macrocode}
 \DeclareRobustCommand{\d@grees}{%
   ${}^\circ$%
+}%
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\tim@s}
+% This is to typeset a times symbol (like ${}\times{}$).
+%    \begin{macrocode}
+\DeclareRobustCommand{\tim@s}{%
+  \relax${}\times{}$\relax%
 }%
 %    \end{macrocode}
 %\end{macro}
