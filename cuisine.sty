@@ -1,12 +1,10 @@
-%% This is file `cuisine.sty'
-%%
-%% Recipe typesetting package `cuisine' by Ben Cohen.
-%% 
-%%
-%%  $Id$
-%%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is file `cuisine.sty'
+%
+% Recipe typesetting package `cuisine' by Ben Cohen.
+% 
+%  $Id$
+%
+% ------------------------------------------------ 
 % Identification section
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
@@ -14,7 +12,7 @@
 % Use the nicefrac package for "nice" fractions...
 \RequirePackage{nicefrac}
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % Variables and counters etc.
 %
 % r@cipenumber   - Recipe number counter
@@ -134,7 +132,7 @@
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % Boxes
 \newsavebox{\m@thodbox}
 \newsavebox{\m@thodtempbox}
@@ -142,7 +140,7 @@
 \newsavebox{\st@pIQUbox}
 \newsavebox{\st@pmethodbox}
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % Options 
 %
 % nonumber - Should recipes be numbered?               Default - yes
@@ -157,7 +155,7 @@
 \ExecuteOptions{number,noindex}
 \ProcessOptions\relax
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % The ingredient/method macros
 %
 %  \DisplaySt@p -- Displays the ingredients and method for the current step
@@ -189,14 +187,15 @@
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}%
 }%
 %
-%
+%  This calls the display routine, depending on whether we are freeforming 
+%  or not.
 \DeclareRobustCommand{\DisplaySt@p}{%
   \iffr@eforming%
     \Fr@eFormStep%
   \else%
     \Displ@ySt@p%
   \fi%
-}
+}%
 %
 %  Version of \sloppy which doesn't cause problems (with spaces in the 
 %  definition!)
@@ -373,21 +372,7 @@
   %
 }%
 %
-%  Wrapper for \ingr@dient to allow easy alteration of style format.
-%\DeclareRobustCommand{\ingr@di@nt}[3][]{%
-%  \ingr@dient[#1]%
-%             {#2}%
-%             {#3}%
-%}%
-%%
-%%  Wrapper for \r@cipetitle to allow easy alteration of style format.
-%\DeclareRobustCommand{\r@cip@title}[3]{%
-%  \r@cipetitle{#1}%
-%              {#2}%
-%              {#3}%
-%}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % The recipe environment
 %   #1 = title, #2 = portions, #3 = preparation time
 \newenvironment{recipe}[3]{%
@@ -416,7 +401,7 @@
   %
   \p@stingred%
 }%
-{%%%%%%%%%%
+{% --------
   % And these are the things put at the end of recipes:  
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%  then complain!
@@ -431,7 +416,7 @@
 }%
 %
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % Miscellaneous useful macros
 %
 % degrees        - to typeset a degrees symbol
@@ -444,10 +429,10 @@
   \nicefrac#1#2%
 }%
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
 % That's it...
 %
 \endinput%
 %
 % END OF FILE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------
