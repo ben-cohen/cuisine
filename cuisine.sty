@@ -138,8 +138,7 @@
 }%
 %  And at the end of ingredients (= start of method)
 \DeclareRobustCommand{\p@stingred}{%
-  \lrbox{\m@thoddetailbox}%
-%%%  \begin{\lrbox}{\m@thoddetailbox}
+  \lrbox{\m@thoddetailbox}\minipage{\R@cipeMethodWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
 }%
@@ -149,13 +148,11 @@
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \endlrbox
-%%%  \end{lrbox}
+  \endminipage\endlrbox%
   \stepcounter{m@thodnumber}%
   \makebox[\textwidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
     \show{\m@thodbox}%
-    
   }%
   \savebox{\m@thodbox}[\R@cipeQandUWidth]{}%
 }%
@@ -270,6 +267,7 @@
   % -- tidying up
   \bigskip
   \setlength{\parindent}{\R@cipeTempParindent}
+  %%%% how to undo \\ ?
 }%
 %
 %
