@@ -184,7 +184,7 @@
 % |Heat the milk and butter until nearly boiling.  Add flour and allow to|\\
 % |seeth over.|\\
 % |\ingredient[3]{}{eggs}|\\
-% |\ingredient{}{salt and pepper}|\\
+% |\ingredient{to taste}{salt and pepper}|\\
 % |Add the remaining eggs and whisk again.  Cook at 220\0C for about 1 hour.|\\
 % |\end{recipe}|
 % \end{small}
@@ -200,14 +200,14 @@
 % Heat the milk and butter until nearly boiling.  Add flour and
 % allow to seeth over.
 % \ingredient[3]{}{eggs}
-% \ingredient{}{salt and pepper}
+% \ingredient{to taste}{salt and pepper}
 % Add the remaining eggs and whisk again.  Cook at 220\0C
 % for about 1 hour.
 % \end{recipe}
 % 
 % We can change the widths of the columns using, for example,
 % \begin{quote}
-% |\RecipeWidths{.75\textwidth}{0.5cm}{3cm}{3cm}{.75cm}{1.25cm}|
+% |\RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}|
 % \end{quote}
 % \noindent and the |small| environment to produce a different layout.
 % We can also change the fonts, for example:
@@ -221,10 +221,10 @@
 %
 % The example below demostrates the |\nextstep| command and how to use 
 % |\freeform| to create freeform text and rules.  In this case, recipe
-% numbering has been turned off.
+% numbering has been turned off, and the |small| environment is being used.
 %
 % \medskip
-% \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.5cm}{.75cm}{.75cm}
+% \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}
 % \makeatletter\numb@ringfalse\makeatother
 % \begin{small}\noindent
 % |\begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}|\\
@@ -305,9 +305,6 @@
 % \item{Page breaking works between the method steps, but method steps will not
 % be split.  There should be a |\pagebreak| command to force the next step onto
 % a new page.}
-% \item{It would be nice if when an ingredient wraps over the end of its box
-% onto the next line, that line started further in.  That is, a negative
-% |\parindent| in effect.}
 % \item{This documentation needs proofreading and improving.}
 %^^A \item{Test it, test it, and test again.}
 % \end{itemize}
@@ -393,6 +390,11 @@
 \newlength{\R@cipeTandSWidth}
 %    \end{macrocode}
 %
+% This is the distance ingredient (etc.) paragraphs are outdented.
+%    \begin{macrocode}
+\newlength{\R@cipeOutdent}
+%    \end{macrocode}
+%
 % These are the vertical distances for the recipe title-to-rule adjustments 
 % (usually negative).
 %    \begin{macrocode}
@@ -450,6 +452,12 @@
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
   \addtolength{\R@cipeMethodWidth}{-0.5cm}%
+%    \end{macrocode}
+%  Allow for the ingredient paragraph outdenting.
+%    \begin{macrocode}
+  \addtolength{\R@cipeIngredientWidth}{-\R@cipeOutdent}
+  \addtolength{\R@cipeUnitsWidth}{-\R@cipeOutdent}
+  \addtolength{\R@cipeQandUWidth}{-\R@cipeOutdent}
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -498,9 +506,10 @@
 %     (A4, portrait, one column, etc.)
 %     I don't think the LaTeX default width is good for a recipe book though!
 %    \begin{macrocode}
-\RecipeWidths{\textwidth}{0.8cm}{3cm}{3.5cm}{1cm}{1.7cm}
+\setlength{\R@cipeOutdent}{0.3cm}%
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
+\RecipeWidths{\textwidth}{0.8cm}{3cm}{3.5cm}{1cm}{1.7cm}
 %    \end{macrocode}
 %
 %^^A ------------------------------------------------
@@ -508,7 +517,7 @@
 % \section{Fonts}
 % This is where the default fonts are set up.
 % \verb|\recipefont| is the default font for recipe default fonts. 
-% The other fonts inherit from this but can be altered.
+% The other fonts inherit from this but can be altered individually.
 %    \begin{macrocode}
 \newcommand*\recipefont{\normalfont}
 \newcommand*\recipetitlefont{\recipefont}
@@ -822,11 +831,18 @@
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}%
-          \raggedright\recipeunitfont #2}%
+        \rule{\R@cipeOutdent}{0cm}%
+        \parbox[b]{\R@cipeQandUWidth}{%
+          \setlength{\parindent}{-\R@cipeOutdent}%
+          \raggedright\recipeunitfont%
+          \rule{0pt}{\baselineskip}%
+          #2}%
         \rule{0.2cm}{0cm}%
-        \parbox[t]{\R@cipeIngredientWidth}{%
-          \raggedright\recipeingredientfont #3}%
+        \rule{\R@cipeOutdent}{0cm}%
+        \parbox[t]{\R@cipeIngredientWidth}{\raggedright%
+          \recipeingredientfont%
+          \setlength{\parindent}{-\R@cipeOutdent}%
+          #3}%
       }%
     }%
   \else
@@ -839,18 +855,26 @@
     \savebox{\st@pingrtmpbox}[\R@cipeIandUWidth]{%
       \parbox[t]{\R@cipeIandUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeUnitsWidth}{\rule{0pt}{\baselineskip}%
-          \raggedright\recipeunitfont #2\hfill}%
+        \rule{\R@cipeOutdent}{0cm}%
+        \parbox[b]{\R@cipeUnitsWidth}{%
+          \raggedright\recipeunitfont%
+          \setlength{\parindent}{-\R@cipeOutdent}%
+          \rule{0pt}{\baselineskip}%
+          #2\hfill}%
         \rule{0.2cm}{0cm}%
+        \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{%
-          \raggedright\recipeingredientfont #3}%
+          \raggedright\recipeingredientfont%
+          \setlength{\parindent}{-\R@cipeOutdent}%
+          #3}%
       }%
     }% 
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
         \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill %
-          \raggedright\recipequantityfont #1%
+          \raggedright\recipequantityfont%
+          #1%
           \rule{0.1cm}{0cm}}%
         \usebox{\st@pingrtmpbox}%
       }%
