@@ -740,9 +740,11 @@
   \vspace{\R@cipeTitleVerticalAdjustBot}%
   \nopagebreak
 %    \end{macrocode}
-% Finally we display the text line below the rule:
+% Finally we display the text line below the rule if it isn't empty:
 %    \begin{macrocode}
-  \makebox[\R@cipeWidth][r]{\recipetimefont #3}\par%
+  \ifx\relax#1\relax%
+    \makebox[\R@cipeWidth][r]{\recipetimefont #3}\par%
+  \fi
   \nopagebreak
 }%
 %    \end{macrocode}
