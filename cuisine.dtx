@@ -36,7 +36,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{502} 
+% \CheckSum{514} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps where
@@ -314,7 +314,10 @@
 % \begin{itemize}
 % \item{Vertical spacing of the boxes:  the ingredients are not uniformly
 % spaced and nor are the method steps.  I currently
-% have no idea how to solve this problem.}
+% have no idea how to solve this problem.  (It is better than it was before I 
+% added a few extra |\strut|s but if you compare the baselines of the
+% ingedients to the adjacent method lines, they are still not all properly
+% aligned.)}
 % \item{Page breaking works between the method steps, but method steps will not
 % be split.  There could be a |\pagebreak| command to force the next step onto
 % a new page.}
@@ -889,7 +892,8 @@
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth][t]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill %
+        \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}%
+          \hfill %
           \raggedright\recipequantityfont%
           \strut #1\strut%
           \rule{0.1cm}{0cm}}%
@@ -963,7 +967,7 @@
 %    \begin{macrocode}
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%  then complain!
-    \PackageWarning{cuisine}{The recipe did not have any method details}%
+    \PackageWarning{cuisine}{The recipe did not have any steps}%
   \fi%
   
   \pagebreak[0]%  
