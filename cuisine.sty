@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Identification section
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cuisine}[2000/04/11 v0.1 recipe typesetting]
+\ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
 %
 % Use the nicefrac package for "nice" fractions...
 \RequirePackage{nicefrac}
@@ -69,7 +69,7 @@
 \newlength{\R@cipeTitleVerticalAdjustTop}
 \newlength{\R@cipeTitleVerticalAdjustBot}
 %
-% Width of the ingredients
+% Width of the ingredient descriptors and combinations of them
 \newlength{\R@cipeIngredientWidth}
 \newlength{\R@cipeQuantityWidth}
 \newlength{\R@cipeUnitsWidth}
@@ -127,7 +127,7 @@
 % default values:  
 %     These appear to be reasonable for the LaTeX default page layout.
 %     (A4, portrait, one column, etc.)
-%     I don't think the LaTeX defaults are sensible for a recipe book though!
+%     I don't think the LaTeX default width is good for a recipe book though!
 \setlength{\RecipeWidth}{\textwidth}
 \RecipeTitleWidths{0.8cm}{3cm}
 \RecipeMethodWidths{3.5cm}{1cm}{1.7cm}
@@ -308,9 +308,9 @@
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
         \ifnum\value{ingr@dnumber}>0%
-          \rule{0pt}{\baselineskip}\usebox{\m@thodtempbox}\par%
+          \usebox{\m@thodtempbox}\strut\par%
         \fi%
-        \strut\usebox{\st@pIQUbox}%
+        \usebox{\st@pIQUbox}\strut%
     \end{minipage}%
   }%
 %
@@ -348,7 +348,7 @@
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
   % -- deal with index entry
   \ifind@xing
-     % TODO...
+     \addcontentsline{toc}{subsection}{#1}     
   \fi
   %
   % -- and the actual displayed title
