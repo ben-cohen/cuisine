@@ -763,9 +763,11 @@
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}#2}%
+        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}%
+          \raggedright #2}%
         \rule{0.2cm}{0cm}%
-        \parbox[t]{\R@cipeIngredientWidth}{#3}%
+        \parbox[t]{\R@cipeIngredientWidth}{%
+          \raggedright #3}%
       }%
     }%
   \else
@@ -778,15 +780,18 @@
     \savebox{\st@pingrtmpbox}[\R@cipeIandUWidth]{%
       \parbox[t]{\R@cipeIandUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeUnitsWidth}{\rule{0pt}{\baselineskip}#2\hfill}%
+        \parbox[b]{\R@cipeUnitsWidth}{\rule{0pt}{\baselineskip}%
+          \raggedright #2\hfill}%
         \rule{0.2cm}{0cm}%
-        \parbox[t]{\R@cipeIngredientWidth}{#3}%
+        \parbox[t]{\R@cipeIngredientWidth}{%
+          \raggedright #3}%
       }%
     }% 
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
-        \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill #1%
+        \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill %
+          \raggedright #1%
           \rule{0.1cm}{0cm}}%
         \usebox{\st@pingrtmpbox}%
       }%
