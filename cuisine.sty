@@ -1,6 +1,13 @@
 %% This is file `cuisine.sty'
 %%
+%% Recipe typesetting package `cuisine' by Ben Cohen.
+%% 
+%%
 %%  $Log$
+%%  Revision 1.25  2000/06/21 16:15:28  bjc23
+%%  WRONG -- vert box NOT fixed
+%%  rewrite?
+%%
 %%  Revision 1.24  2000/06/21 15:40:34  bjc23
 %%  vertical box alignment problem seems to be fixed now, although may need
 %%  a total re-write.
@@ -10,7 +17,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Identification section
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cuisine}[2000/04/11 v0.00 recipe typesetting]
+\ProvidesPackage{cuisine}[2000/04/11 v0.1 recipe typesetting]
 %
 % Use the nicefrac package for "nice" fractions...
 \RequirePackage{nicefrac}
@@ -154,11 +161,15 @@
 %                  and resets things
 \DeclareRobustCommand{\DisplaySt@p}{%
   \stepcounter{st@pnumber}%
+% Put extra vertical space between steps.  But it isn't uniform yet.
+  \vskip0.2cm%
+% Display this step.
   \makebox[\RecipeWidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{st@pnumber}}%
     \usebox{\m@thodbox}%
     \usebox{\st@pmethodbox}%
   }%
+% Clear the step storage boxes.
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
 %
@@ -226,6 +237,11 @@
     %
     % first: is m@thoddetailbox empty?
   \fi%
+%
+% The following is the main bit to typeset the ingredients list.
+% Thanks to , comp.text.tex for help with aligning box baselines.
+%
+%
 %
 % WAS:
 % hack to see if #1 is empty - is there a better way? 
