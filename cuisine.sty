@@ -203,6 +203,8 @@
   \endminipage\end{lrbox}%
   % Here we compare the width of the \st@pmethodbox with zero to determine
   % whether anything was entered into it.
+  %
+  % (Idea for determining whether box is empty, Donald Arseneau, comp.text.tex)
   \ifdim\wd\st@pmethodbox=0in%
 %    \PackageWarning{cuisine}{No text}%  % use for testing
   \else%
@@ -306,7 +308,7 @@
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
         \ifnum\value{ingr@dnumber}>0%
-          \usebox{\m@thodtempbox}\par%
+          \rule{0pt}{\baselineskip}\usebox{\m@thodtempbox}\par%
         \fi%
         \strut\usebox{\st@pIQUbox}%
     \end{minipage}%
