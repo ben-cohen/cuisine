@@ -148,22 +148,28 @@
 % Please e-mail me at \myemailaddress if you find any problems or can solve
 % these ones.
 % 
+% \StopEventually{}
 %
 %
-%
-% Identification section
+% \section{Identification section and initialisation}
+%    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
+%    \end{macrocode}
 %
-% Use the nicefrac package for "nice" fractions...
+% We use the |nicefrac| package for ``nice'' fractions.
+%    \begin{macrocode}
 \RequirePackage{nicefrac}
+%    \end{macrocode}
 %
-% ------------------------------------------------
-% Variables and counters etc.
+%^^A ------------------------------------------------
+% \section{Counters, booleans and lengths}
 %
-% r@cipenumber   - Recipe number counter
+% Recipe number counter
 %                  This could be made dependent on, say, section.
+%    \begin{macrocode}
 \newcounter{r@cipenumber}
+%    \end{macrocode}
 %
 % command to reset it
 \DeclareRobustCommand{\ResetRecipeCounter}{%
