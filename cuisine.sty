@@ -16,15 +16,15 @@
 %                  This could be made dependent on, say, section.
 \newcounter{r@cipenumber}
 %
+% command to reset it
+\DeclareRobustCommand{\ResetRecipeCounter}{\setcounter{r@cipenumber}{0}}
+%
 % m@thodnumber   - Method counter (within recipes)
 %                  It is zeroed whenever the recipe counter is incremented.
 \newcounter{m@thodnumber}[r@cipenumber]  
 %
 % ifnumb@ring     - Whether or not recipe numbers are printed 
 \newif\ifnumb@ring
-%
-% ifd@bugging    - Debug mode or not
-\newif\ifd@bugging
 %
 % ifind@xing     - Whether writing the recipes to an index file or not
 \newif\ifind@xing
@@ -40,39 +40,53 @@
 % Width of the recipe number-of-servings box
 \newlength{\R@cipeServingsWidth}
 %
-% Relevant definition for setting this:
-%   #1 is the recipe number width, #2 the number of servings
-%   title width calculated
-\DeclareRobustCommand{\RecipeTitleWidths}[2]{%
-\setlength{\R@cipeNumberWidth}{#1}%
-\setlength{\R@cipeServingsWidth}{#2}%
-\setlength{\R@cipeTitleWidth}{\textwidth}%
-\addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
-\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}}
-%
-% Height of the recipe title to rule adjustment (usually negative)
-\newlength{\R@cipeTitleVerticalAdjust}
+% Height of the recipe title to rule adjustments (usually negative)
+\newlength{\R@cipeTitleVerticalAdjustTop}
+\newlength{\R@cipeTitleVerticalAdjustBot}
 %
 % Width of the ingredients
 \newlength{\R@cipeIngredientWidth}
 \newlength{\R@cipeQuantityWidth}
 \newlength{\R@cipeUnitsWidth}
-\newlength{\R@cipeQandUWidth}
+\newlength{\R@cipeQandUWidth}   % total of the previous two...
 %
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
 %
-% Relevant definition for setting this:
+% Temporary parindent
+\newlength{\R@cipeTempParindent}
+%
+% Relevant definitions for setting the above values:
+%
+%   #1 is the ingredient width, #2 the quantity, #3 the units
+%   others calculated
+\DeclareRobustCommand{\RecipeMethodWidths}[3]{%
+\setlength{\R@cipeIngredientWidth}{#1}%
+\setlength{\R@cipeQuantityWidth}{#2}%
+\setlength{\R@cipeUnitsWidth}{#3}%
+\setlength{\R@cipeQandUWidth}{\R@cipeQuantityWidth}%
+\addtolength{\R@cipeQandUWidth}{\R@cipeUnitsWidth}%
+\setlength{\R@cipeMethodWidth}{\textwidth}
+\addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
+\addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
+\addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}}
+%
+%   #1 is the recipe number width, #2 the number of servings
+%   title width calculated, updates method widths too
 \DeclareRobustCommand{\RecipeTitleWidths}[2]{%
 \setlength{\R@cipeNumberWidth}{#1}%
 \setlength{\R@cipeServingsWidth}{#2}%
 \setlength{\R@cipeTitleWidth}{\textwidth}%
 \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
-\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}}
+\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
+\RecipeMethodWidths{\R@cipeIngredientWidth}{\R@cipeQuantityWidth}%
+                   {\R@cipeUnitsWidth}}
 %
 % default values:
-\RecipeTitleWidths{0.75cm}{2.5cm}
-\setlength{\R@cipeTitleVerticalAdjust}{-0.2cm}
+\RecipeTitleWidths{0.8cm}{3cm}
+\RecipeMethodWidths{4.5cm}{1cm}{2.5cm}
+\setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
+\setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options 
@@ -85,24 +99,47 @@
 \DeclareOption{index}{\ind@xingtrue}
 \DeclareOption{noindex}{\ind@xingfalse}
 %
-% debug    - Debugging mode?                           Default - no
-\DeclareOption{debug}{\d@buggingtrue}
-\DeclareOption{nodebug}{\d@buggingfalse}
-%
 % Process the options, using defaults
-\ExecuteOptions{number,noindex,nodebug}
+\ExecuteOptions{number,noindex}
 \ProcessOptions\relax
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The recipe environment
+%   #1 = title, #2 = portions, #3 = preparation time
 \newenvironment{recipe}[3]{%
 % These are the things that are put at the start of recipes:
+%
+% -- set-up things
+\stepcounter{r@cipenumber}
+\setlength{\R@cipeTempParindent}{\parindent}
+\setlength{\parindent}{0pt}
+%
+% -- and the actual displayed title
 
+\medskip
+% ---- line 1
+\mbox{%
+\ifnumb@ring%
+\makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+\parbox[b]{\R@cipeTitleWidth}{#1}%
+\else%
+\parbox[b]{\R@cipeTitleWidth}{#1}%
+\makebox[\R@cipeNumberWidth]{}%
+\fi%
+\parbox[b]{\R@cipeServingsWidth}{\hfill #2}}\par%
+% ---- rule
+\vspace{\R@cipeTitleVerticalAdjustTop}%
+\rule{\textwidth}{0.4pt}\par%
+\vspace{\R@cipeTitleVerticalAdjustBot}%
+% ---- line 2
+\makebox[\textwidth][r]{#3}\par%
+%
 %
 }{%
 % And these are the things put at the end of recipes:
-
 %
+% -- tidying up
+\setlength{\parindent}{\R@cipeTempParindent}
 }
 %
 %
