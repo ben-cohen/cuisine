@@ -101,10 +101,9 @@
   \addtolength{\R@cipeIQUWidth}{0.5cm}%
   \setlength{\R@cipeIandUWidth}{\R@cipeIQUWidth}%
   \addtolength{\R@cipeIandUWidth}{-\R@cipeQuantityWidth}%
-  \setlength{\R@cipeStepWidth}{\RecipeWidth}
+  \setlength{\R@cipeStepWidth}{\RecipeWidth}%
   \addtolength{\R@cipeStepWidth}{-\R@cipeNumberWidth}%
-  \setlength{\R@cipeMethodWidth}{\R@cipeStepWidth}
-  \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
+  \setlength{\R@cipeMethodWidth}{\R@cipeStepWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
 % deal with the space between columns
@@ -179,6 +178,16 @@
 %
 }%
 %
+% Displays a free form description
+\DeclareRobustCommand{\Fr@eFormStep}{%
+  \vskip0.2cm%
+  \makebox[\RecipeWidth]{%
+    \rule{\R@cipeNumberWidth}{0cm}\usebox{\st@pmethodbox}%
+  }%
+% Clear the step storage boxes.
+  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+}%
+%
 %  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
   \endminipage\end{lrbox}%
@@ -189,6 +198,7 @@
   \else%
 %    \PackageWarning{cuisine}{Method text}%
     \iffr@eforming%
+      \Fr@eFormStep%
     \else%
       \DisplaySt@p%
     \fi%
@@ -319,6 +329,7 @@
   \let\fr\fr@ction
   \let\ing\ingr@di@nt
   \let\ingredient\ingr@di@nt
+  \let\freeform\fr@eform
 %  \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
