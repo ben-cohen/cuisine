@@ -36,10 +36,10 @@
 % There appear to be two styles of typesetting recipes in general use.  The
 % more common (at least in recipe books in the UK)
 % is where the ingredients appear at the top above the method, 
-% like in the recipe class (|macros/latex/contrib/other/recipe|). Another
+% like in the class |macros/latex/contrib/other/recipe|. Another
 % way is to have each ingredient next to the method step it appears in, like
-% the cooking package (|macros/latex/contrib/supported/cooking|); 
-% the cuisine package also uses this style, but closer to the format in 
+% the package |macros/latex/contrib/supported/cooking|; 
+% the |cuisine| package also uses this style, but closer to the format in 
 % \textit{Practical Professional Cookery} by H.~L.\ Cracknell and R.~J.\
 % Kaufmann.
 %
@@ -58,7 +58,7 @@
 % \end{enumerate}
 % 
 % \medskip
-% \DescribeEnvironment{recipe}
+% \DescribeEnv{recipe}
 % Each recipe is set out in a |recipe| environment.  The three
 % parameters are the title, and two recipe description fields---typically they
 % might be used for the number of servings and the preparation time.
@@ -75,15 +75,15 @@
 %
 % The |\ingredient| command is used as follows:
 % \begin{quote}
-%   |\ingredient{|\textit{Quantity}|}%
-%               {|\textit{Ingredient}|}|
+%   |\ingredient{|\textit{Quantity}|}|%
+%               |{|\textit{Ingredient}|}|
 % \end{quote}
 % There is an optional first parameter which allows you to separate the 
 % numerical quantity from the name of the unit of measurement:
 % \begin{quote}
-%   |\ingredient[|\textit{Numerical quantity}|]%
-%               {|\textit{Unit of measurement}|}%
-%               {|\textit{Ingredient}|}|
+%   |\ingredient[|\textit{Numerical quantity}|]|%
+%               |{|\textit{Unit of measurement}|}|%
+%               |{|\textit{Ingredient}|}|
 % \end{quote}
 % Examples include:
 % \begin{quote}
@@ -94,14 +94,14 @@
 % \medskip
 % \DescribeMacro{\fr}
 % Within the recipe you can use |\fr| to typeset fractions using
-% |\fr12| to get \fr@ction12, or |\fr{11}{12}| to typeset \fr@ction{11}{12}.
+% |\fr12| to get \nicefrac12, or |\fr{11}{12}| to typeset \nicefrac{11}{12}.
 % (If the numerator or denominator of the fraction is more than one digit long
 % then you will need to enclose it in braces.)
 % 
 % \DescribeMacro{\degrees}
 % \DescribeMacro{\0}
-% A degree symbol can be obtained using |\degrees| or the shorter form |\0|,
-% for example |120\0| gives 120\d@grees.
+% A degree symbol can be obtained using |\degrees| or the shorter form |\0|;
+% for example |120\0| gives 120${}^\circ$.
 % 
 % \section{More advanced usage}
 % \DescribeMacro{\nextstep}
@@ -125,12 +125,12 @@
 % The |\RecipeWidths| command is designed to be used in conjunction with the
 % \LaTeX\ commands for changing the page layout.  It is used as follows:
 % \begin{quote}
-%   |\RecipeWidths{|\textit{Total recipe width}|}%
-%               {|\textit{Recipe number width}|}%
-%               {|\textit{Number of servings width}|}%
-%               {|\textit{Ingredient width}|}%
-%               {|\textit{Quantity width}|}%
-%               {|\textit{Units width}|}|}
+%   |\RecipeWidths{|\textit{Total recipe width}|}|%
+%               |{|\textit{Recipe number width}|}|%
+%               |{|\textit{Number of servings width}|}|%
+%               |{|\textit{Ingredient width}|}|%
+%               |{|\textit{Quantity width}|}|%
+%               |{|\textit{Units width}|}|
 % \end{quote}
 %
 % \medskip
@@ -146,7 +146,7 @@
 % spaced and nor are the method steps.}
 % \item{Test it, test it, and test again.}
 % \end{itemize}
-% Please e-mail me at \myemailaddress if you find any problems or can solve
+% Please e-mail me at \myemailaddress\ if you find any problems or can solve
 % these ones.
 % 
 % \StopEventually{}
@@ -260,8 +260,8 @@
 % \begin{macro}{\R@cipeMethodWidths}
 % |\R@cipeMethodWidths| is to set the widths of the boxes/columns used in the
 % recipe steps.
-% There are three parameters:  #1 is the ingredient width, 
-% #2 the quantity width, #3 the units width.  
+% There are three parameters:  |#1| is the ingredient width, 
+% |#2| the quantity width, |#3| the units width.  
 % The other lengths below are deduced
 % from these and |\R@cipeMethodWidth|.  
 % The |0.5cm| values are to leave a little space between the columns.
@@ -290,8 +290,8 @@
 % \begin{macro}{\R@cipeTitleWidths}
 % |\R@cipeTitleWidths| is to set the widths of the boxes/columns used in
 % the recipe title.
-%   There are two parameters:  #1 is the recipe number width, 
-% #2 the number of servings width.
+%   There are two parameters:  |#1| is the recipe number width, 
+% |#2| the number of servings width.
 % The title width is deduced from there.  The method widths are also updated
 % with the new recipe number width.
 %    \begin{macrocode}
@@ -312,9 +312,9 @@
 % \begin{macro}{\RecipeWidths}
 % |\RecipeWidths| combines the above macros in a useable form.  There are six
 % parameters:
-% #1 is the recipe width, #2 the recipe number width, #3 the number of servings
-% width, 
-% #4 the ingredient width, #5 the quantity width, #6 the units width.
+% |#1| is the recipe width, |#2| the recipe number width, |#3| the number
+%of servings width, 
+% |#4| the ingredient width, |#5| the quantity width, |#6| the units width.
 % The order of the three commands here is very important.
 %    \begin{macrocode}
 \DeclareRobustCommand*{\RecipeWidths}[6]{%
@@ -420,7 +420,7 @@
 %    \end{macrocode}
 %\end{macro}
 %
-%\begin{macro}{\DisplaySt@p}{%
+%\begin{macro}{\DisplaySt@p}
 %  This calls one of the two display routines above,
 % depending on whether we are freeforming 
 %  or not.
@@ -433,10 +433,11 @@
   \fi%
 }%
 %    \end{macrocode}
+%\end{macro}
 %
 %\begin{macro}{\r@cipetitle}
 %  |\r@cipetitle| displays the recipe title constrution, given the parameters
-%  #1 the title, #2 the number of servings and #3 the preparation time.
+%  |#1| the title, |#2| the number of servings and |#3| the preparation time.
 %
 %  Note: I want to get the recipe number aligned with the TOP of the title
 %   in the case of multi-line titles.
@@ -609,9 +610,9 @@
 % \end{macro}
 %
 %\begin{macro}{\ingr@dient}
-%  The \ingr@dient command takes 3 parameters, one optional.  #3 is the
-%  ingredient.  If #1 is non-blank then #1 is the numerical quantity and 
-% #2 the unit of measure, otherwise #2 is the quantity.  Start by ending the
+%  The |\ingr@dient| command takes 3 parameters, one optional.  |#3| is the
+%  ingredient.  If |#1| is non-blank then |#1| is the numerical quantity and 
+% |#2| the unit of measure, otherwise |#2| is the quantity.  Start by ending the
 % method box.
 %    \begin{macrocode}
 \DeclareRobustCommand{\ingr@dient}[3][]{%
@@ -622,11 +623,11 @@
 % (Thanks to Ulrike Fischer, |comp.text.tex|, for help with aligning box 
 %  baselines.)
 %
-% This is a hack to see if #1 is empty (Patrick Guio, |comp.text.tex|).
+% This is a hack to see if |#1| is empty (Patrick Guio, |comp.text.tex|).
 %    \begin{macrocode}
   \ifx\relax#1\relax%
 %    \end{macrocode}
-% If it is empty we typeset #2 in the whole QandU width.  We align the top of
+% If it is empty we typeset |#2| in the whole QandU width.  We align the top of
 % the ingredient box with the bottom of the quantity box but have the
 % baseline as the top line of the quantity box.  
 %    \begin{macrocode}
@@ -640,7 +641,7 @@
     }%
   \else
 %    \end{macrocode}
-% If #1 was not empty, typeset #1 and #2 separately.  First align the top of
+% If |#1| was not empty, typeset |#1| and |#2| separately.  First align the top of
 % the ingredient box with the bottom of the unit box but have the
 % baseline as the top line of the unit box; then repeat with that box below
 % the quantity box.
@@ -679,13 +680,14 @@
   \p@stingred%
 }%
 %    \end{macrocode}
+%\end{macro}
 %
 %^^A ------------------------------------------------
 %\section{The recipe environment}
 %\begin{environment}{recipe}
 %This is the main environment in the package.  Its 3 parameters are 
-%#1 is the recipe title, #2 is the number of portions, and #3 the preparation
-%time.  Of course, #2 and #3 can be whatever you like but that is one way of
+%|#1| is the recipe title, |#2| is the number of portions, and |#3| the preparation
+%time.  Of course, |#2| and |#3| can be whatever you like but that is one way of
 %using them.
 %    \begin{macrocode}
 \newenvironment{recipe}[3]{%
@@ -748,6 +750,7 @@
   ${}^\circ$%
 }%
 %    \end{macrocode}
+%\end{macro}
 %
 %\begin{macro}{\fr@ction}
 % This is to typeset fractions, currently using package |nicefrac|.
@@ -756,6 +759,7 @@
   \nicefrac#1#2%
 }%
 %    \end{macrocode}
+%\end{macro}
 %
 %^^A ------------------------------------------------
 %^^A That's it...
