@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{572} 
+% \CheckSum{581} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -91,7 +91,7 @@
 %   |\begin{recipe}{|\textit{Title}|}|%
 %               |{|\textit{Number of servings}|}|%
 %               |{|\textit{Preparation time}|}|
-%               \\\dots\\|\end{recipe}|
+%               \\$\vdots$\\|\end{recipe}|
 % \end{quote}
 % There is no reason why the descriptive fields cannot be used for other
 % things (such as the number of calories).
@@ -129,7 +129,7 @@
 % Within the recipe you can use |\fr| to typeset fractions using
 % |\fr12| to get \nicefrac12, or |\fr{11}{12}| to typeset \nicefrac{11}{12}.
 % If the numerator or denominator of the fraction is more than one digit long
-% then you will need to enclose it in braces otherwise they are optional.
+% then you will need to enclose it in braces (otherwise they are optional).
 %
 % \DescribeMacro{\degrees}
 % \DescribeMacro{\0}
@@ -189,6 +189,21 @@
 % width of the method, use the |\freeform| command.  This is equivalent to 
 % |\noalign| in tables.  Freeform text is not given a step number.
 %
+% \medskip
+% The recipe environment has an optional first parameter with which you can
+% recipe a label.
+% \begin{quote}
+%   |\begin{recipe}[|\textit{Label}|]{|\textit{Title}|}|%
+%               |{|\textit{Servings}|}|%
+%               |{|\textit{Preparation time}|}|
+%               \\$\vdots$\\|\end{recipe}|
+% \end{quote}
+% |\pageref| and |\ref| then refer to the recipe page number
+% and recipe number respectively of the recipe with that label.  For example,
+% the label in the recipe below will make |\ref{YorkshirePud}| give recipe
+% number \ref{YorkshirePud}.  (Note that you cannot use |\label| for this
+% purpose within the environment because it breaks the formatting.)
+%
 % \section{Fonts}
 % The fonts used in the different parts of a recipe can be altered by
 % changing the definition of the following macros; this should be done
@@ -234,7 +249,7 @@
 % \end{small}
 % \medskip
 %
-% \begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}
+% \begin{recipe}[YorkshirePud]{Yorkshire Pudding}{4 portions}{1\fr12 hours}
 % \ingredient[\fr12]{pt}{milk}
 % \ingredient[2]{oz}{butter}
 % \ingredient[5]{oz}{self-raising flour}
@@ -1004,18 +1019,24 @@
 %^^A ------------------------------------------------
 %\section{The recipe environment}
 %\begin{environment}{recipe}
-%This is the main environment in the package.  Its 3 parameters are 
-%|#1| is the recipe title, |#2| is the number of portions, and |#3| the preparation
-%time.  Of course, |#2| and |#3| can be whatever you like but that is one way of
-%using them.
+%This is the main environment in the package.  Its 3 parameters are |#2| is
+%the recipe title, |#3| is the number of portions, and |#3| the preparation
+%time.  Of course, |#3| and |#4| can be whatever you like but that is one way
+%of using them.  |#1| is the label.
 %    \begin{macrocode}
-\newenvironment{recipe}[3]{%
+\newenvironment{recipe}[4][]{%
 %    \end{macrocode}
 % These are the things that are put at the start of the recipe environment.
-% First, set things up.  Increment the recipe counter, make command aliases
-% and empty the boxes.
+% First, set things up.  Increment the recipe counter (which can be used in
+% |\label|), make command aliases and empty the boxes.
+% Note that |\label| is set through |#1|, {\bf not} |\label|.
 %    \begin{macrocode}
-  \stepcounter{r@cipenumber}
+  \refstepcounter{r@cipenumber}
+  \ifx\relax#1\relax
+  \else
+    \label{#1}
+  \fi
+  \let\label\relax
   \let\newstep\m@thodend
   \let\recipen@wpage\newpage
   \let\newpage\r@cipen@wpage
@@ -1034,15 +1055,15 @@
 % Next deal with the contents/index entry if we need to.
 %    \begin{macrocode}
   \ifc@ntentsing
-     \addcontentsline{toc}{subsection}{#1}     
+     \addcontentsline{toc}{subsection}{#2}     
   \fi
   \ifind@xing
-     \index{#1 (\arabic{r@cipenumber})}
+     \index{#2 (\arabic{r@cipenumber})}
   \fi
 %    \end{macrocode}
 % Display the title and start the method box.
 %    \begin{macrocode}
-  \r@cipetitle{#1}{#2}{#3}
+  \r@cipetitle{#2}{#3}{#4}
   \vskip0.2cm%
   \p@stingred%
 }%
