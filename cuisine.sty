@@ -147,7 +147,7 @@
     \usebox{\m@thodbox}%
     \usebox{\st@pmethodbox}%
   }%
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
 %
 }%
@@ -179,7 +179,7 @@
   \ignorespaces%
 }%
 %
-%  The \m@thodend command (which is \\ in the environment)
+%  The \m@thodend command (which is \nextstep in the environment)
 \DeclareRobustCommand{\m@thodend}{%
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%
@@ -223,7 +223,7 @@
     }%
   \else
     \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
-      \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.06cm}{0cm}}%
+      \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
       \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
     }%
   \fi%
@@ -248,7 +248,7 @@
   %
   % -- set-up things
   \stepcounter{r@cipenumber}
-  \let\\\m@thodend
+  \let\nextstep\m@thodend
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
@@ -300,7 +300,7 @@
   % -- tidying up
   \bigskip
   \setlength{\parindent}{\R@cipeTempParindent}
-  % Undo \let\\  -- but this seems to be handled automatically by LaTeX
+  % Undo \let\nextstep  -- but this seems to be handled automatically by LaTeX
 }%
 %
 %
