@@ -160,13 +160,12 @@
   \endminipage\end{lrbox}%
   % Here we compare the width of the \st@pmethodbox with zero to determine
   % whether anything was entered into it.
-  \ifdim\wd\st@pmethodbox=0in
-    \PackageWarning{cuisine}{No text}
+  \ifdim\wd\st@pmethodbox=0in%
+%    \PackageWarning{cuisine}{No text}%  % use for testing
   \else%
-    \PackageWarning{cuisine}{Method text}
+%    \PackageWarning{cuisine}{Method text}%
     \DisplaySt@p%
   \fi%
-%
 }%
 %  And at the end of ingredients (= start of method)
 \DeclareRobustCommand{\p@stingred}{%
@@ -187,9 +186,9 @@
   %\pr@ingred%  % we don't do this: we want to *force* the new step
   \endminipage\end{lrbox}%
   % fill in the method box in case there isn't one yet:
-  \ifdim\wd\st@pmethodbox=0in
+  \ifdim\wd\st@pmethodbox=0in%
     \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
-  \fi
+  \fi%
   \DisplaySt@p%
   \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
@@ -228,7 +227,7 @@
     \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
       \parbox[b]{\R@cipeQandUWidth}{#2}%
     }%
-  \else
+  \else%
     \savebox{\m@thodqtybox}{%
       \begin{minipage}[b]{\R@cipeQandUWidth}%
         \mbox{%
@@ -252,10 +251,9 @@
     \end{minipage}%
     }%
   }%
+%
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
-%
   \stepcounter{ingr@dnumber}%
-%
   \p@stingred%
 }%
 %
@@ -270,6 +268,7 @@
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
   \let\0\d@grees
+  \let\ing\ingredient
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
