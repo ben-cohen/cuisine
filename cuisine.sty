@@ -181,7 +181,13 @@
 %
 %  The \m@thodend command (which is \nextstep in the environment)
 \DeclareRobustCommand{\m@thodend}{%
-  \pr@ingred%
+  %\pr@ingred%  % we don't do this: we want to *force* the new step
+  \endminipage\end{lrbox}%
+  % fill in the method box in case there isn't one yet:
+  \ifdim\wd\st@pmethodbox=0in
+    \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
+  \fi
+  \DisplaySt@p%
   \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
   \else%
