@@ -109,7 +109,7 @@
 % default values:
 \setlength{\RecipeWidth}{\textwidth}
 \RecipeTitleWidths{0.8cm}{3cm}
-\RecipeMethodWidths{4.5cm}{1cm}{2.5cm}
+\RecipeMethodWidths{3.5cm}{0.7cm}{2cm}
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
 %
@@ -216,8 +216,6 @@
     % first: is m@thoddetailbox empty?
   \fi%
 %
-  \stepcounter{ingr@dnumber}%
-%
 % WAS:
 % hack to see if #1 is empty - is there a better way? 
 %  \def\@Raaa{z}\def\@Rbbb{z#1}%
@@ -236,11 +234,15 @@
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{%
     \parbox[t]{\R@cipeIQUWidth}{%
-      \usebox{\m@thodtempbox}\par%
+      \ifnum\value{ingr@dnumber}>0%
+        \usebox{\m@thodtempbox}\par%
+      \fi
       \strut\usebox{\m@thodqtybox}\parbox[t]{\R@cipeIngredientWidth}{#3}%
     }%
   }%
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
+%
+  \stepcounter{ingr@dnumber}%
 %
   \p@stingred%
 }%
@@ -255,6 +257,7 @@
   % -- set-up things
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
+  \let\0\d@grees
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
@@ -314,7 +317,7 @@
 % Miscellaneous useful macros
 %
 % degrees        - to typeset a degrees symbol
-\DeclareRobustCommand{\degrees}{%
+\DeclareRobustCommand{\d@grees}{%
   ${}^\circ$%
 }
 %
