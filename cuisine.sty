@@ -106,7 +106,10 @@
                      {\R@cipeUnitsWidth}%
 }
 %
-% default values:
+% default values:  
+%     These appear to be reasonable for the LaTeX default page layout.
+%     (A4, portrait, one column, etc.)
+%     I don't think the LaTeX defaults are sensible for a recipe book though!
 \setlength{\RecipeWidth}{\textwidth}
 \RecipeTitleWidths{0.8cm}{3cm}
 \RecipeMethodWidths{3.5cm}{0.7cm}{2cm}
@@ -223,21 +226,30 @@
 % NOW:  (Patrick Guio, comp.text.tex)
   \ifx\relax#1\relax%
     \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
-      \parbox[t]{\R@cipeQandUWidth}{#2}%
+      \parbox[b]{\R@cipeQandUWidth}{#2}%
     }%
   \else
-    \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
-      \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
-      \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
+    \savebox{\m@thodqtybox}{%
+      \begin{minipage}[b]{\R@cipeQandUWidth}%
+        \mbox{%
+          \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
+          \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
+        }%
+        \\\mbox{}%
+      \end{minipage}%
     }%
   \fi%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
-  \savebox{\m@thodbox}[\R@cipeIQUWidth]{%
-    \parbox[t]{\R@cipeIQUWidth}{%
-      \ifnum\value{ingr@dnumber}>0%
-        \usebox{\m@thodtempbox}\par%
-      \fi
-      \strut\usebox{\m@thodqtybox}\parbox[t]{\R@cipeIngredientWidth}{#3}%
+  \savebox{\m@thodbox}{%
+    \begin{minipage}[t]{\R@cipeIQUWidth}%
+      \mbox{}\\[-\baselineskip]%
+      \parbox[t]{\R@cipeIQUWidth}{%
+        \ifnum\value{ingr@dnumber}>0%
+          \strut\usebox{\m@thodtempbox}\par%
+        \fi%
+        \strut\usebox{\m@thodqtybox}\parbox[t]{\R@cipeIngredientWidth}{#3}%
+%\\[-\baselineskip]\rule{1cm}{0cm}%
+    \end{minipage}%
     }%
   }%
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
