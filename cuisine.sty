@@ -232,12 +232,11 @@
     }%
   \else%
     \savebox{\m@thodqtybox}{%   
-      \begin{minipage}[b]{\R@cipeQandUWidth}%
-        \mbox{%
-          \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
+      \begin{minipage}[t]{\R@cipeQandUWidth}\lineskip0pt %
+        \mbox{}\\[-\baselineskip]%
+          \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}%
+             \hfill #1\rule{0.1cm}{0cm}}%
           \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
-        }%
-       %\\\mbox{}%
       \end{minipage}%
     }%
   \fi%
