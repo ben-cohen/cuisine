@@ -36,7 +36,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{535} 
+% \CheckSum{549} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -898,8 +898,22 @@
         \parbox[b]{\R@cipeQandUWidth}{%
           \raggedright\recipeunitfont%
           \setlength{\parindent}{-\R@cipeOutdent}%
-          \rule{0pt}{\baselineskip}%
-          \strut #2\strut}%
+%    \end{macrocode}
+% This sees whether the text is large enough to fit on one line, in which case
+% it centres it; otherwise it formats it sensibly.
+%
+% Note: the |\hfill| matches another one elsewhere to centre the line.
+%    \begin{macrocode}
+          \savebox{\st@pingrtmpbox}{#2}%
+          \ifdim\wd\st@pingrtmpbox>\R@cipeQandUWidth%
+            \rule{0pt}{\baselineskip}%
+            \strut #2\strut%
+          \else%
+            \noindent%
+            \rule{0pt}{\baselineskip}%
+            \strut #2\hfill\strut%
+          \fi%
+        }%
         \rule{0.2cm}{0cm}%
         \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{\raggedright%
