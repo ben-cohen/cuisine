@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{588} 
+% \CheckSum{657} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -599,7 +599,7 @@
 %    \begin{macrocode}
 \setlength{\R@cipeOutdent}{0.3cm}%
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
-\setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
+\setlength{\R@cipeTitleVerticalAdjustBot}{-0.25cm}
 \RecipeWidths{\textwidth}{0.8cm}{3cm}{3.5cm}{1cm}{1.7cm}
 %    \end{macrocode}
 %
@@ -750,25 +750,59 @@
 % The following displays the text line above the rule:
 %    \begin{macrocode}
   \mbox{%
-    \ifnumb@ring%
-      \makebox[\R@cipeNumberWidth][l]{\recipenumberfont\arabic{r@cipenumber}}%
-      \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
-    \else%
-      \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
-      \makebox[\R@cipeNumberWidth]{}%
-    \fi%
-    \parbox[b]{\R@cipeServingsWidth}{\hfill\recipeservingsfont #2}%
+    \makebox[\R@cipeWidth][t]{%
+      \parbox[t]{\R@cipeWidth}{%
+        \ifnumb@ring%
+          \lineskip0pt\mbox{}\\[-\baselineskip]%
+          \parbox[b]{\R@cipeNumberWidth}{%
+            \rule{0pt}{\baselineskip}%
+            \strut \recipenumberfont\arabic{r@cipenumber}%
+            \strut%
+          }%
+          \makebox[\R@cipeTandSWidth][t]{%
+            \parbox[t]{\R@cipeTandSWidth}{%
+              \lineskip0pt\mbox{}\\[-\baselineskip]%
+              \parbox[b]{\R@cipeTitleWidth}{%
+                \rule{0pt}{\baselineskip}%
+                \strut{\recipetitlefont #1}\strut\hfill}%
+              \parbox[b]{\R@cipeServingsWidth}{%
+                \strut{\hfill\recipeservingsfont #2}\strut}%
+            }%
+          }%
+        \else%
+          \lineskip0pt\mbox{}\\[-\baselineskip]%
+          \parbox[b]{\R@cipeTitleWidth}{%
+            \rule{0pt}{\baselineskip}%
+            \strut{\recipetitlefont #1}\strut\hfill}%
+          \makebox[\R@cipeNumberWidth]{}%
+          \parbox[b]{\R@cipeServingsWidth}{%
+            \strut{\hfill\recipeservingsfont #2}\strut}%        
+        \fi%
+      }%
+    }%    
+%%\iffalse
+%%    \ifnumb@ring%
+%%      \makebox[\R@cipeNumberWidth][l]{\recipenumberfont\arabic{r@cipenumber}}%
+%%      \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
+%%    \else%
+%%      \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
+%%      \makebox[\R@cipeNumberWidth]{}%
+%%    \fi%
+%%    \parbox[b]{\R@cipeServingsWidth}{\hfill\recipeservingsfont #2}%
+%%\fi
   }\par%
 %    \end{macrocode}
-% Next we display the rule, being careful not to allow 
+% Next we display the rule, being careful not to allow
 % page breaks during the title, using the adjustments as specified above.
+% (This is a bit vague and nasty...)
 %    \begin{macrocode}
-  \nopagebreak   
-  \vspace{\R@cipeTitleVerticalAdjustTop}%
+%%  \nopagebreak   
+%%  \vspace{\R@cipeTitleVerticalAdjustTop}%
   \nopagebreak
-  \rule{\R@cipeWidth}{0.4pt}\par%
+  \rule[-\R@cipeTitleVerticalAdjustTop]{\R@cipeWidth}{0.4pt}\par%
   \nopagebreak
-  \vspace{\R@cipeTitleVerticalAdjustBot}%
+  \vskip\R@cipeTitleVerticalAdjustBot%
+%%  \vspace{\R@cipeTitleVerticalAdjustBot}%
   \nopagebreak
 %    \end{macrocode}
 % Finally we display the text line below the rule if it isn't empty:
