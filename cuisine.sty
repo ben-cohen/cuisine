@@ -168,7 +168,7 @@
   \vskip0.2cm%
 % Display this step.
   \makebox[\RecipeWidth]{%
-    \makebox[\R@cipeNumberWidth][c]{\arabic{st@pnumber}}%
+    \makebox[\R@cipeNumberWidth][l]{\arabic{st@pnumber}}%
     \usebox{\m@thodbox}%
     \usebox{\st@pmethodbox}%
   }%
@@ -319,46 +319,15 @@
   \p@stingred%
 }%
 %
-%  Wrapper for \ingr@dient to allow easy alteration of style format.
-\DeclareRobustCommand{\ingr@di@nt}[3][]{%
-  \ingr@dient[#1]%
-             {#2}%
-             {#3}%
-}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The recipe environment
-%   #1 = title, #2 = portions, #3 = preparation time
-\newenvironment{recipe}[3]{%
-  % These are the things that are put at the start of recipes:
-  %
-  % -- set-up things
-  \sloppy % don't be too fussy about line-breaks (is this working?)
-  \stepcounter{r@cipenumber}
-  \let\nextstep\m@thodend
-  \let\0\d@grees
-  \let\degrees\d@grees
-  \let\fr\fr@ction
-  \let\ing\ingr@di@nt
-  \let\ingredient\ingr@di@nt
-  \let\freeform\fr@eform
-%  \setlength{\R@cipeTempParindent}{\parindent}
-  \setlength{\parindent}{0pt}
-  \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
-  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
-  % -- deal with index entry
-  \ifind@xing
-     \addcontentsline{toc}{subsection}{#1}     
-  \fi
-  %
-  % -- and the actual displayed title
+%  Recipe title code
+\DeclareRobustCommand{\r@cipetitle}[3]{
 
   \bigskip
   \pagebreak[0]
   % ---- line 1
   \mbox{%
     \ifnumb@ring%
-      \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+      \makebox[\R@cipeNumberWidth][l]{\arabic{r@cipenumber}}%
       \parbox[b]{\R@cipeTitleWidth}{#1}%
     \else%
       \parbox[b]{\R@cipeTitleWidth}{#1}%
@@ -383,6 +352,48 @@
   \makebox[\RecipeWidth][r]{#3}\par%
   \nopagebreak
   %
+}%
+%
+%  Wrapper for \ingr@dient to allow easy alteration of style format.
+%\DeclareRobustCommand{\ingr@di@nt}[3][]{%
+%  \ingr@dient[#1]%
+%             {#2}%
+%             {#3}%
+%}%
+%%
+%%  Wrapper for \r@cipetitle to allow easy alteration of style format.
+%\DeclareRobustCommand{\r@cip@title}[3]{%
+%  \r@cipetitle{#1}%
+%              {#2}%
+%              {#3}%
+%}%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The recipe environment
+%   #1 = title, #2 = portions, #3 = preparation time
+\newenvironment{recipe}[3]{%
+  % These are the things that are put at the start of recipes:
+  %
+  % -- set-up things
+  \sloppy % don't be too fussy about line-breaks (is this working?)
+  \stepcounter{r@cipenumber}
+  \let\nextstep\m@thodend
+  \let\0\d@grees
+  \let\degrees\d@grees
+  \let\fr\fr@ction
+  \let\ing\ingr@dient
+  \let\ingredient\ingr@dient
+  \let\freeform\fr@eform
+  \setlength{\parindent}{0pt}
+  \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
+  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+  % -- deal with index entry
+  \ifind@xing
+     \addcontentsline{toc}{subsection}{#1}     
+  \fi
+  %
+  % -- and the actual displayed title
+  \r@cipetitle{#1}{#2}{#3}
   %
   \p@stingred%
 }%
