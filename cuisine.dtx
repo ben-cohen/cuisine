@@ -237,7 +237,7 @@
 % for about 1 hour.
 % \end{recipe}
 % 
-% \subsection{A less simple example}
+% \subsection{A more complex example}
 % We can change the widths of the columns using, for example,
 % \begin{quote}
 % |\RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}|
@@ -252,14 +252,13 @@
 % |\renewcommand*{\recipefreeformfont}{\itshape}|
 % \end{quote}
 %
-% The example below demostrates the |\newstep| and |\newpage| commands
-% and how to use |\freeform| to create freeform text and rules.  In this case,
-% recipe numbering has been turned off, and the |small| environment is being
-% used.
+% The example below demostrates the |\newstep| and |\newpage| commands, and
+% also how to use |\freeform| to create freeform text.  |\freeform| can also
+% be used to create rules in the same way as when using |\noalign| in tables.
+% In this case, recipe numbering has been turned off, and the |small|
+% environment is being used.
 %
 % \medskip
-% \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}
-% \makeatletter\numb@ringfalse\makeatother
 % \begin{small}\noindent
 % |\begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}|\\
 % |\freeform This is a well-known Italian recipe which is |\\
@@ -269,9 +268,10 @@
 % |\ingredient[6--8]{tbsp}{Marsala (or sherry)}|\\
 % |\ingredient[\fr14]{oz}{gelatine}|\\
 % |\ingredient[2]{tbsp}{cold water}|\\
-% |In the top of a double boiler, combine the egg yolks with sugar and Marsala,|\\
-% |and whip the mixture over hot, but not boiling, water until it thickens.|\\
-% |Stir in gelatine, softened in cold water and dissolved over hot water.|\\
+% |In the top of a double boiler, combine the egg yolks with sugar and|\\
+% |Marsala, and whip the mixture over hot, but not boiling, water until it|\\
+% |thickens. Stir in gelatine, softened in cold water and dissolved over hot|\\
+% |water.|\\
 % |\ingredient[3]{tbsp}{brandy}|\\
 % |\ingredient[\fr38]{pt}{double cream}|\\
 % |Put the pan in a bowl of ice and stir the |\\
@@ -298,6 +298,8 @@
 % \renewcommand*{\recipeunitfont}{\sffamily}
 % \renewcommand*{\recipeingredientfont}{\sffamily}
 % \renewcommand*{\recipefreeformfont}{\itshape}
+% \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}
+% \makeatletter\numb@ringfalse\makeatother ^^A Cheap trick
 %
 % \begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}
 % \freeform This is a well-known Italian recipe which is 
@@ -340,13 +342,12 @@
 % added a few extra |\strut|s but if you compare the baselines of the
 % ingedients to the adjacent method baselines, they are still not all properly
 % aligned.)}
-% \item{Page breaking works between the method steps, but method steps will not
-% be split.  There could be a |\pagebreak| command to force the next step onto
-% a new page.}
+% \item{Vertical alignment of the recipe title: see |\r@cipetitle| on page
+% \pageref{rectitlealign}.}
 % \item{Support for dual sets of quantities, for example using a command like
 % \verb|\ingredient{1}{oz}{25}{g}{butter}|.  This could be used where two
 % systems of measurement are used or for different numbers of servings.  The
-% display would then have to have 2 extra columns or else (more likely) 
+% display would then have to have two extra columns or else (more likely) 
 % there would have to be an option to select which one to display.}
 % \end{itemize}
 % Please e-mail me at \myemailaddress\ if you can help find or solve any 
@@ -563,8 +564,8 @@
 %
 % \section{Fonts}
 % This is where the default fonts are set up.
-% \verb|\recipefont| is the default font for recipe default fonts. 
-% The other fonts inherit from this but can be altered individually.
+% \verb|\recipefont| is the default font for the other recipe fonts; thus
+% the other fonts inherit from this but can be altered individually.
 %    \begin{macrocode}
 \newcommand*\recipefont{\normalfont}
 \newcommand*\recipetitlefont{\recipefont}
@@ -649,8 +650,8 @@
 %    \end{macrocode}
 %\end{macro}
 %
-%\begin{macro}{\FreeFormSt@p}
-% |\FreeFormSt@p| displays a free form description; it works in the same way
+%\begin{macro}{\Fr@eFormStep}
+% |\Fr@eFormStep| displays a free form description; it works in the same way
 % as |\Displ@ySt@p|.
 %    \begin{macrocode}
 \DeclareRobustCommand{\Fr@eFormStep}{%
@@ -685,8 +686,9 @@
 %  |\r@cipetitle| displays the recipe title constrution, given the parameters
 %  |#1| the title, |#2| the number of servings and |#3| the preparation time.
 %
+%  \label{rectitlealign}
 %  Note: I want to get the recipe number aligned with the TOP of the title
-%   in the case of multi-line titles.
+%  in the case of multi-line titles.
 %    \begin{macrocode}
 \DeclareRobustCommand{\r@cipetitle}[3]{
 
@@ -742,7 +744,7 @@
   \hfuzz.5pt%
   \vfuzz.5pt%
 %    \end{macrocode}
-%  Also, this is not in \sloppy.  Avoid warning on underfull boxes, which are
+%  This is not in |\sloppy|:  avoid warning on underfull boxes, which are
 %  more common since the columns are very narrow.
 %  This value may need to be adjusted...
 %    \begin{macrocode}
@@ -782,7 +784,9 @@
 %  supposed to work properly over an environment definition (and doesn't
 %  seem to, either).  So we use |\lrbox|...|\endlrbox|.  But we want to nest
 %  a |\minipage| inside this, which fails.  But it does work with 
-%  |\begin{lrbox}\minipage|...|\endminipage\end{lrbox}|.  WHY?!
+%  |\begin{lrbox}\minipage|...|\endminipage\end{lrbox}|.
+%
+%  \centerline{WHY?!}
 %
 %  What happens, anyway, is that a new minipage--box is started.  Provided
 %  the user doesn't put anything other than whitespace and comments between
@@ -802,7 +806,7 @@
 %\end{macro}
 %
 %\subsection{Step terminating macros}
-% These macros are ones which call |\pr@ingred| and |\p@stingred|, and which
+% These macros call |\pr@ingred| and |\p@stingred|, and 
 % can (through |\pr@ingred|) cause the next step to be started.
 %
 %\begin{macro}{\m@thodend}
