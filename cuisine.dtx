@@ -24,7 +24,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{500} 
+% \CheckSum{502} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps where
@@ -79,7 +79,8 @@
 % \textit{before} the method step beside which you want the ingredient to
 % appear.  A new method step is started whenever an |\ingredient| appears
 % after there has been method text.  Two consecutive |\ingredient|
-% declarations will appear next to the same method step.
+% declarations will appear next to the same method step.  (Page breaks only
+% occur between method steps.)
 %
 % The |\ingredient| command is used as follows:
 % \begin{quote}
@@ -112,19 +113,6 @@
 % for example |120\0| gives 120${}^\circ$.
 % 
 % \section{More advanced usage}
-% \DescribeMacro{\nextstep}
-% To force a new step if you do not want to declare any ingredients, use the
-% |\nextstep| command.  (A second |\nextstep| command with no ingredient or
-% method text before it will be ignored to prevent empty method steps from
-% appearing.)
-%
-% \medskip
-% \DescribeMacro{\freeform}
-% To typeset text across the whole width of the recipe instead of just the
-% width of the method, use the |\freeform| command.  This is equivalent to 
-% |\noalign| in tables.  Freeform text is not given a step number.
-% 
-% \medskip
 % \DescribeMacro{\RecipeWidths}
 % The |cuisine| package has been designed so that it is easy to vary the
 % widths of the columns.  \LaTeX\ has very wide margins by default 
@@ -145,6 +133,19 @@
 % \DescribeMacro{\ResetRecipeCounter}
 % The |\ResetRecipeCounter| command will reset the recipe counter so that 
 % recipes are numbered from 1 again.
+%
+% \medskip
+% \DescribeMacro{\nextstep}
+% Within the recipe envirmonment, to force a new step if you do not want 
+% to declare any ingredients, use the
+% |\nextstep| command.  (A second |\nextstep| command with no ingredient or
+% method text before it will be ignored to prevent completely empty steps from
+% appearing.)
+%
+% \DescribeMacro{\freeform}
+% To typeset text across the whole width of the recipe instead of just the
+% width of the method, use the |\freeform| command.  This is equivalent to 
+% |\noalign| in tables.  Freeform text is not given a step number.
 %
 % \section{Fonts}
 % The fonts used in the different parts of a recipe can be altered by
@@ -953,7 +954,12 @@
     \PackageWarning{cuisine}{The recipe did not have any method details}%
   \fi%
   
-  \bigskip%
+  \pagebreak[0]%  
+  \medskip%
+%    \end{macrocode}
+% This prevents indentation problems after the end of the environment.
+%    \begin{macrocode}
+  \@endpetrue%
 }%
 %    \end{macrocode}
 %\end{environment}
