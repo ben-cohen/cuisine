@@ -36,8 +36,10 @@
 % ifind@xing     - Whether writing the recipes to an index file or not
 \newif\ifind@xing
 %
+% ifh@smethodtext - Whether the method body is empty or not
 \newif\ifh@smethodtext
 \h@smethodtextfalse
+%
 % And some dimensions:
 %
 % Width of the recipe number box
@@ -146,7 +148,7 @@
     \h@smethodtexttrue%
      \PackageWarning{cuisine}{TRUE}
   \fi%
-%\usebox{\m@thoddetailbox}
+\usebox{\m@thoddetailbox}
 %
 }%
 %  And at the end of ingredients (= start of method)
@@ -158,10 +160,15 @@
 %
 %  The \m@thodend command (which is \\ in the environment)
 \DeclareRobustCommand{\m@thodend}{%
+  \ifnum\value{m@thodnumber}=0%
+    % don't need to do much here...
+  \else%
+    \pr@ingred%
+    % 
+  \fi%
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \pr@ingred%
   \stepcounter{m@thodnumber}%
   \makebox[\textwidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
@@ -174,10 +181,10 @@
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
-  \pr@ingred%
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
+    \pr@ingred%
     % 
   \fi%
   \ifnum\value{ingr@dnumber}=0%
@@ -191,7 +198,7 @@
   \stepcounter{ingr@dnumber}%
 %
 % WAS:
-% hack to see if #1 is empty - is there a better way?  (TODO)
+% hack to see if #1 is empty - is there a better way? 
 %  \def\@Raaa{z}\def\@Rbbb{z#1}%
 %  \ifx\@Raaa\@Rbbb%
 % NOW:  (Patrick Guio, comp.text.tex)
@@ -265,16 +272,15 @@
   \nopagebreak
   %
   %
-  \p@stingred%
+%  \p@stingred%
 }%
 {%%%%%%%%%%
   % And these are the things put at the end of recipes:  
-%  \ifnum\value{m@thodnumber}=0%  then complain!
-%    \PackageWarning{cuisine}{The recipe did not have any method details}
-%  \else%
-%              % do we want this?
-%  \fi%
-  \pr@ingred%
+  \ifnum\value{m@thodnumber}=0%  then complain!
+    \PackageWarning{cuisine}{The recipe did not have any method details}
+  \else%
+    \pr@ingred%
+  \fi%
   %
   % -- tidying up
   \bigskip
