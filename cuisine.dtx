@@ -19,7 +19,7 @@
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{cuisine}
+\usepackage[nonumber]{cuisine}
 \GetFileInfo{cuisine.sty} % defines \filename, \filedate, \fileversion, 
                           % \fileinfo from cuisine.sty
 \begin{document}
@@ -46,7 +46,7 @@
 % \MakeShortVerb{\|}
 % \section{Introduction}
 % There appear to be two styles of typesetting recipes in general use.  The
-% more common (at least in recipe books in the UK)
+% more common (at least in recipe books in the U.K.)
 % is where the ingredients appear at the top above the method, 
 % like in the class |macros/latex/contrib/other/recipe|. Another
 % way is to have each ingredient next to the method step in which it appears, 
@@ -140,6 +140,11 @@
 % \DescribeMacro{\X}
 % A times symbol, ${}\times{}$, can be obtained using |\X|.
 % 
+% \DescribeMacro{\%}
+% As is usual with \LaTeX, to obtain a percent sign, \%, you must use |\%|
+% since |%| on its own starts a comment.
+% 
+% 
 % \section{More advanced usage}
 % The |cuisine| package has been designed so that it is easy to vary the
 % widths of the columns.  \LaTeX\ has very wide margins by default 
@@ -200,8 +205,8 @@
 % \end{quote}
 % |\pageref| and |\ref| then refer to the recipe page number
 % and recipe number respectively of the recipe with that label.  For example,
-% the label in the recipe below will make |\ref{YorkshirePud}| give recipe
-% number \ref{YorkshirePud}.  (Note that you cannot use |\label| for this
+% the label in the recipe below will make |\ref{Zabaglione}| give recipe
+% number \ref{Zabaglione}.  (Note that you cannot use |\label| for this
 % purpose within the environment because it breaks the formatting.)
 %
 % \section{Fonts}
@@ -232,12 +237,11 @@
 % there been text before the first ingredient, that text would become the first
 % step and the heating instruction would be the second step.)  The fourth
 % |\ingredient| signals the end of the method text and starts a new step.  The
-% final |\end{recipe}| finishes that step.  Note the label declaration 
-% ``YorkshirePud.''
+% final |\end{recipe}| finishes that step.  
 % \medskip
 %
 % \begin{small}\noindent
-% |\begin{recipe}[YorkshirePud]{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
+% |\begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
 % |\ingredient[\fr12]{pt}{milk}|\\
 % |\ingredient[2]{oz}{butter}|\\
 % |\ingredient[5]{oz}{self-raising flour}|\\
@@ -250,7 +254,7 @@
 % \end{small}
 % \medskip
 %
-% \begin{recipe}[YorkshirePud]{Yorkshire Pudding}{4 portions}{1\fr12 hours}
+% \begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}
 % \ingredient[\fr12]{pt}{milk}
 % \ingredient[2]{oz}{butter}
 % \ingredient[5]{oz}{self-raising flour}
@@ -271,6 +275,7 @@
 % We can also change the fonts, for example:
 % \begin{quote}
 % |\renewcommand*{\recipetitlefont}{\large\bfseries\sffamily}|\\
+% |\renewcommand*{\recipenumberfont}{\large\bfseries\sffamily}|\\
 % |\renewcommand*{\recipequantityfont}{\sffamily\bfseries}|\\
 % |\renewcommand*{\recipeunitfont}{\sffamily}|\\
 % |\renewcommand*{\recipeingredientfont}{\sffamily}|\\
@@ -280,12 +285,13 @@
 % The example below demostrates the |\newstep| and |\newpage| commands, and
 % also how to use |\freeform| to create freeform text.  |\freeform| can also
 % be used to create rules in the same way as when using |\noalign| in tables.
-% In this case, recipe numbering has been turned off, and the |small|
-% environment is being used.
+% In this case, recipe numbering has been turned on, and the |small|
+% environment is being used.  Note the label declaration 
+% ``Zabaglione''.
 %
 % \medskip
 % \begin{small}\noindent
-% |\begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}|\\
+% |\begin{recipe}[Zabaglione]{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}|\\
 % |\freeform This is a well-known Italian recipe which is |\\
 % |great for piling on the calories.|\\
 % |\ingredient[6]{}{egg yolks}|\\
@@ -319,14 +325,16 @@
 % \medskip
 % \begin{center}
 % \renewcommand*{\recipetitlefont}{\large\bfseries\sffamily}
+% \renewcommand*{\recipenumberfont}{\large\bfseries\sffamily}
 % \renewcommand*{\recipequantityfont}{\sffamily\bfseries}
 % \renewcommand*{\recipeunitfont}{\sffamily}
 % \renewcommand*{\recipeingredientfont}{\sffamily}
 % \renewcommand*{\recipefreeformfont}{\itshape}
 % \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}
-% \makeatletter\numb@ringfalse\makeatother ^^A Cheap trick
+% \makeatletter\numb@ringtrue\makeatother ^^A Cheap trick
+% \ResetRecipeCounter
 %
-% \begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}
+% \begin{recipe}[Zabaglione]{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}
 % \freeform This is a well-known Italian recipe which is 
 % great for piling on the calories.
 % \ingredient[6]{}{egg yolks}
@@ -361,8 +369,11 @@
 %
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
+% \item{There may be alignment problems if the font for the ingredients is
+% taller than that for the method text.}
 % \item{Vertical alignment of the recipe title: see |\r@cipetitle| on page
 % \pageref{rectitlealign}.}
+% \item{Code optimisations.}
 % \item{Support for dual sets of quantities, for example using a command like
 % \verb|\ingredient{1}{oz}{25}{g}{butter}|.  This could be used where two
 % systems of measurement are used or for different numbers of servings.  The
