@@ -39,8 +39,8 @@
 % \CheckSum{534} 
 %
 % \begin{abstract}
-% This package provides an environment for typesetting recipes in steps where
-% each ingredient is on the left of the page next to  
+% This package provides an environment for typesetting recipes in steps
+% in which each ingredient is on the left of the page next to  
 % method step where it is used.
 % \end{abstract}
 % 
@@ -50,15 +50,15 @@
 % more common (at least in recipe books in the UK)
 % is where the ingredients appear at the top above the method, 
 % like in the class |macros/latex/contrib/other/recipe|. Another
-% way is to have each ingredient next to the method step it appears in, like
-% the package |macros/latex/contrib/supported/cooking|; 
+% way is to have each ingredient next to the method step in which it appears, 
+% as in the package |macros/latex/contrib/supported/cooking|; 
 % the |cuisine| package also uses this style, but closer to the format in 
 % \textit{Practical Professional Cookery} by H.~L.\ Cracknell and R.~J.\
 % Kaufmann.
 %
 % \section{Usage}
-% The package is loaded using the header |\usepackage{cuisine}|.  The options
-% are:
+% The package is loaded using the header |\usepackage{cuisine}|;  the
+% available options are:
 % \begin{itemize}
 % \item{|number|}\ \ Recipes will be numbered sequentially to the left of the 
 % recipe title.  (This is the
@@ -69,14 +69,18 @@
 % \item{|noindex|}\ \ Recipe titles will not be written to the document contents.
 % (This is the default.)
 % \end{itemize}
-% You will need the package |nicefrac|; for more details, see
-% Section \ref{nicefractions}.
+% You will need the package |nicefrac|; 
+% it comes
+% with current versions of te\TeX\ and is also 
+% available from CTAN as part of the |units| package in 
+% |tex-archive/macros/latex/contrib/supported/units|.
 % 
+%
 % \medskip
 % \DescribeEnv{recipe}
 % Each recipe is set out in a |recipe| environment.  The three
-% parameters are the title, and two recipe description fields---typically they
-% might be used for the number of servings and the preparation time, for
+% parameters are the title, and two recipe description fields---it is assumed
+% that they are used for the number of servings and the preparation time, for
 % example:
 % \begin{quote}
 %   |\begin{recipe}{|\textit{Title}|}|%
@@ -84,6 +88,8 @@
 %               |{|\textit{Preparation time}|}|
 %               \\\dots\\|\end{recipe}|
 % \end{quote}
+% There is no reason why the descriptive fields cannot be used for other
+% things (such as the number of calories).
 % 
 % \medskip
 % \DescribeMacro{\ingredient}
@@ -91,10 +97,9 @@
 % Within the environment, you type in method details directly, and you
 % type the ingredients using |\ingredient| or the shorter version |\ing|
 % \textit{before} the method step beside which you want the ingredient to
-% appear.  A new method step is started whenever an |\ingredient| appears
-% after there has been method text.  Two consecutive |\ingredient|
-% declarations will appear next to the same method step.  (Page breaks only
-% occur between method steps; method steps will not be split across pages.)
+% appear.  A new method step is started whenever there is method text before
+% an |\ingredient|.  Two consecutive |\ingredient|
+% declarations will appear next to the same method step.
 %
 % The |\ingredient| command is used as follows:
 % \begin{quote}
@@ -118,15 +123,9 @@
 % \DescribeMacro{\fr}
 % Within the recipe you can use |\fr| to typeset fractions using
 % |\fr12| to get \nicefrac12, or |\fr{11}{12}| to typeset \nicefrac{11}{12}.
-% (If the numerator or denominator of the fraction is more than one digit long
-% then you will need to enclose it in braces.)
+% If the numerator or denominator of the fraction is more than one digit long
+% then you will need to enclose it in braces otherwise they are optional.
 %
-% \label{nicefractions}
-% This is implemented by calling the |nicefrac| package; this package comes
-% with current versions of te\TeX\ and is also 
-% available from CTAN as part of the |units| package in 
-% |tex-archive/macros/latex/contrib/supported/units|.
-% 
 % \DescribeMacro{\degrees}
 % \DescribeMacro{\0}
 % A degree symbol can be obtained using |\degrees| or the shorter form |\0|;
@@ -167,7 +166,10 @@
 % the next page.  It does not end the current method body (and so does not
 % have to appear at the end of it); to end the body as well, use
 % |\newpage\newstep|.
+% Page breaks only
+% occur between method steps; method steps will not be split across pages.
 %
+% \medskip
 % \DescribeMacro{\freeform}
 % To typeset text across the whole width of the recipe instead of just the
 % width of the method, use the |\freeform| command.  This is equivalent to 
