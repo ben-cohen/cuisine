@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{654} 
+% \CheckSum{655} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -385,7 +385,8 @@
 % \item[\sl v0.5]Written---release on CTAN. 
 % \item[\sl v0.6]Fixed a couple of vertical alignment problems.
 %                Labelling of recipes for |\ref|. |\X| (times) macro.
-%                Different index and contents options.
+%                Added different index and contents options, and corrected a
+%                bug that sometimes gave the wrong page number.
 %                If |recipe|'s |#4| is empty, don't leave a blank line.
 %                The step number width can be changed but the recipe number
 %                width varies.
@@ -734,11 +735,7 @@
 %  |#1| the title, |#2| the number of servings and |#3| the preparation time.
 %
 %    \begin{macrocode}
-\DeclareRobustCommand{\r@cipetitle}[3]{
-
-  \bigskip\medskip
-  \pagebreak[0]
-  \parskip0pt%
+\DeclareRobustCommand{\r@cipetitle}[3]{%
 %    \end{macrocode}
 % The |\parskip| ensures that the distance between the rule and the text above
 % and below does not change when the page's vertical glue ``sets''.
@@ -1101,14 +1098,26 @@
   \savebox{\st@pingrbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
 %    \end{macrocode}
-% Next deal with the contents/index entry if we need to.
+% Make sure that the recipe is spaced appropriately from the preceding text
+% and start a new page if necessary.  This is not part of |\r@cipetitle|
+% because putting the break after |\addcontentsline| might yield the wrong
+% page number.  The blank line below is intentional.
 %    \begin{macrocode}
-  \ifc@ntentsing
-     \addcontentsline{toc}{subsection}{#2}     
-  \fi
-  \ifind@xing
-     \index{#2 (\arabic{r@cipenumber})}
-  \fi
+
+  \bigskip\medskip
+  \pagebreak[0]
+  \parskip0pt%
+%    \end{macrocode}
+% Next deal with the contents/index entry if we need to.  Again, the 
+% |\nopagebreak| prevents the contents line occurring on the previous page.
+%    \begin{macrocode}
+  \ifc@ntentsing%
+     \addcontentsline{toc}{subsection}{#2}%
+  \fi%
+  \ifind@xing%
+     \index{#2 (\arabic{r@cipenumber})}%
+  \fi%
+  \nopagebreak%
 %    \end{macrocode}
 % Display the title and start the method box.
 %    \begin{macrocode}
