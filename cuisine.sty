@@ -17,13 +17,20 @@
 \newcounter{r@cipenumber}
 %
 % command to reset it
-\DeclareRobustCommand{\ResetRecipeCounter}{\setcounter{r@cipenumber}{0}}
+\DeclareRobustCommand{\ResetRecipeCounter}{%
+  \setcounter{r@cipenumber}{0}%
+}
 %
 % m@thodnumber   - Method counter (within recipes)
 %                  It is zeroed whenever the recipe counter is incremented.
 \newcounter{m@thodnumber}[r@cipenumber]  
 %
-% ifnumb@ring     - Whether or not recipe numbers are printed 
+% ingr@dnumber   - Ingredeient counter (within recipes)
+%                  It is zeroed whenever the method counter is incremented.
+\newcounter{ingr@dnumber}[m@thodnumber]  
+%
+% ifnumb@ring    - Whether or not recipe numbers are printed 
+%                  Method numbers will always be printed    
 \newif\ifnumb@ring
 %
 % ifind@xing     - Whether writing the recipes to an index file or not
@@ -40,6 +47,9 @@
 % Width of the recipe number-of-servings box
 \newlength{\R@cipeServingsWidth}
 %
+% And the sum of the last two
+\newlength{\R@cipeTandSWidth}
+%
 % Height of the recipe title to rule adjustments (usually negative)
 \newlength{\R@cipeTitleVerticalAdjustTop}
 \newlength{\R@cipeTitleVerticalAdjustBot}
@@ -49,6 +59,7 @@
 \newlength{\R@cipeQuantityWidth}
 \newlength{\R@cipeUnitsWidth}
 \newlength{\R@cipeQandUWidth}   % total of the previous two...
+\newlength{\R@cipeIQUWidth}   % total of the previous two...
 %
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
@@ -60,33 +71,46 @@
 %
 %   #1 is the ingredient width, #2 the quantity, #3 the units
 %   others calculated
-\DeclareRobustCommand{\RecipeMethodWidths}[3]{%
-\setlength{\R@cipeIngredientWidth}{#1}%
-\setlength{\R@cipeQuantityWidth}{#2}%
-\setlength{\R@cipeUnitsWidth}{#3}%
-\setlength{\R@cipeQandUWidth}{\R@cipeQuantityWidth}%
-\addtolength{\R@cipeQandUWidth}{\R@cipeUnitsWidth}%
-\setlength{\R@cipeMethodWidth}{\textwidth}
-\addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
-\addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
-\addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}}
+\DeclareRobustCommand*{\RecipeMethodWidths}[3]{%
+  \setlength{\R@cipeIngredientWidth}{#1}%
+  \setlength{\R@cipeQuantityWidth}{#2}%
+  \setlength{\R@cipeUnitsWidth}{#3}%
+  \setlength{\R@cipeQandUWidth}{\R@cipeQuantityWidth}%
+  \addtolength{\R@cipeQandUWidth}{\R@cipeUnitsWidth}%
+  \setlength{\R@cipeIQUWidth}{\R@cipeQandUWidth}%
+  \addtolength{\R@cipeIQUWidth}{\R@cipeIngredientWidth}%
+  \setlength{\R@cipeMethodWidth}{\textwidth}
+  \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
+  \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
+  \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
+}
 %
 %   #1 is the recipe number width, #2 the number of servings
 %   title width calculated, updates method widths too
-\DeclareRobustCommand{\RecipeTitleWidths}[2]{%
-\setlength{\R@cipeNumberWidth}{#1}%
-\setlength{\R@cipeServingsWidth}{#2}%
-\setlength{\R@cipeTitleWidth}{\textwidth}%
-\addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
-\addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
-\RecipeMethodWidths{\R@cipeIngredientWidth}{\R@cipeQuantityWidth}%
-                   {\R@cipeUnitsWidth}}
+\DeclareRobustCommand*{\RecipeTitleWidths}[2]{%
+  \setlength{\R@cipeNumberWidth}{#1}%
+  \setlength{\R@cipeServingsWidth}{#2}%
+  \setlength{\R@cipeTitleWidth}{\textwidth}%
+  \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
+  \addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
+  \setlength{\R@cipeTandSWidth}{\R@cipeServingsWidth}%
+  \addtolength{\R@cipeTandSWidth}{\R@cipeTitleWidth}%
+  \RecipeMethodWidths{\R@cipeIngredientWidth}{\R@cipeQuantityWidth}%
+                     {\R@cipeUnitsWidth}%
+}
 %
 % default values:
 \RecipeTitleWidths{0.8cm}{3cm}
 \RecipeMethodWidths{4.5cm}{1cm}{2.5cm}
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boxes
+\newsavebox{\m@thodbox}
+\newsavebox{\m@thodtempbox}
+\newsavebox{\m@thodqtybox}
+\newsavebox{\m@thoddetailbox}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options 
@@ -104,53 +128,141 @@
 \ProcessOptions\relax
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The ingredient/method macros
+%
+%   \DeclareRobustCommand{\r@cipeempty}{}
+%
+%  The \m@thodend command (which is \\ in the environment)
+\DeclareRobustCommand{\m@thodend}{%
+%  \ifnum\value{ingr@dnumber}=0%
+%  \else%
+%  \fi%
+  \end{lrbox}
+  \stepcounter{m@thodnumber}%
+  \makebox[\textwidth]{%
+    \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+    \show{\m@thodbox}%
+    
+  }%
+
+
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+}%
+%
+%
+%  The \ingredient command
+\DeclareRobustCommand{\ingredient}[3][]{%
+  \end{lrbox}
+  \ifnum\value{m@thodnumber}=0%
+    % don't need to do much here...
+  \else%
+    % 
+  \fi%
+  
+  \stepcounter{ingr@dnumber}%
+%
+% hack to see if #1 is empty - is there a better way?  
+  \def\@Raaa{z}%
+  \def\@Rbbb{z#1}%
+  \ifx\@Raaa\@Rbbb%
+    \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
+      \parbox[t]{\R@cipeQandUWidth}{#2}%
+    }%
+  \else
+    \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
+      \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.06cm}{0cm}}%
+      \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
+    }%
+  \fi%
+  \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{%
+    \parbox[t]{\R@cipeQandUWidth}{%
+      \usebox{\m@thodtempbox}\par%
+      \strut\usebox{\m@thodqtybox}%
+    }%
+  }%
+
+
+
+  \usebox{\m@thodbox}
+%
+  \begin{\lrbox}{\m@thoddetailbox}
+}%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The recipe environment
 %   #1 = title, #2 = portions, #3 = preparation time
 \newenvironment{recipe}[3]{%
-% These are the things that are put at the start of recipes:
-%
-% -- set-up things
-\stepcounter{r@cipenumber}
-\setlength{\R@cipeTempParindent}{\parindent}
-\setlength{\parindent}{0pt}
-%
-% -- and the actual displayed title
+  % These are the things that are put at the start of recipes:
+  %
+  % -- set-up things
+  \stepcounter{r@cipenumber}
+  \let\\\m@thodend
+  \setlength{\R@cipeTempParindent}{\parindent}
+  \setlength{\parindent}{0pt}
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  %
+  % -- and the actual displayed title
 
-\medskip
-% ---- line 1
-\mbox{%
-\ifnumb@ring%
-\makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
-\parbox[b]{\R@cipeTitleWidth}{#1}%
-\else%
-\parbox[b]{\R@cipeTitleWidth}{#1}%
-\makebox[\R@cipeNumberWidth]{}%
-\fi%
-\parbox[b]{\R@cipeServingsWidth}{\hfill #2}}\par%
-% ---- rule
-\vspace{\R@cipeTitleVerticalAdjustTop}%
-\rule{\textwidth}{0.4pt}\par%
-\vspace{\R@cipeTitleVerticalAdjustBot}%
-% ---- line 2
-\makebox[\textwidth][r]{#3}\par%
-%
-%
-}{%
-% And these are the things put at the end of recipes:
-%
-% -- tidying up
-\setlength{\parindent}{\R@cipeTempParindent}
-}
+  \bigskip
+  \pagebreak[0]
+  % ---- line 1
+  \mbox{%
+    \ifnumb@ring%
+      \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+      \parbox[b]{\R@cipeTitleWidth}{#1}%
+    \else%
+      \parbox[b]{\R@cipeTitleWidth}{#1}%
+      \makebox[\R@cipeNumberWidth]{}%
+    \fi%
+    \parbox[b]{\R@cipeServingsWidth}{\hfill #2}%
+  }\par%
+  \nopagebreak    % we don't want page breaks during the title
+  %
+  %  (NOTE: I want to get the recipe number aligned with the TOP of the title
+  %   in the case of multi-line titles, but I can seem to get it to work.  Why?)
+  %
+  % ---- rule
+  \vspace{\R@cipeTitleVerticalAdjustTop}%
+  \nopagebreak
+  \rule{\textwidth}{0.4pt}\par%
+  \nopagebreak
+  \vspace{\R@cipeTitleVerticalAdjustBot}%
+  \nopagebreak
+  %
+  % ---- line 2
+  \makebox[\textwidth][r]{#3}\par%
+  \nopagebreak
+  %
+  %
+  \begin{\lrbox}{\m@thoddetailbox}
+}%
+{%
+  % And these are the things put at the end of recipes:
+  \ifnum\value{m@thodnumber}=0%  then complain!
+    \PackageWarning{cuisine}{The recipe did not have any method details}
+  \else%
+  \fi%
+  %
+  % -- tidying up
+  \bigskip
+  \setlength{\parindent}{\R@cipeTempParindent}
+}%
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Miscellaneous useful macros
 %
 % degrees        - to typeset a degrees symbol
-\DeclareRobustCommand{\degrees}{${}^\circ$}
+\DeclareRobustCommand{\degrees}{%
+  ${}^\circ$%
+}
 %
 % fr             - to typeset fractions, currently using package nicefrac
-\DeclareRobustCommand{\fr}[2]{\nicefrac#1#2}
+\DeclareRobustCommand{\fr}[2]{%
+  \nicefrac#1#2%
+}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % That's it...
