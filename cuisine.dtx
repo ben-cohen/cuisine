@@ -232,11 +232,12 @@
 % there been text before the first ingredient, that text would become the first
 % step and the heating instruction would be the second step.)  The fourth
 % |\ingredient| signals the end of the method text and starts a new step.  The
-% final |\end{recipe}| finishes that step.
+% final |\end{recipe}| finishes that step.  Note the label declaration 
+% ``YorkshirePud.''
 % \medskip
 %
 % \begin{small}\noindent
-% |\begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
+% |\begin{recipe}[YorkshirePud]{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
 % |\ingredient[\fr12]{pt}{milk}|\\
 % |\ingredient[2]{oz}{butter}|\\
 % |\ingredient[5]{oz}{self-raising flour}|\\
