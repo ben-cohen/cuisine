@@ -46,27 +46,34 @@
 % \section{Usage}
 % The package is loaded using the header |\usepackage{cuisine}|.  The options
 % are:
-% \begin{enumerate}
-% \item{|number|}Recipes will be numbered sequentially to the left of the 
+% \begin{itemize}
+% \item{|number|}\ \ Recipes will be numbered sequentially to the left of the 
 % recipe title.  (This is the
 % default.) The recipe \emph{steps} will always be numbered.
-% \item{|nonumber|}Recipes will not be numbered.
-% \item{|index|}Recipe titles will be written to the contents for the
+% \item{|nonumber|}\ \ Recipes will not be numbered.
+% \item{|index|}\ \ Recipe titles will be written to the contents for the
 % document.
-% \item{|noindex|}Recipe titles will not be written to the document contents.
+% \item{|noindex|}\ \ Recipe titles will not be written to the document contents.
 % (This is the default.)
-% \end{enumerate}
+% \end{itemize}
 % 
 % \medskip
 % \DescribeEnv{recipe}
 % Each recipe is set out in a |recipe| environment.  The three
 % parameters are the title, and two recipe description fields---typically they
-% might be used for the number of servings and the preparation time.
+% might be used for the number of servings and the preparation time, for
+% example:
+% \begin{quote}
+%   |\begin{recipe}{|\textit{Title}|}|%
+%               |{|\textit{Number of servings}|}|%
+%               |{|\textit{Preparation time}|}|
+%               \\\dots\\|\end{recipe}|
+% \end{quote}
 % 
 % \medskip
 % \DescribeMacro{\ingredient}
 % \DescribeMacro{\ing}
-% Within the environment, you type method details in directly, and you
+% Within the environment, you type in method details directly, and you
 % type the ingredients using |\ingredient| or the shorter version |\ing|
 % \textit{before} the method step beside which you want the ingredient to
 % appear.  A new method step is started whenever an |\ingredient| appears
@@ -150,7 +157,7 @@
 % these ones.
 % 
 % \StopEventually{}
-%
+% \setlength{\parindent}{0cm}
 %
 % \section{Identification section and initialisation}
 %    \begin{macrocode}
@@ -173,7 +180,7 @@
 %    \end{macrocode}
 %
 % \begin{macro}{\ResetRecipeCounter}
-% The |\ResetRecipeCounter| resets the recipe number counter to 0.
+% The |\ResetRecipeCounter| macro resets the recipe number counter to 0.
 %    \begin{macrocode}
 \DeclareRobustCommand{\ResetRecipeCounter}{%
   \setcounter{r@cipenumber}{0}%
@@ -515,7 +522,6 @@
 %    \end{macrocode}
 % Here we compare the width of the |\st@pmethodbox| with zero to determine
 % whether anything was entered into it.
-%
 % (The idea for determining whether box is empty was from
 % Donald Arseneau, |comp.text.tex|.)
 %    \begin{macrocode}
@@ -693,7 +699,6 @@
 \newenvironment{recipe}[3]{%
 %    \end{macrocode}
 % These are the things that are put at the start of the recipe environment.
-%
 % First, set things up.  Increment the recipe counter, make command aliases
 % and empty the boxes.
 %    \begin{macrocode}
@@ -723,10 +728,8 @@
 {% 
 %    \end{macrocode}
 % These are the things put at the end of recipes.  
-%
 % End the method box and deal with the last step.  Give a warning if the
 % recipe is empty.
-%
 %  It is apparently not necessary to reset the earlier assignments and
 %  |\parindent|.
 %    \begin{macrocode}
