@@ -1,8 +1,10 @@
 %% This is file `cuisine.sty'
 %%
 %%  $Log$
-%%  Revision 1.23  2000/06/21 14:53:14  bjc23
-%%  ...
+%%  Revision 1.24  2000/06/21 15:40:34  bjc23
+%%  vertical box alignment problem seems to be fixed now, although may need
+%%  a total re-write.
+%%  however, the vertical spacing problem seems to be at least as bad now.
 %%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -254,7 +256,9 @@
           \parbox[t]{\R@cipeIngredientWidth}{#3}%
         \else%
           \lineskip0pt\mbox{}\\[-\baselineskip]%
-          \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+          \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}\strut%
+            \usebox{\m@thodqtybox}}%
+          \rule{0.2cm}{0cm}%
           \parbox[t]{\R@cipeIngredientWidth}{#3}%
         \fi%
       }%
