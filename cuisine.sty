@@ -268,7 +268,9 @@
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingr@dient}[3][]{%
+\PackageWarning{cuisine}{(A)}% 
   \pr@ingred%
+\PackageWarning{cuisine}{(B)}% 
 %
 % The following is the main bit to typeset the ingredients list.
 % (Thanks to Ulrike Fischer, comp.text.tex, for help with aligning box 
@@ -304,6 +306,7 @@
       }%
     }%
   \fi%
+\PackageWarning{cuisine}{(C)}% 
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}% % temporary holding box
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
@@ -316,7 +319,9 @@
 %
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
   \stepcounter{ingr@dnumber}%
+\PackageWarning{cuisine}{(D)}% 
   \p@stingred%
+\PackageWarning{cuisine}{(E)}% 
 }%
 %
 %  Recipe title code
@@ -375,8 +380,9 @@
   % These are the things that are put at the start of recipes:
   %
   % -- set-up things
-  \sloppy % don't be too fussy about line-breaks (is this working?)
+%  \sloppy % don't be too fussy about line-breaks (is this working?)
   \stepcounter{r@cipenumber}
+\tiny%
   \let\nextstep\m@thodend
   \let\0\d@grees
   \let\degrees\d@grees
