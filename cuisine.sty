@@ -70,8 +70,9 @@
 \newlength{\R@cipeIngredientWidth}
 \newlength{\R@cipeQuantityWidth}
 \newlength{\R@cipeUnitsWidth}
-\newlength{\R@cipeQandUWidth}   % total of the previous two...
-\newlength{\R@cipeIQUWidth}   % total of the previous two...
+\newlength{\R@cipeQandUWidth}   % total of the obvious two...
+\newlength{\R@cipeIandUWidth}   % total of the obvious two...
+\newlength{\R@cipeIQUWidth}   % total 
 %
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
@@ -92,6 +93,8 @@
   \setlength{\R@cipeIQUWidth}{\R@cipeQandUWidth}%
   \addtolength{\R@cipeIQUWidth}{\R@cipeIngredientWidth}%
   \addtolength{\R@cipeIQUWidth}{0.5cm}%
+  \setlength{\R@cipeIandUWidth}{\R@cipeIQUWidth}%
+  \addtolength{\R@cipeIandUWidth}{-\R@cipeQuantityWidth}%
   \setlength{\R@cipeMethodWidth}{\RecipeWidth}
   \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
@@ -129,6 +132,7 @@
 \newsavebox{\m@thodbox}
 \newsavebox{\m@thodtempbox}
 \newsavebox{\m@thodqtybox}
+\newsavebox{\st@pIQUbox}
 \newsavebox{\st@pmethodbox}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -239,41 +243,84 @@
 %  \def\@Raaa{z}\def\@Rbbb{z#1}%
 %  \ifx\@Raaa\@Rbbb%
 % NOW:  (Patrick Guio, comp.text.tex)
+%%%  \ifx\relax#1\relax%
+%%%    \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
+%%%      \parbox[b]{\R@cipeQandUWidth}{#2}%
+%%%    }%
+%%%  \else%
+%%%    \savebox{\m@thodqtybox}{%   
+%%%      \begin{minipage}[b]{\R@cipeQandUWidth}%\lineskip0pt %
+%%%          \parbox[b]{\R@cipeQuantityWidth}{%\rule{0pt}{\baselineskip}%
+%%%             \hfill #1\rule{0.1cm}{0cm}}%
+%%%          \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
+%%%          \\[-\baselineskip]\mbox{\rule{0pt}{\baselineskip}}%
+%%%      \end{minipage}%
+%%%\rule{0.1cm}{0.4cm}
+%%%    }%
+%%%  \fi%
+%%%%
+%%%%  Here the quantity and unit boxes are correctly aligned (if two) and have 
+%%%%  the baseline at the bottom of the box.
+%%%%
+%%%  \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}% % temporary holding box
+%%%  \savebox{\m@thodbox}{%
+%%%    \begin{minipage}[t]{\R@cipeIQUWidth}%
+%%%      \parbox[t]{\R@cipeIQUWidth}{%
+%%%        \ifnum\value{ingr@dnumber}>0%
+%%%          \usebox{\m@thodtempbox}\par%
+%%%          \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0.2cm}%
+%%%          \parbox[t]{\R@cipeIngredientWidth}{#3}%
+%%%        \else%
+%%%          \lineskip0pt%\mbox{}\\[-\baselineskip]%
+%%%          \parbox[b]{\R@cipeQandUWidth}{%\rule{0pt}{\baselineskip}\strut%
+%%%            \usebox{\m@thodqtybox}}%
+%%%          \rule{0.2cm}{0.2cm}%
+%%%          \parbox[t]{\R@cipeIngredientWidth}{#3}%
+%%%        \fi%
+%%%      }%
+%%%    \end{minipage}%
+%%%% Second attempt...
+% The following is the main bit to typeset the ingredients list.
+% (Thanks to Ulrike Fischer, comp.text.tex, for help with aligning box 
+%  baselines.)
+%
+% hack to see if #1 is empty (Patrick Guio, comp.text.tex)
   \ifx\relax#1\relax%
-    \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
-      \parbox[b]{\R@cipeQandUWidth}{#2}%
+    % if it is empty we typeset #2 in the whole QandU width:    
+    \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
+      \parbox[t]{\R@cipeIQUWidth}{%
+        \lineskip0pt\mbox{}\\[-\baselineskip]%
+        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}#2}%
+        \rule{0.2cm}{0cm}%
+        \parbox[t]{\R@cipeIngredientWidth}{#3}%
+      }%
     }%
-  \else%
-    \savebox{\m@thodqtybox}{%   
-      \begin{minipage}[b]{\R@cipeQandUWidth}%\lineskip0pt %
-          \parbox[b]{\R@cipeQuantityWidth}{%\rule{0pt}{\baselineskip}%
-             \hfill #1\rule{0.1cm}{0cm}}%
-          \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
-          \\[-\baselineskip]\mbox{\rule{0pt}{\baselineskip}}%
-      \end{minipage}%
-\rule{0.1cm}{0.4cm}
+  \else
+    % if #1 was not empty, typeset #1 and #2 separately:
+    \savebox{\m@thodtempbox}[\R@cipeIandUWidth]{%
+      \parbox[t]{\R@cipeIandUWidth}{%
+        \lineskip0pt\mbox{}\\[-\baselineskip]%
+        \parbox[b]{\R@cipeUnitsWidth}{\rule{0pt}{\baselineskip}#2\hfill}%
+        \rule{0.2cm}{0cm}%
+        \parbox[t]{\R@cipeIngredientWidth}{#3}%
+      }%
+    }% 
+    \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
+      \parbox[t]{\R@cipeIQUWidth}{%
+        \lineskip0pt\mbox{}\\[-\baselineskip]%
+        \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill #1%
+          \rule{0.1cm}{0cm}}%
+        \usebox{\m@thodtempbox}%
+      }%
     }%
   \fi%
-%
-%  Here the quantity and unit boxes are correctly aligned (if two) and have 
-%  the baseline at the bottom of the box.
-%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}% % temporary holding box
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
-      \parbox[t]{\R@cipeIQUWidth}{%
         \ifnum\value{ingr@dnumber}>0%
           \usebox{\m@thodtempbox}\par%
-          \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0.2cm}%
-          \parbox[t]{\R@cipeIngredientWidth}{#3}%
-        \else%
-          \lineskip0pt%\mbox{}\\[-\baselineskip]%
-          \parbox[b]{\R@cipeQandUWidth}{%\rule{0pt}{\baselineskip}\strut%
-            \usebox{\m@thodqtybox}}%
-          \rule{0.2cm}{0.2cm}%
-          \parbox[t]{\R@cipeIngredientWidth}{#3}%
         \fi%
-      }%
+        \strut\usebox{\st@pIQUbox}%
     \end{minipage}%
   }%
 %
