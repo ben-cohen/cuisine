@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{586} 
+% \CheckSum{601} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -203,9 +203,7 @@
 % \begin{quote}
 %   |<|{\it Number\/}{\tt\char`\ }{\it Unit\/}|>|
 % \end{quote}
-% For example, |<4 oz>| gives ``<4 oz>'' (where the number and unit will be
-% in the
-% |\recipequantityfont| and |\recipeunitfont|).
+% For example, |<4 oz>| gives ``<4 oz>''.
 % Note that this will clash with other uses of the |<| symbol so it is
 % disabled by default.
 %
@@ -1177,7 +1175,7 @@
 %    \begin{macrocode}
 \if@units
   \catcode`\<=13 %
-  \def<#1 #2>{{\recipequantityfont #1}$\,${\recipeunitfont #2}}%
+  \def<#1 #2>{#1$\,$#2}%
 \fi
 %    \end{macrocode}
 %\end{macro}
