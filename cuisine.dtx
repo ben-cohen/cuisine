@@ -36,7 +36,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{514} 
+% \CheckSum{516} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps where
@@ -611,7 +611,7 @@
 % Display this step.
 %    \begin{macrocode}
   \makebox[\R@cipeWidth]{%
-    \makebox[\R@cipeNumberWidth][l]{\arabic{st@pnumber}}%
+    \makebox[\R@cipeNumberWidth][l]{\recipestepnumberfont\arabic{st@pnumber}}%
     \usebox{\st@pingrbox}%
     \usebox{\st@pmethodbox}%
   }%
@@ -666,7 +666,7 @@
 %    \begin{macrocode}
   \mbox{%
     \ifnumb@ring%
-      \makebox[\R@cipeNumberWidth][l]{\arabic{r@cipenumber}}%
+      \makebox[\R@cipeNumberWidth][l]{\recipenumberfont\arabic{r@cipenumber}}%
       \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
     \else%
       \parbox[b]{\R@cipeTitleWidth}{\recipetitlefont #1}%
