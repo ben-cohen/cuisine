@@ -134,6 +134,7 @@
 %
 %  What happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
+  \endminipage\endlrbox%
 %
 }%
 %  And at the end of ingredients (= start of method)
@@ -148,7 +149,7 @@
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \endminipage\endlrbox%
+  \pr@ingred
   \stepcounter{m@thodnumber}%
   \makebox[\textwidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
@@ -160,8 +161,7 @@
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
-  \endlrbox
-%%  \end{lrbox}
+  \pr@ingred
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
@@ -174,7 +174,7 @@
     %
     % first: is m@thoddetailbox empty?
   \fi%
-  
+%
   \stepcounter{ingr@dnumber}%
 %
 % WAS:
@@ -258,11 +258,13 @@
   \p@stingred
 }%
 {%%%%%%%%%%
-  % And these are the things put at the end of recipes:
-  \ifnum\value{m@thodnumber}=0%  then complain!
-    \PackageWarning{cuisine}{The recipe did not have any method details}
-  \else%
-  \fi%
+  % And these are the things put at the end of recipes:  
+%  \ifnum\value{m@thodnumber}=0%  then complain!
+%    \PackageWarning{cuisine}{The recipe did not have any method details}
+%  \else%
+%              % do we want this?
+%  \fi%
+  \pr@ingred
   %
   % -- tidying up
   \bigskip
