@@ -234,27 +234,24 @@
       \parbox[b]{\R@cipeQandUWidth}{#2}%
     }%
   \else%
-    \savebox{\m@thodqtybox}{%   
-      \begin{minipage}[t]{\R@cipeQandUWidth}\lineskip0pt %
-        \mbox{}\\[-\baselineskip]%
+    \savebox{\m@thodqtybox}{\fbox{%   
+      \begin{minipage}[b]{\R@cipeQandUWidth}\lineskip0pt %
           \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}%
              \hfill #1\rule{0.1cm}{0cm}}%
           \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
-      \end{minipage}%
+          \\\mbox{}%
+      \end{minipage}}%
     }%
   \fi%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}{%
-    \begin{minipage}[t]{\R@cipeIQUWidth}\lineskip0pt%
-      \mbox{}\\[-\baselineskip]%
+    \begin{minipage}[t]{\R@cipeIQUWidth}%
       \parbox[t]{\R@cipeIQUWidth}{%
         \ifnum\value{ingr@dnumber}>0%
           \usebox{\m@thodtempbox}\par%
         \fi%
         \strut%
-        \parbox[b]{\R@cipeQandUWidth}{\rule{0pt}{\baselineskip}%
-          \usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
-          \\\mbox{}}%
+        \usebox{\m@thodqtybox}%
         \parbox[t]{\R@cipeIngredientWidth}{#3}%
       }%
     \end{minipage}%
