@@ -335,6 +335,7 @@
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
   \let\0\d@grees
+  \let\degrees\d@grees
   \let\fr\fr@ction
   \let\ing\ingr@di@nt
   \let\ingredient\ingr@di@nt
@@ -343,6 +344,10 @@
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+  % -- deal with index entry
+  \ifind@xing
+     % TODO...
+  \fi
   %
   % -- and the actual displayed title
 
