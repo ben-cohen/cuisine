@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{581} 
+% \CheckSum{586} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -361,12 +361,6 @@
 %
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
-% \item{Vertical spacing of the boxes:  the ingredients are not uniformly
-% spaced and nor are the method steps.  I currently
-% have no idea how to solve this problem.  (It is better than it was before I 
-% added a few extra |\strut|s but if you compare the baselines of the
-% ingedients to the adjacent method baselines, they are still not all properly
-% aligned.)}
 % \item{Vertical alignment of the recipe title: see |\r@cipetitle| on page
 % \pageref{rectitlealign}.}
 % \item{Support for dual sets of quantities, for example using a command like
@@ -378,6 +372,17 @@
 % Please e-mail me at \myemailaddress\ if you can help find or solve any 
 % problems with this package.
 % 
+% \section{Change History}
+% \begin{small}
+% \begin{itemize}
+% \item[\sl v0.5]Written---release on CTAN. 
+% \item[\sl v0.6]Fixed vertical alignment problem.\\
+%                Labelling of recipes for |\ref|. |\X| (times) macro.\\
+%                Different index and contents options.\\
+%                If |recipe|'s |#4| is empty, don't leave a blank line.
+% \end{itemize}
+% \end{small}
+%
 % \StopEventually{}
 % \newpage
 % \setlength{\parindent}{0cm}
@@ -999,11 +1004,13 @@
     }%
   \fi%
 %    \end{macrocode}
-% Use |\st@pingrtmpbox| as a temporary holding box:
+% Use |\st@pingrtmpbox| as a temporary holding box.  The |\lineskip0pt|
+% ensures that the ingredients and the method text are aligned correctly.
 %    \begin{macrocode}
   \savebox{\st@pingrtmpbox}[\R@cipeIQUWidth][t]{\usebox{\st@pingrbox}}%
   \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
+        \lineskip0pt%   
         \ifnum\value{ingr@dnumber}>0%
           \usebox{\st@pingrtmpbox}\par%
           \usebox{\st@pIQUbox}\strut%
