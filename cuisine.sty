@@ -71,8 +71,8 @@
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
 %
-% Temporary parindent
-\newlength{\R@cipeTempParindent}
+% Temporary use
+\newlength{\R@cipeTemp}
 %
 % Relevant definitions for setting the above values:
 %
@@ -206,7 +206,7 @@
 %
 %
 %  The \ingredient command
-\DeclareRobustCommand{\ingredient}[3][]{%
+\DeclareRobustCommand{\ingr@dient}[3][]{%
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
@@ -231,7 +231,7 @@
       \parbox[b]{\R@cipeQandUWidth}{#2}%
     }%
   \else%
-    \savebox{\m@thodqtybox}{%
+    \savebox{\m@thodqtybox}{%   
       \begin{minipage}[b]{\R@cipeQandUWidth}%
         \mbox{%
           \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
@@ -251,8 +251,8 @@
         \fi%
         \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{#3}%
+      }%
     \end{minipage}%
-    }%
   }%
 %
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
@@ -271,8 +271,10 @@
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
   \let\0\d@grees
-  \let\ing\ingredient
-  \setlength{\R@cipeTempParindent}{\parindent}
+  \let\fr\fr@ction
+  \let\ing\ingr@dient
+  \let\ingredient\ingr@dient
+%  \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
@@ -316,14 +318,14 @@
   % And these are the things put at the end of recipes:  
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%  then complain!
-    \PackageWarning{cuisine}{The recipe did not have any method details}
+    \PackageWarning{cuisine}{The recipe did not have any method details}%
   \else%
   \fi%
   %
   % -- tidying up
   \bigskip
-  \setlength{\parindent}{\R@cipeTempParindent}
-  % Undo \let\nextstep  -- but this seems to be handled automatically by LaTeX
+%  \setlength{\parindent}{\R@cipeTempParindent} % not apparently necessary
+% Undo \let\*  -- but this seems to be handled automatically by LaTeX
 }%
 %
 %
@@ -333,17 +335,17 @@
 % degrees        - to typeset a degrees symbol
 \DeclareRobustCommand{\d@grees}{%
   ${}^\circ$%
-}
+}%
 %
 % fr             - to typeset fractions, currently using package nicefrac
-\DeclareRobustCommand{\fr}[2]{%
+\DeclareRobustCommand{\fr@ction}[2]{%
   \nicefrac#1#2%
-}
+}%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % That's it...
 %
-\endinput
+\endinput%
 %
 % END OF FILE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
