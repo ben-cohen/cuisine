@@ -174,7 +174,8 @@
   }%
 % Clear the step storage boxes.
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
-  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+% The following is redundant and causes underful \hbox problems
+%  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
 %
 }%
 %
@@ -197,6 +198,17 @@
   \fi%
 }
 %
+%  Version of \sloppy which doesn't cause problems (with spaces in the 
+%  definition!)
+\def\r@cipesloppy{%
+  \tolerance 9999%
+  \emergencystretch 3em%
+  \hfuzz.5pt%
+  \vfuzz.5pt%
+  %  Also, this is not in \sloppy.  Avoid warning on underfull boxes.
+  %  This value may need to be adjusted...
+  \hbadness 1500%   
+}%
 %
 %  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
@@ -225,6 +237,7 @@
   \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeMethodWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
+  \r@cipesloppy%
 }%
 %
 %  The \m@thodend command (which is \nextstep in the environment)
@@ -264,13 +277,14 @@
   \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeStepWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
+  \r@cipesloppy%
 }%
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingr@dient}[3][]{%
-\PackageWarning{cuisine}{(A)}% 
+%\PackageWarning{cuisine}{(A)}%  for testing - but causes some problems too
   \pr@ingred%
-\PackageWarning{cuisine}{(B)}% 
+%\PackageWarning{cuisine}{(B)}% 
 %
 % The following is the main bit to typeset the ingredients list.
 % (Thanks to Ulrike Fischer, comp.text.tex, for help with aligning box 
@@ -306,7 +320,7 @@
       }%
     }%
   \fi%
-\PackageWarning{cuisine}{(C)}% 
+%\PackageWarning{cuisine}{(C)}% 
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}% % temporary holding box
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
@@ -319,9 +333,9 @@
 %
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
   \stepcounter{ingr@dnumber}%
-\PackageWarning{cuisine}{(D)}% 
+%\PackageWarning{cuisine}{(D)}% 
   \p@stingred%
-\PackageWarning{cuisine}{(E)}% 
+%\PackageWarning{cuisine}{(E)}% 
 }%
 %
 %  Recipe title code
@@ -382,7 +396,6 @@
   % -- set-up things
 %  \sloppy % don't be too fussy about line-breaks (is this working?)
   \stepcounter{r@cipenumber}
-\tiny%
   \let\nextstep\m@thodend
   \let\0\d@grees
   \let\degrees\d@grees
