@@ -1,6 +1,9 @@
 %% This is file `cuisine.sty'
 %%
 %%  $Log$
+%%  Revision 1.23  2000/06/21 14:53:14  bjc23
+%%  ...
+%%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Identification section
@@ -233,24 +236,27 @@
     }%
   \else%
     \savebox{\m@thodqtybox}{%   
-      \begin{minipage}[t]{\R@cipeQandUWidth}\lineskip0pt %
-        \mbox{}\\[-\baselineskip]%
+      \begin{minipage}[b]{\R@cipeQandUWidth}\lineskip0pt %
           \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}%
              \hfill #1\rule{0.1cm}{0cm}}%
           \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
+          \\[-\baselineskip]\mbox{}%
       \end{minipage}%
     }%
   \fi%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
-      \mbox{}\\[-\baselineskip]%
       \parbox[t]{\R@cipeIQUWidth}{%
         \ifnum\value{ingr@dnumber}>0%
           \usebox{\m@thodtempbox}\par%
+          \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+          \parbox[t]{\R@cipeIngredientWidth}{#3}%
+        \else%
+          \lineskip0pt\mbox{}\\[-\baselineskip]%
+          \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+          \parbox[t]{\R@cipeIngredientWidth}{#3}%
         \fi%
-        \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
-        \parbox[t]{\R@cipeIngredientWidth}{#3}%
       }%
     \end{minipage}%
   }%
