@@ -36,7 +36,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{534} 
+% \CheckSum{535} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -73,7 +73,7 @@
 % it comes
 % with current versions of te\TeX\ and is also 
 % available from CTAN as part of the |units| package in 
-% |tex-archive/macros/latex/contrib/supported/units|.
+% |macros/latex/|\hskip0cm|contrib/supported/|\hskip0cm|units|.
 % 
 %
 % \medskip
@@ -132,11 +132,15 @@
 % for example |120\0| gives 120${}^\circ$.
 % 
 % \section{More advanced usage}
-% \DescribeMacro{\RecipeWidths}
 % The |cuisine| package has been designed so that it is easy to vary the
 % widths of the columns.  \LaTeX\ has very wide margins by default 
-% so the text width is very narrow, which may be unsuitable for
-% typesetting recipes using this package.  
+% so the text width is very narrow which may be unsuitable for
+% typesetting recipes using this package.  (It might be worth looking at the
+% KOMA-Script classes in 
+% |macros/latex/|\hskip0pt|contrib/supported/|\hskip0pt|koma-script/| as an
+% alternative to the standard \LaTeX\ classes.)
+%
+% \DescribeMacro{\RecipeWidths}
 % The |\RecipeWidths| command is designed to be used in conjunction with the
 % \LaTeX\ commands for changing the page layout.  It is used as follows:
 % \begin{quote}
@@ -151,23 +155,24 @@
 % \medskip
 % \DescribeMacro{\ResetRecipeCounter}
 % The |\ResetRecipeCounter| command will reset the recipe counter so that 
-% recipes are numbered from 1 again.
+% subsequent recipes are numbered from 1.
 %
 % \medskip
 % \DescribeMacro{\newstep}
-% Within the recipe envirmonment, to force a new step if you do not want 
+% Within the recipe environment, to force a new step if you do not want 
 % to declare any ingredients, use the
-% |\newstep| command.  (A second |\newstep| command with no ingredient or
-% method text before it will be ignored to prevent completely empty steps from
+% |\newstep| command.  (A |\newstep| command with no preceding ingredient or
+% method text will be ignored to prevent completely empty steps from
 % appearing.)
 %
 % \DescribeMacro{\newpage}
-% |\newpage| tells the environment that the next step will appear on
-% the next page.  It does not end the current method body (and so does not
-% have to appear at the end of it); to end the body as well, use
-% |\newpage\newstep|.
-% Page breaks only
+% |\newpage| ends the current step (as for |\newstep|) but also tells the 
+% environment that the next step will appear on
+% the next page. 
+% Page breaks can only
 % occur between method steps; method steps will not be split across pages.
+% It is not normally necessary to use this command since page breaking after
+% each step will be done automatically by \LaTeX\ as necessary.
 %
 % \medskip
 % \DescribeMacro{\freeform}
@@ -181,23 +186,23 @@
 % using, for example, \verb|\renewcommand*{\recipetitlefont}{\sffamily}|.
 %
 % \begin{tabular}{ll}
-% \verb|\recipefont|&The default definition for the other fonts\\
+% \verb|\recipefont|&The default font used for the fonts below\\
 % \verb|\recipetitlefont|&The font for the recipe title\\
-% \verb|\recipeservingsfont|&The font used for the number of servings\\
-% \verb|\recipetimefont|&The font used for the preparation time\\
+% \verb|\recipeservingsfont|&The font for the number of servings\\
+% \verb|\recipetimefont|&The font for the preparation time\\
 % \verb|\recipenumberfont|&The font for the recipe number\\
 % \verb|\recipestepnumberfont|&The font for each step number\\
 % \verb|\recipequantityfont|&The font for the numerical quantity\\
 % \verb|\recipeunitfont|&The font for the unit of measurement\\
 %   & (or descriptive quantity)\\
 % \verb|\recipeingredientfont|&The font for the ingredient\\
-% \verb|\recipemethodfont|&The font used for the method details\\
-% \verb|\recipefreeformfont|&The font used for freeform descriptions\\
+% \verb|\recipemethodfont|&The font for the method details\\
+% \verb|\recipefreeformfont|&The font for freeform descriptions\\
 % \end{tabular}
 %
 % \section{Examples}
 % \subsection{A simple example}
-% There is only whitespace between the first three and
+% There is only whitespace between the first three 
 % ingredients, so they are used for the first step with
 % the method text which follows.  (Had
 % there been text before the first ingredient, that text would become the first
@@ -272,7 +277,7 @@
 % |Put the pan in a bowl of ice and stir the |\\
 % |zabaglione well until it is thick and free of bubbles.  When it is almost |\\
 % |cold, fold in brandy and whipped cream and pour into individual moulds.|\\
-% |\freeform\rule{\textwidth}{0.05pt}\newpage\newstep|\\
+% |\freeform\rule{\textwidth}{0.05pt}\newpage|\\
 % |\freeform\rule{\textwidth}{0.05pt}|\\
 % |\ingredient[3]{}{egg yolks}|\\
 % |\ingredient[1]{oz}{granulated sugar}|\\
@@ -311,7 +316,7 @@
 % Put the pan in a bowl of ice and stir the 
 % zabaglione well until it is thick and free of bubbles.  When it is almost 
 % cold, fold in brandy and whipped cream and pour into individual moulds.
-% \freeform\rule{\textwidth}{0.05pt}\newpage\newstep
+% \freeform\rule{\textwidth}{0.05pt}\newpage
 % \freeform\rule{\textwidth}{0.05pt}
 % \ingredient[3]{}{egg yolks}
 % \ingredient[1]{oz}{granulated sugar}
@@ -415,7 +420,6 @@
 % page.
 %    \begin{macrocode}
 \newif\ifn@wpaging
-\newcommand*\r@cipen@wpage{\global\n@wpagingtrue}
 %    \end{macrocode}
 %
 % |\R@cipeWidth| is the total width of the recipe.
@@ -821,6 +825,14 @@
   \fi%
   \p@stingred%
 }%
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\r@cipen@wpage}
+% |\r@cipen@wpage| is a macro which sets |\n@wpagingtrue|---so that the next
+% step will appear on the next page---and then forces the next step.
+%    \begin{macrocode}
+\DeclareRobustCommand\r@cipen@wpage{\global\n@wpagingtrue\m@thodend}
 %    \end{macrocode}
 %\end{macro}
 %
