@@ -24,7 +24,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{501} 
+% \CheckSum{500} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps where
@@ -303,17 +303,17 @@
 % spaced and nor are the method steps.  I currently
 % have no idea how to solve this problem.}
 % \item{Page breaking works between the method steps, but method steps will not
-% be split.  There should be a |\pagebreak| command to force the next step onto
+% be split.  There could be a |\pagebreak| command to force the next step onto
 % a new page.}
-% \item{Support for dual sets of quantities, for example a command like
+% \item{Support for dual sets of quantities, for example using a command like
 % \verb|\ingredient{1}{oz}{25}{g}{butter}|.  This could be used where two
 % systems of measurement are used or for different numbers of servings.  The
-% display would then have to have 2 extra columns or else there would have to
-% be an option to select which one to display.}
+% display would then have to have 2 extra columns or else (more likely) 
+% there would have to be an option to select which one to display.}
 % \item{This documentation needs proofreading and improving.}
 % \end{itemize}
-% Please e-mail me at \myemailaddress\ if you find any problems or can solve
-% these ones.
+% Please e-mail me at \myemailaddress\ if you can help find or solve any 
+% problems with this package.
 % 
 % \StopEventually{}
 % \newpage
@@ -889,12 +889,12 @@
 %    \begin{macrocode}
   \savebox{\st@pingrtmpbox}{\usebox{\st@pingrbox}}%
   \savebox{\st@pingrbox}{%
-    \begin{minipage}[t]{\R@cipeIQUWidth}%
-        \ifnum\value{ingr@dnumber}>0%
-          \usebox{\st@pingrtmpbox}\par%
-        \fi%
-        \usebox{\st@pIQUbox}\strut%
-    \end{minipage}%
+     \begin{minipage}[t]{\R@cipeIQUWidth}%
+         \ifnum\value{ingr@dnumber}>0%
+           \usebox{\st@pingrtmpbox}\par%
+         \fi%
+         \usebox{\st@pIQUbox}\strut%
+     \end{minipage}%
   }%
 %  \usebox{\st@pingrbox}    % For testing: show cumulative boxes.
   \stepcounter{ingr@dnumber}%
