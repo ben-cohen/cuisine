@@ -134,36 +134,49 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The ingredient/method macros
 %
-%   \DeclareRobustCommand{\r@cipeempty}{}
+%  \DisplaySt@p -- Displays the ingredients and method for the current step
+%                  and resets things
+\DeclareRobustCommand{\DisplaySt@p}{%
 %
-%  What happens at the start of ingredients (= end of method)
+}%
+%
+%  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
-  \endminipage\endlrbox%
+  \endminipage\end{lrbox}%
   % Here we compare the width of the \m@thoddetailbox with zero to determine
   % whether anything was entered into it.
   \ifdim\wd\m@thoddetailbox=0in
     \h@smethodtextfalse%
-     \PackageWarning{cuisine}{FALSE}
+     \PackageWarning{cuisine}{No text}
   \else%
     \h@smethodtexttrue%
-     \PackageWarning{cuisine}{TRUE}
+     \PackageWarning{cuisine}{Method text}
   \fi%
-\usebox{\m@thoddetailbox}
+  \usebox{\m@thodbox}\usebox{\m@thoddetailbox}
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\m@thoddetailbox}[\R@cipeMethodWidth]{}
 %
 }%
 %  And at the end of ingredients (= start of method)
 \DeclareRobustCommand{\p@stingred}{%
-  \lrbox{\m@thoddetailbox}\minipage{\R@cipeMethodWidth}%
+  %
+  %  This is very odd.  Using \begin{lrbox}...\end{lrbox} isn't
+  %  supposed to work properly over an environment definition (and doesn't
+  %  seem to, either).  So we use \lrbox...\endlrbox.  But we want to nest
+  %  a \minipage inside this, which fails.  But it does work with 
+  %  \begin{lrbox}\minipage...\endminipage\end{lrbox}.  WHY????!!!
+  %
+  \begin{lrbox}{\m@thoddetailbox}\minipage{\R@cipeMethodWidth}%
   \noindent%    might be sensible...
   \ignorespaces%
 }%
 %
 %  The \m@thodend command (which is \\ in the environment)
 \DeclareRobustCommand{\m@thodend}{%
+  \pr@ingred%
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
-    \pr@ingred%
     % 
   \fi%
 %  \ifnum\value{ingr@dnumber}=0%
@@ -181,10 +194,10 @@
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
+  \pr@ingred%
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
-    \pr@ingred%
     % 
   \fi%
   \ifnum\value{ingr@dnumber}=0%
@@ -272,14 +285,14 @@
   \nopagebreak
   %
   %
-%  \p@stingred%
+  \p@stingred%
 }%
 {%%%%%%%%%%
   % And these are the things put at the end of recipes:  
+  \pr@ingred%
   \ifnum\value{m@thodnumber}=0%  then complain!
     \PackageWarning{cuisine}{The recipe did not have any method details}
   \else%
-    \pr@ingred%
   \fi%
   %
   % -- tidying up
