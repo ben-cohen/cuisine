@@ -132,39 +132,60 @@
 %
 %   \DeclareRobustCommand{\r@cipeempty}{}
 %
+%  What happens at the start of ingredients (= end of method)
+\DeclareRobustCommand{\pr@ingred}{%
+%
+}%
+%  And at the end of ingredients (= start of method)
+\DeclareRobustCommand{\p@stingred}{%
+  \lrbox{\m@thoddetailbox}%
+%%%  \begin{\lrbox}{\m@thoddetailbox}
+  \noindent%    might be sensible...
+  \ignorespaces%
+}%
+%
 %  The \m@thodend command (which is \\ in the environment)
 \DeclareRobustCommand{\m@thodend}{%
 %  \ifnum\value{ingr@dnumber}=0%
 %  \else%
 %  \fi%
-  \end{lrbox}
+  \endlrbox
+%%%  \end{lrbox}
   \stepcounter{m@thodnumber}%
   \makebox[\textwidth]{%
     \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
     \show{\m@thodbox}%
     
   }%
-
-
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}%
 }%
 %
 %
 %  The \ingredient command
 \DeclareRobustCommand{\ingredient}[3][]{%
-  \end{lrbox}
+  \endlrbox
+%%  \end{lrbox}
   \ifnum\value{m@thodnumber}=0%
     % don't need to do much here...
   \else%
     % 
   \fi%
+  \ifnum\value{ingr@dnumber}=0%
+    % don't need to do much here...
+  \else%
+    % process the previous method section, if there was one...
+    %
+    % first: is m@thoddetailbox empty?
+  \fi%
   
   \stepcounter{ingr@dnumber}%
 %
-% hack to see if #1 is empty - is there a better way?  
-  \def\@Raaa{z}%
-  \def\@Rbbb{z#1}%
-  \ifx\@Raaa\@Rbbb%
+% WAS:
+% hack to see if #1 is empty - is there a better way?  (TODO)
+%  \def\@Raaa{z}\def\@Rbbb{z#1}%
+%  \ifx\@Raaa\@Rbbb%
+% NOW:  (Patrick Guio, comp.text.tex)
+   \ifx\relax#1\relax%
     \savebox{\m@thodqtybox}[\R@cipeQandUWidth]{%
       \parbox[t]{\R@cipeQandUWidth}{#2}%
     }%
@@ -184,9 +205,9 @@
 
 
 
-  \usebox{\m@thodbox}
+%  \usebox{\m@thodbox}    % For testing: show cumulative boxes
 %
-  \begin{\lrbox}{\m@thoddetailbox}
+  \p@stingred%
 }%
 %
 %
@@ -202,6 +223,7 @@
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\m@thoddetailbox}[\R@cipeMethodWidth]{}
   %
   % -- and the actual displayed title
 
@@ -236,9 +258,9 @@
   \nopagebreak
   %
   %
-  \begin{\lrbox}{\m@thoddetailbox}
+  \p@stingred
 }%
-{%
+{%%%%%%%%%%
   % And these are the things put at the end of recipes:
   \ifnum\value{m@thodnumber}=0%  then complain!
     \PackageWarning{cuisine}{The recipe did not have any method details}
