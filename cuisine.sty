@@ -86,11 +86,14 @@
   \addtolength{\R@cipeQandUWidth}{\R@cipeUnitsWidth}%
   \setlength{\R@cipeIQUWidth}{\R@cipeQandUWidth}%
   \addtolength{\R@cipeIQUWidth}{\R@cipeIngredientWidth}%
+  \addtolength{\R@cipeIQUWidth}{0.5cm}%
   \setlength{\R@cipeMethodWidth}{\RecipeWidth}
   \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
-}
+% deal with the space between columns
+  \addtolength{\R@cipeMethodWidth}{-0.5cm}%
+}%
 %
 %   #1 is the recipe number width, #2 the number of servings
 %   title width calculated, updates method widths too
@@ -234,7 +237,7 @@
           \parbox[b]{\R@cipeQuantityWidth}{\hfill #1\rule{0.1cm}{0cm}}%
           \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
         }%
-        \\\mbox{}%
+       %\\\mbox{}%
       \end{minipage}%
     }%
   \fi%
@@ -246,8 +249,8 @@
         \ifnum\value{ingr@dnumber}>0%
           \strut\usebox{\m@thodtempbox}\par%
         \fi%
-        \strut\usebox{\m@thodqtybox}\parbox[t]{\R@cipeIngredientWidth}{#3}%
-%\\[-\baselineskip]\rule{1cm}{0cm}%
+        \strut\usebox{\m@thodqtybox}\rule{0.2cm}{0cm}%
+        \parbox[t]{\R@cipeIngredientWidth}{#3}%
     \end{minipage}%
     }%
   }%
