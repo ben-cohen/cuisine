@@ -1,7 +1,7 @@
 %\iffalse        This is file `cuisine.dtx'
 %%
 %% Recipe typesetting package `cuisine' by Ben Cohen.
-% 
+%
 %  $Id$
 % ------------------------------------------------ 
 %
@@ -23,12 +23,13 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{1} 
 % \changes{v0.5}{2000/06/26}{First Version}
+% \CheckSum{419} 
 %
 % \begin{abstract}
-% This package provides an environment for typesetting recipes with the
-% ingredients down the left of the page next to their respective method steps.
+% This package provides an environment for typesetting recipes in steps where
+% each ingredient is on the left of the page next to  
+% method step where it is used.
 % \end{abstract}
 % 
 % \MakeShortVerb{\|}
@@ -153,6 +154,7 @@
 % step and the heating instruction would be the second step.)  The fourth
 % |\ingredient| signals the end of the method text and starts a new step.  The
 % final |\end{recipe}| finishes that step.
+% \medskip
 %
 % \begin{small}\noindent
 % |\begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}|\\
@@ -263,14 +265,15 @@
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
 % \item{Vertical spacing of the boxes:  the ingredients are not uniformly
-% spaced and nor are the method steps.}
+% spaced and nor are the method steps.  I currently
+% have no idea how to solve this problem.}
 % \item{Page breaking works between the method steps, but method steps will not
 % be split.  There should be a |\pagebreak| command to force the next step onto
 % a new page.}
 % \item{It would be nice if when an ingredient wraps over the end of its box
 % onto the next line, that line started further in.  That is, a negative
-% \item{This documentation needs proofreading and improving.}
 % |\parindent| in effect.}
+% \item{This documentation needs proofreading and improving.}
 %^^A \item{Test it, test it, and test again.}
 % \end{itemize}
 % Please e-mail me at \myemailaddress\ if you find any problems or can solve
@@ -284,7 +287,7 @@
 % The package declaration follows the standard form.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
+\ProvidesPackage{cuisine}[2000/07/04 v0.5 recipe typesetting]
 %    \end{macrocode}
 %
 % We use the |nicefrac| package for ``nice'' fractions.
@@ -887,7 +890,7 @@
 %^^A ------------------------------------------------
 %^^A That's it...
 %
-\endinput%
 % \Finale
+\endinput%
 %^^A END OF FILE
 %^^A ------------------------------------------------
