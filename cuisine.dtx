@@ -1,10 +1,128 @@
-% This is file `cuisine.dtx'
-%
-% Recipe typesetting package `cuisine' by Ben Cohen.
+%\iffalse        This is file `cuisine.dtx'
+%%
+%% Recipe typesetting package `cuisine' by Ben Cohen.
 % 
 %  $Id$
-%
 % ------------------------------------------------ 
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{cuisine}
+\GetFileInfo{cuisine.sty} % defines \filename, \filedate, \fileversion, 
+                          % \fileinfo from cuisine.sty
+\begin{document}
+  \def\myemailaddress{\texttt{benc@cus.org.uk}}
+  \title{The \texttt{cuisine} package}
+  \author{Ben Cohen\thanks{My e-mail address is \myemailaddress.}}
+  \date{Version \fileversion, \filedate}
+  \maketitle
+  \DocInput{cuisine.dtx}
+\end{document}
+%</driver> 
+%\fi
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \CheckSum{1} 
+% \changes{v0.5}{2000/06/26}{First Version}
+%
+% \begin{abstract}
+% This package provides an environment for typesetting recipes with the
+% ingredients down the left of the page next to their respective method steps.
+% \end{abstract}
+% 
+% \MakeShortVerb{\|}
+% \section{Introduction}
+% There appear to be two styles of typesetting recipes in general use.  The
+% more common (at least in recipe books in the UK)
+% is where the ingredients appear at the top above the method, 
+% like in the recipe class (|macros/latex/contrib/other/recipe|). Another
+% way is to have each ingredient next to the method step it appears in, like
+% the cooking package (|macros/latex/contrib/supported/cooking|); 
+% the cuisine package also uses this style, but closer to the format in 
+% \textit{Practical Professional Cookery} by H.~L.\ Cracknell and R.~J.\
+% Kaufmann.
+%
+% \section{Usage}
+% The package is loaded using the header |\usepackage{cuisine}|.  The options
+% are:
+% \begin{enumerate}
+% \item{|number|}Recipes will be numbered sequentially.  (This is the
+% default.)
+% \item{|nonumber|}Recipes will not be numbered.
+% \item{|index|}Recipe titles will be written to the contents for the
+% document.
+% \item{|noindex|}Recipe titles will not be written to the document contents.
+% (This is the default.)
+% \end{enumerate}
+% 
+% \medskip
+% \DescribeEnvironment{recipe}
+% Each recipe is set out in a |recipe| environment.  The three
+% parameters are the title, and two recipe description fields---typically they
+% might be used for the number of servings and the preparation time.
+% 
+% \DescribeMacro{\ingredient}
+% \DescribeMacro{\ing}
+% Within the environment, you type method details in directly, and you
+% type the ingredients using |\ingredient| or the shorter version |\ing|
+% \textit{before} the method step beside which you want the ingredient to
+% appear.  A new method step is started whenever an |\ingredient| appears
+% after there has been method text.  Two consecutive |\ingredient|
+% declarations will appear next to the same method step.
+%
+%
+% \DescribeMacro{\fr}
+% Within the recipe you can use |\fr| to typeset fractions using
+% |\fr12| to get \fr@ction12, or |\fr{11}{12}| to typeset \fr@ction{11}{12}.
+% (If the numerator or denominator of the fraction is more than one digit long
+% then you will need to enclose it in braces.)
+% 
+% \DescribeMacro{\degrees}
+% \DescribeMacro{\0}
+% A degree symbol can be obtained using |\degrees| or the shorter form |\0|,
+% for example |120\0| gives 120\d@grees.
+% 
+% \section{More advanced usage}
+% \DescribeMacro{\nextstep}
+% To force a new step if you do not want to declare any ingredients, use the
+% |\nextstep| command.  (A second |\nextstep| command with no ingredient or
+% method text before it will be ignored to prevent empty method steps from
+% appearing.)
+%
+% \DescribeMacro{\freeform}
+% To typeset text across the whole width of the recipe instead of just the
+% width of the method, use the |\freeform| command.  
+% 
+% \DescribeMacro{\RecipeWidths}
+% The |cuisine| package has been designed so that it is easy to vary the
+% widths of the columns.  \LaTeX\ has very wide margins by default 
+% so the text width is very narrow, which may be unsuitable for
+% typesetting recipes using this package.  
+ The |\RecipeWidths| command is designed to be used in conjunction with the
+ \LaTeX\ commands for changing the page layout.  It is used as follows
+
+
+
+
+% 
+% 
+%
+%
+% \section{Examples}
+%
+% \section{Bugs, Issues, Features, \dots}
+% \begin{itemize}
+% \item{Vertical spacing of the boxes:  the ingredients are not uniformly
+% spaced and nor are the method steps.}
+% \item{Test it, test it, and test again.}
+% \end{itemize}
+% Please e-mail me at \myemailaddress if you find any problems or can solve
+% these ones.
+% 
+%
+%
+%
 % Identification section
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{cuisine}[2000/04/11 v0.4 recipe typesetting]
@@ -49,7 +167,7 @@
 % And some dimensions:
 %
 % Total width
-\newlength{\RecipeWidth}
+\newlength{\R@cipeWidth}
 %
 % Width of the recipe number box
 \newlength{\R@cipeNumberWidth}
@@ -88,7 +206,7 @@
 %
 %   #1 is the ingredient width, #2 the quantity, #3 the units
 %   others calculated
-\DeclareRobustCommand*{\RecipeMethodWidths}[3]{%
+\DeclareRobustCommand*{\R@cipeMethodWidths}[3]{%
   \setlength{\R@cipeIngredientWidth}{#1}%
   \setlength{\R@cipeQuantityWidth}{#2}%
   \setlength{\R@cipeUnitsWidth}{#3}%
@@ -99,7 +217,7 @@
   \addtolength{\R@cipeIQUWidth}{0.5cm}%
   \setlength{\R@cipeIandUWidth}{\R@cipeIQUWidth}%
   \addtolength{\R@cipeIandUWidth}{-\R@cipeQuantityWidth}%
-  \setlength{\R@cipeStepWidth}{\RecipeWidth}%
+  \setlength{\R@cipeStepWidth}{\R@cipeWidth}%
   \addtolength{\R@cipeStepWidth}{-\R@cipeNumberWidth}%
   \setlength{\R@cipeMethodWidth}{\R@cipeStepWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
@@ -110,25 +228,35 @@
 %
 %   #1 is the recipe number width, #2 the number of servings
 %   title width calculated, updates method widths too
-\DeclareRobustCommand*{\RecipeTitleWidths}[2]{%
+\DeclareRobustCommand*{\R@cipeTitleWidths}[2]{%
   \setlength{\R@cipeNumberWidth}{#1}%
   \setlength{\R@cipeServingsWidth}{#2}%
-  \setlength{\R@cipeTitleWidth}{\RecipeWidth}%
+  \setlength{\R@cipeTitleWidth}{\R@cipeWidth}%
   \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
   \setlength{\R@cipeTandSWidth}{\R@cipeServingsWidth}%
   \addtolength{\R@cipeTandSWidth}{\R@cipeTitleWidth}%
-  \RecipeMethodWidths{\R@cipeIngredientWidth}{\R@cipeQuantityWidth}%
+  \R@cipeMethodWidths{\R@cipeIngredientWidth}{\R@cipeQuantityWidth}%
                      {\R@cipeUnitsWidth}%
 }
+%
+% Combines the above macros
+% #1 recipe width, #2 recipe number, #3 number of servings, 
+% #4 ingredient width, #5 quantity, #6 units
+\DeclareRobustCommand*{\RecipeWidths}[6]{%
+  \setlength{\R@cipeWidth}{#1}%
+  \R@cipeTitleWidths{#2}{#3}%
+  \R@cipeMethodWidths{#4}{#5}{#6}%
+}%
 %
 % default values:  
 %     These appear to be reasonable for the LaTeX default page layout.
 %     (A4, portrait, one column, etc.)
 %     I don't think the LaTeX default width is good for a recipe book though!
-\setlength{\RecipeWidth}{\textwidth}
-\RecipeTitleWidths{0.8cm}{3cm}
-\RecipeMethodWidths{3.5cm}{1cm}{1.7cm}
+%\setlength{\R@cipeWidth}{\textwidth}
+%\R@cipeTitleWidths{0.8cm}{3cm}
+%\R@cipeMethodWidths{3.5cm}{1cm}{1.7cm}
+\RecipeWidths{\textwidth}{0.8cm}{3cm}{3.5cm}{1cm}{1.7cm}
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.04cm}
 %
@@ -165,7 +293,7 @@
 % Put extra vertical space between steps.  But it isn't uniform yet.
   \vskip0.2cm%
 % Display this step.
-  \makebox[\RecipeWidth]{%
+  \makebox[\R@cipeWidth]{%
     \makebox[\R@cipeNumberWidth][l]{\arabic{st@pnumber}}%
     \usebox{\m@thodbox}%
     \usebox{\st@pmethodbox}%
@@ -180,7 +308,7 @@
 % Displays a free form description
 \DeclareRobustCommand{\Fr@eFormStep}{%
   \vskip0.2cm%
-  \makebox[\RecipeWidth]{%
+  \makebox[\R@cipeWidth]{%
     \rule{\R@cipeNumberWidth}{0cm}\usebox{\st@pmethodbox}%
   }%
 % Clear the step storage boxes.
@@ -363,13 +491,13 @@
 % ---- rule
   \vspace{\R@cipeTitleVerticalAdjustTop}%
   \nopagebreak
-  \rule{\RecipeWidth}{0.4pt}\par%
+  \rule{\R@cipeWidth}{0.4pt}\par%
   \nopagebreak
   \vspace{\R@cipeTitleVerticalAdjustBot}%
   \nopagebreak
 %
 % ---- line 2
-  \makebox[\RecipeWidth][r]{#3}\par%
+  \makebox[\R@cipeWidth][r]{#3}\par%
   \nopagebreak
 %
 }%
@@ -418,7 +546,7 @@
 }%
 %
 %
-% ------------------------------------------------
+%^^A ------------------------------------------------
 % Miscellaneous useful macros
 %
 % degrees        - to typeset a degrees symbol
@@ -431,10 +559,10 @@
   \nicefrac#1#2%
 }%
 %
-% ------------------------------------------------
+%^^A ------------------------------------------------
 % That's it...
 %
 \endinput%
-%
-% END OF FILE
-% ------------------------------------------------
+% \Finale
+%^^A END OF FILE
+%^^A ------------------------------------------------
