@@ -162,7 +162,7 @@
 %
 %  \DisplaySt@p -- Displays the ingredients and method for the current step
 %                  and resets things
-\DeclareRobustCommand{\DisplaySt@p}{%
+\DeclareRobustCommand{\Displ@ySt@p}{%
   \stepcounter{st@pnumber}%
 % Put extra vertical space between steps.  But it isn't uniform yet.
   \vskip0.2cm%
@@ -185,8 +185,18 @@
     \rule{\R@cipeNumberWidth}{0cm}\usebox{\st@pmethodbox}%
   }%
 % Clear the step storage boxes.
-  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
+  \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}%
 }%
+%
+%
+\DeclareRobustCommand{\DisplaySt@p}{%
+  \iffr@eforming%
+    \Fr@eFormStep%
+  \else%
+    \Displ@ySt@p%
+  \fi%
+}
+%
 %
 %  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
@@ -197,11 +207,7 @@
 %    \PackageWarning{cuisine}{No text}%  % use for testing
   \else%
 %    \PackageWarning{cuisine}{Method text}%
-    \iffr@eforming%
-      \Fr@eFormStep%
-    \else%
-      \DisplaySt@p%
-    \fi%
+    \DisplaySt@p%
   \fi%
 }%
 %  And at the end of ingredients (= start of method)
@@ -246,7 +252,7 @@
   \ifdim\wd\st@pmethodbox=0in%
     \ifnum\value{ingr@dnumber}>0%
       \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
-      \DisplaySt@p%
+       \DisplaySt@p%
     \fi%
   \else%  
     \DisplaySt@p%
@@ -313,8 +319,10 @@
 %
 %  Wrapper for \ingr@dient to allow easy alteration of style format.
 \DeclareRobustCommand{\ingr@di@nt}[3][]{%
-  \ingr@dient[#1]{#2}{#3}%
-}
+  \ingr@dient[#1]%
+             {#2}%
+             {#3}%
+}%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The recipe environment
@@ -323,6 +331,7 @@
   % These are the things that are put at the start of recipes:
   %
   % -- set-up things
+  \sloppy % don't be too fussy about line-breaks (is this working?)
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
   \let\0\d@grees
