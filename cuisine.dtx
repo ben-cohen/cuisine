@@ -62,6 +62,7 @@
 % parameters are the title, and two recipe description fields---typically they
 % might be used for the number of servings and the preparation time.
 % 
+% \medskip
 % \DescribeMacro{\ingredient}
 % \DescribeMacro{\ing}
 % Within the environment, you type method details in directly, and you
@@ -71,7 +72,25 @@
 % after there has been method text.  Two consecutive |\ingredient|
 % declarations will appear next to the same method step.
 %
+% The |\ingredient| command is used as follows:
+% \begin{quote}
+%   |\ingredient{|\textit{Quantity}|}%
+%               {|\textit{Ingredient}|}|
+% \end{quote}
+% There is an optional first parameter which allows you to separate the 
+% numerical quantity from the name of the unit of measurement:
+% \begin{quote}
+%   |\ingredient[|\textit{Numerical quantity}|]%
+%               {|\textit{Unit of measurement}|}%
+%               {|\textit{Ingredient}|}|
+% \end{quote}
+% Examples include:
+% \begin{quote}
+%   |\ingredient{a pinch}{salt}|\\
+%   |\ingredient[4]{oz}{sugar}|
+% \end{quote}
 %
+% \medskip
 % \DescribeMacro{\fr}
 % Within the recipe you can use |\fr| to typeset fractions using
 % |\fr12| to get \fr@ction12, or |\fr{11}{12}| to typeset \fr@ction{11}{12}.
@@ -90,25 +109,34 @@
 % method text before it will be ignored to prevent empty method steps from
 % appearing.)
 %
+% \medskip
 % \DescribeMacro{\freeform}
 % To typeset text across the whole width of the recipe instead of just the
-% width of the method, use the |\freeform| command.  
+% width of the method, use the |\freeform| command.  This is equivalent to 
+% |\noalign| in tables.
 % 
+% \medskip
 % \DescribeMacro{\RecipeWidths}
 % The |cuisine| package has been designed so that it is easy to vary the
 % widths of the columns.  \LaTeX\ has very wide margins by default 
 % so the text width is very narrow, which may be unsuitable for
 % typesetting recipes using this package.  
- The |\RecipeWidths| command is designed to be used in conjunction with the
- \LaTeX\ commands for changing the page layout.  It is used as follows
-
-
-
-
-% 
-% 
+% The |\RecipeWidths| command is designed to be used in conjunction with the
+% \LaTeX\ commands for changing the page layout.  It is used as follows:
+% \begin{quote}
+%   |\RecipeWidths{|\textit{Total recipe width}|}%
+%               {|\textit{Recipe number width}|}%
+%               {|\textit{Number of servings width}|}%
+%               {|\textit{Ingredient width}|}%
+%               {|\textit{Quantity width}|}%
+%               {|\textit{Units width}|}|}
+% \end{quote}
 %
-%
+% \medskip
+% \DescribeMacro{\ResetRecipeCounter}
+% The |\ResetRecipeCounter| command will reset the recipe counter so that 
+% recipes are numbered from 1 again.
+% 
 % \section{Examples}
 %
 % \section{Bugs, Issues, Features, \dots}
