@@ -1006,8 +1006,10 @@
     \begin{minipage}[t]{\R@cipeIQUWidth}%
         \ifnum\value{ingr@dnumber}>0%
           \usebox{\st@pingrtmpbox}\par%
-        \fi%        
-        \usebox{\st@pIQUbox}\strut%
+          \usebox{\st@pIQUbox}\strut%
+        \else%
+          \usebox{\st@pIQUbox}\strut%
+        \fi%
     \end{minipage}%
   }%
 %  \usebox{\st@pingrbox}    % For testing: show cumulative boxes.
