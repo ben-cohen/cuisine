@@ -3,15 +3,7 @@
 %% Recipe typesetting package `cuisine' by Ben Cohen.
 %% 
 %%
-%%  $Log$
-%%  Revision 1.25  2000/06/21 16:15:28  bjc23
-%%  WRONG -- vert box NOT fixed
-%%  rewrite?
-%%
-%%  Revision 1.24  2000/06/21 15:40:34  bjc23
-%%  vertical box alignment problem seems to be fixed now, although may need
-%%  a total re-write.
-%%  however, the vertical spacing problem seems to be at least as bad now.
+%%  $Id$
 %%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -239,9 +231,8 @@
   \fi%
 %
 % The following is the main bit to typeset the ingredients list.
-% Thanks to , comp.text.tex for help with aligning box baselines.
-%
-%
+% (Thanks to Ulrike Fischer, comp.text.tex, for help with aligning box 
+%  baselines.)
 %
 % WAS:
 % hack to see if #1 is empty - is there a better way? 
@@ -254,14 +245,18 @@
     }%
   \else%
     \savebox{\m@thodqtybox}{%   
-      \begin{minipage}[b]{\R@cipeQandUWidth}\lineskip0pt %
-          \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}%
+      \begin{minipage}[b]{\R@cipeQandUWidth}%\lineskip0pt %
+          \parbox[b]{\R@cipeQuantityWidth}{%\rule{0pt}{\baselineskip}%
              \hfill #1\rule{0.1cm}{0cm}}%
           \parbox[t]{\R@cipeUnitsWidth}{#2\hfill}%
-          \\[-\baselineskip]\mbox{}%
+          \\[-\baselineskip]\mbox{\rule{0pt}{\baselineskip}}%
       \end{minipage}%
     }%
   \fi%
+%
+%  Here the quantity and unit boxes are correctly aligned (if two) and have 
+%  the baseline at the bottom of the box.
+%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
