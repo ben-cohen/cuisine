@@ -25,7 +25,7 @@
 \begin{document}
   \def\myemailaddress{\texttt{benc@cus.org.uk}}
   \title{The \texttt{cuisine} package}
-  \author{Ben Cohen\thanks{My e-mail address is \myemailaddress.}}
+  \author{Ben Cohen}
   \date{\filedate, \fileversion}
   \maketitle
   \DocInput{cuisine.dtx}
@@ -36,7 +36,7 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \changes{v0.5}{2000/06/26}{First Version}
-% \CheckSum{516} 
+% \CheckSum{534} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps where
@@ -69,6 +69,8 @@
 % \item{|noindex|}\ \ Recipe titles will not be written to the document contents.
 % (This is the default.)
 % \end{itemize}
+% You will need the package |nicefrac|; for more details, see
+% Section \ref{nicefractions}.
 % 
 % \medskip
 % \DescribeEnv{recipe}
@@ -118,6 +120,12 @@
 % |\fr12| to get \nicefrac12, or |\fr{11}{12}| to typeset \nicefrac{11}{12}.
 % (If the numerator or denominator of the fraction is more than one digit long
 % then you will need to enclose it in braces.)
+%
+% \label{nicefractions}
+% This is implemented by calling the |nicefrac| package; this package comes
+% with current versions of te\TeX\ and is also 
+% available from CTAN as part of the |units| package in 
+% |tex-archive/macros/latex/contrib/supported/units|.
 % 
 % \DescribeMacro{\degrees}
 % \DescribeMacro{\0}
@@ -147,12 +155,18 @@
 % recipes are numbered from 1 again.
 %
 % \medskip
-% \DescribeMacro{\nextstep}
+% \DescribeMacro{\newstep}
 % Within the recipe envirmonment, to force a new step if you do not want 
 % to declare any ingredients, use the
-% |\nextstep| command.  (A second |\nextstep| command with no ingredient or
+% |\newstep| command.  (A second |\newstep| command with no ingredient or
 % method text before it will be ignored to prevent completely empty steps from
 % appearing.)
+%
+% \DescribeMacro{\newpage}
+% |\newpage| tells the environment that the next step will appear on
+% the next page.  It does not end the current method body (and so does not
+% have to appear at the end of it); to end the body as well, use
+% |\newpage\newstep|.
 %
 % \DescribeMacro{\freeform}
 % To typeset text across the whole width of the recipe instead of just the
@@ -180,7 +194,8 @@
 % \end{tabular}
 %
 % \section{Examples}
-% First a simple example.  There is only whitespace between the first three and
+% \subsection{A simple example}
+% There is only whitespace between the first three and
 % ingredients, so they are used for the first step with
 % the method text which follows.  (Had
 % there been text before the first ingredient, that text would become the first
@@ -203,9 +218,6 @@
 % \end{small}
 % \medskip
 %
-% \noindent This produces:
-%
-% \medskip
 % \begin{recipe}{Yorkshire Pudding}{4 portions}{1\fr12 hours}
 % \ingredient[\fr12]{pt}{milk}
 % \ingredient[2]{oz}{butter}
@@ -218,6 +230,7 @@
 % for about 1 hour.
 % \end{recipe}
 % 
+% \subsection{A less simple example}
 % We can change the widths of the columns using, for example,
 % \begin{quote}
 % |\RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}|
@@ -232,9 +245,10 @@
 % |\renewcommand*{\recipefreeformfont}{\itshape}|
 % \end{quote}
 %
-% The example below demostrates the |\nextstep| command and how to use 
-% |\freeform| to create freeform text and rules.  In this case, recipe
-% numbering has been turned off, and the |small| environment is being used.
+% The example below demostrates the |\newstep| and |\newpage| commands
+% and how to use |\freeform| to create freeform text and rules.  In this case,
+% recipe numbering has been turned off, and the |small| environment is being
+% used.
 %
 % \medskip
 % \RecipeWidths{.75\textwidth}{0.5cm}{3cm}{1.75cm}{.75cm}{.75cm}
@@ -256,6 +270,7 @@
 % |Put the pan in a bowl of ice and stir the |\\
 % |zabaglione well until it is thick and free of bubbles.  When it is almost |\\
 % |cold, fold in brandy and whipped cream and pour into individual moulds.|\\
+% |\freeform\rule{\textwidth}{0.05pt}\newpage\newstep|\\
 % |\freeform\rule{\textwidth}{0.05pt}|\\
 % |\ingredient[3]{}{egg yolks}|\\
 % |\ingredient[1]{oz}{granulated sugar}|\\
@@ -265,7 +280,7 @@
 % |saucepan.  Whisk mixture over hot, but not boiling, water until the|\\
 % |sauce coats |\\
 % |the back of a spoon.  Stir in the Marsala and brandy.|\\
-% |\nextstep|\\
+% |\newstep|\\
 % |Chill the zabaglione, unmould it, and serve with the sauce immediately.|\\
 % |\freeform\hrulefill|\\
 % |\end{recipe}|
@@ -276,7 +291,6 @@
 % \renewcommand*{\recipeunitfont}{\sffamily}
 % \renewcommand*{\recipeingredientfont}{\sffamily}
 % \renewcommand*{\recipefreeformfont}{\itshape}
-% \pagebreak
 %
 % \begin{recipe}{Zabaglione alla Marsala}{4 Portions}{\fr12 hour}
 % \freeform This is a well-known Italian recipe which is 
@@ -295,6 +309,7 @@
 % Put the pan in a bowl of ice and stir the 
 % zabaglione well until it is thick and free of bubbles.  When it is almost 
 % cold, fold in brandy and whipped cream and pour into individual moulds.
+% \freeform\rule{\textwidth}{0.05pt}\newpage\newstep
 % \freeform\rule{\textwidth}{0.05pt}
 % \ingredient[3]{}{egg yolks}
 % \ingredient[1]{oz}{granulated sugar}
@@ -304,7 +319,7 @@
 % saucepan.  Whisk mixture over hot, but not boiling, water until the
 % sauce coats 
 % the back of a spoon.  Stir in the Marsala and brandy.
-% \nextstep
+% \newstep
 % Chill the zabaglione, unmould it, and serve with the sauce immediately.
 % \freeform\hrulefill
 % \end{recipe}
@@ -316,7 +331,7 @@
 % spaced and nor are the method steps.  I currently
 % have no idea how to solve this problem.  (It is better than it was before I 
 % added a few extra |\strut|s but if you compare the baselines of the
-% ingedients to the adjacent method lines, they are still not all properly
+% ingedients to the adjacent method baselines, they are still not all properly
 % aligned.)}
 % \item{Page breaking works between the method steps, but method steps will not
 % be split.  There could be a |\pagebreak| command to force the next step onto
@@ -326,7 +341,6 @@
 % systems of measurement are used or for different numbers of servings.  The
 % display would then have to have 2 extra columns or else (more likely) 
 % there would have to be an option to select which one to display.}
-% \item{This documentation needs proofreading and improving.}
 % \end{itemize}
 % Please e-mail me at \myemailaddress\ if you can help find or solve any 
 % problems with this package.
@@ -339,7 +353,7 @@
 % The package declaration follows the standard form.
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cuisine}[2000/07/04 v0.5 recipe typesetting]
+\ProvidesPackage{cuisine}[2000/08/01 v0.5 recipe typesetting]
 %    \end{macrocode}
 %
 % We use the |nicefrac| package for ``nice'' fractions.
@@ -393,6 +407,13 @@
 % |iffr@eforming| determines whether or not we are in freeform mode.
 %    \begin{macrocode}
 \newif\iffr@eforming
+%    \end{macrocode}
+%
+% |ifn@wpaging| determines whether or not the next step will be on a new
+% page.
+%    \begin{macrocode}
+\newif\ifn@wpaging
+\newcommand*\r@cipen@wpage{\global\n@wpagingtrue}
 %    \end{macrocode}
 %
 % |\R@cipeWidth| is the total width of the recipe.
@@ -606,7 +627,6 @@
 % (But it isn't uniform yet, unfortunately.)
 %    \begin{macrocode}
   \stepcounter{st@pnumber}%
-  \vskip0.2cm%
 %    \end{macrocode}
 % Display this step.
 %    \begin{macrocode}
@@ -628,7 +648,6 @@
 % as |\Displ@ySt@p|.
 %    \begin{macrocode}
 \DeclareRobustCommand{\Fr@eFormStep}{%
-  \vskip0.2cm%
   \usebox{\st@pmethodbox}%
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}%
 }%
@@ -646,6 +665,12 @@
   \else%
     \Displ@ySt@p%
   \fi%
+  \ifn@wpaging%
+    \recipen@wpage%
+  \else%
+    \vskip0.2cm%
+  \fi%
+  \n@wpagingfalse%
 }%
 %    \end{macrocode}
 %\end{macro}
@@ -775,7 +800,7 @@
 % can (through |\pr@ingred|) cause the next step to be started.
 %
 %\begin{macro}{\m@thodend}
-%  The |\m@thodend| command (which is |\nextstep| in the environment) forces
+%  The |\m@thodend| command (which is |\newstep| in the environment) forces
 %  a new step unless there is no method \textbf{and} no ingredient.
 %    \begin{macrocode}
 \DeclareRobustCommand{\m@thodend}{%
@@ -935,13 +960,16 @@
 % and empty the boxes.
 %    \begin{macrocode}
   \stepcounter{r@cipenumber}
-  \let\nextstep\m@thodend
+  \let\newstep\m@thodend
+  \let\recipen@wpage\newpage
+  \let\newpage\r@cipen@wpage
   \let\0\d@grees
   \let\degrees\d@grees
   \let\fr\fr@ction
   \let\ing\ingr@dient
   \let\ingredient\ingr@dient
   \let\freeform\fr@eform
+  \n@wpagingfalse%
   \setlength{\parindent}{0pt}
   \savebox{\st@pingrbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
@@ -955,6 +983,7 @@
 % Display the title and start the method box.
 %    \begin{macrocode}
   \r@cipetitle{#1}{#2}{#3}
+  \vskip0.2cm%
   \p@stingred%
 }%
 {% 
