@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{623} 
+% \CheckSum{653} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -475,10 +475,11 @@
 \newlength{\R@cipeWidth}
 %    \end{macrocode}
 %
-% The following are, respectively, the widths of the recipe title box, the
-% recipe number-of-servings box, and the total of the recipe title and
-% number-of-servings boxes.  
+% The following are, respectively, the widths of the recipe number box, the 
+% recipe title box, the recipe number-of-servings box, and the total of the
+% recipe title and number-of-servings boxes.
 %    \begin{macrocode}
+\newlength{\R@cipeNumberWidth}
 \newlength{\R@cipeTitleWidth}
 \newlength{\R@cipeServingsWidth}
 \newlength{\R@cipeTandSWidth}
@@ -624,12 +625,13 @@
 %
 %^^A ------------------------------------------------
 % \section{Boxes}
-% |\st@pingrbox| is to hold the ingredients cumulatively as each
-% |\ingredient| command is processed; |\st@pingrtmpbox| is used as a
-% temporary transfer box.
+% |\st@pingrbox| is to hold the ingredients cumulatively as each |\ingredient|
+% command is processed; |\st@pingrtmpbox| and |\titl@tmpbox| are used as
+% temporary transfer boxes.
 %    \begin{macrocode}
 \newsavebox{\st@pingrbox}
 \newsavebox{\st@pingrtmpbox}
+\newsavebox{\titl@tmpbox}
 %    \end{macrocode}
 % This is used to hold a single ingredient as it is being processed:
 %    \begin{macrocode}
@@ -745,24 +747,37 @@
 %    \end{macrocode}
 % The |\parskip| ensures that the distance between the rule and the text above
 % and below does not change when the page's vertical glue ``sets''.
-% The following displays the text line above the rule:
+% The following displays the text line above the rule; the recipe number width
+% is automatically determined here.
 %    \begin{macrocode}
   \mbox{%
     \makebox[\R@cipeWidth][t]{%
       \parbox[t]{\R@cipeWidth}{%
         \ifnumb@ring%
+          \savebox{\titl@tmpbox}{%
+            {\recipenumberfont\arabic{r@cipenumber}\rule{1em}{0pt}}%
+          }%  
+          \setlength{\R@cipeNumberWidth}{\wd\titl@tmpbox}%
+          \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
+          \addtolength{\R@cipeTandSWidth}{-\R@cipeNumberWidth}%
           \lineskip0pt\mbox{}\\[-\baselineskip]%
+          \parbox[b]{\R@cipeNumberWidth}{%
+            \rule{0pt}{\baselineskip}%
+            \strut\usebox{\titl@tmpbox}%
+            \strut%
+          }%
           \makebox[\R@cipeTandSWidth][t]{%
             \parbox[t]{\R@cipeTandSWidth}{%
               \lineskip0pt\mbox{}\\[-\baselineskip]%
               \parbox[b]{\R@cipeTitleWidth}{%
                 \rule{0pt}{\baselineskip}%
-                \strut{\recipenumberfont\arabic{r@cipenumber}}%
-                \rule{1em}{0pt}{\recipetitlefont #1}\strut\hfill}%
+                \strut{\recipetitlefont #1}\strut\hfill}%
               \parbox[b]{\R@cipeServingsWidth}{%
                 \strut{\hfill\recipeservingsfont #2}\strut}%
             }%
           }%
+          \addtolength{\R@cipeTandSWidth}{\R@cipeNumberWidth}%
+          \addtolength{\R@cipeTitleWidth}{\R@cipeNumberWidth}%
         \else%
           \lineskip0pt\mbox{}\\[-\baselineskip]%
           \parbox[b]{\R@cipeTitleWidth}{%
