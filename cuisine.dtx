@@ -384,7 +384,7 @@
 % \begin{small}
 % \begin{itemize}
 % \item[\sl v0.5]Written---release on CTAN. 
-% \item[\sl v0.6]Fixed vertical alignment problem.
+% \item[\sl v0.6]Fixed a couple of vertical alignment problems.
 %                Labelling of recipes for |\ref|. |\X| (times) macro.
 %                Different index and contents options.
 %                If |recipe|'s |#4| is empty, don't leave a blank line.
@@ -744,7 +744,10 @@
 
   \bigskip
   \pagebreak[0]
+  \parskip0pt%
 %    \end{macrocode}
+% The |\parskip| ensures that the distance between the rule and the text above
+% and below does not change when the page's vertical glue ``sets''.
 % The following displays the text line above the rule:
 %    \begin{macrocode}
   \mbox{%
