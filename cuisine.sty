@@ -42,6 +42,9 @@
 %
 % And some dimensions:
 %
+% Total width
+\newlength{\RecipeWidth}
+%
 % Width of the recipe number box
 \newlength{\R@cipeNumberWidth}
 %
@@ -83,7 +86,7 @@
   \addtolength{\R@cipeQandUWidth}{\R@cipeUnitsWidth}%
   \setlength{\R@cipeIQUWidth}{\R@cipeQandUWidth}%
   \addtolength{\R@cipeIQUWidth}{\R@cipeIngredientWidth}%
-  \setlength{\R@cipeMethodWidth}{\textwidth}
+  \setlength{\R@cipeMethodWidth}{\RecipeWidth}
   \addtolength{\R@cipeMethodWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
@@ -94,7 +97,7 @@
 \DeclareRobustCommand*{\RecipeTitleWidths}[2]{%
   \setlength{\R@cipeNumberWidth}{#1}%
   \setlength{\R@cipeServingsWidth}{#2}%
-  \setlength{\R@cipeTitleWidth}{\textwidth}%
+  \setlength{\R@cipeTitleWidth}{\RecipeWidth}%
   \addtolength{\R@cipeTitleWidth}{-\R@cipeNumberWidth}%
   \addtolength{\R@cipeTitleWidth}{-\R@cipeServingsWidth}%
   \setlength{\R@cipeTandSWidth}{\R@cipeServingsWidth}%
@@ -104,6 +107,7 @@
 }
 %
 % default values:
+\setlength{\RecipeWidth}{\textwidth}
 \RecipeTitleWidths{0.8cm}{3cm}
 \RecipeMethodWidths{4.5cm}{1cm}{2.5cm}
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
@@ -137,14 +141,14 @@
 %  \DisplaySt@p -- Displays the ingredients and method for the current step
 %                  and resets things
 \DeclareRobustCommand{\DisplaySt@p}{%
-  \makebox[\textwidth]{%
-    \makebox[\R@cipeNumberWidth][c]{\arabic{r@cipenumber}}%
+  \stepcounter{st@pnumber}%
+  \makebox[\RecipeWidth]{%
+    \makebox[\R@cipeNumberWidth][c]{\arabic{st@pnumber}}%
     \usebox{\m@thodbox}%
     \usebox{\st@pmethodbox}%
   }%
   \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
-  \stepcounter{st@pnumber}%
 %
 }%
 %
@@ -224,10 +228,10 @@
     }%
   \fi%
   \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{%
-    \parbox[t]{\R@cipeQandUWidth}{%
+  \savebox{\m@thodbox}[\R@cipeIQUWidth]{%
+    \parbox[t]{\R@cipeIQUWidth}{%
       \usebox{\m@thodtempbox}\par%
-      \strut\usebox{\m@thodqtybox}%
+      \strut\usebox{\m@thodqtybox}\parbox[t]{\R@cipeIngredientWidth}{#3}%
     }%
   }%
 %  \usebox{\m@thodbox}    % For testing: show cumulative boxes
@@ -247,7 +251,7 @@
   \let\\\m@thodend
   \setlength{\R@cipeTempParindent}{\parindent}
   \setlength{\parindent}{0pt}
-  \savebox{\m@thodbox}[\R@cipeQandUWidth]{}
+  \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
   %
   % -- and the actual displayed title
@@ -273,13 +277,13 @@
   % ---- rule
   \vspace{\R@cipeTitleVerticalAdjustTop}%
   \nopagebreak
-  \rule{\textwidth}{0.4pt}\par%
+  \rule{\RecipeWidth}{0.4pt}\par%
   \nopagebreak
   \vspace{\R@cipeTitleVerticalAdjustBot}%
   \nopagebreak
   %
   % ---- line 2
-  \makebox[\textwidth][r]{#3}\par%
+  \makebox[\RecipeWidth][r]{#3}\par%
   \nopagebreak
   %
   %
