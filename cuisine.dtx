@@ -193,7 +193,7 @@
 %
 % \medskip
 % The recipe environment has an optional first parameter with which you can
-% recipe a label.
+% assign a label to a recipe.
 % \begin{quote}
 %   |\begin{recipe}[|\textit{Label}|]{|\textit{Title}|}|%
 %               |{|\textit{Servings}|}|%
@@ -370,12 +370,11 @@
 % taller than that for the method text.}
 % \item{Vertical alignment of the recipe title: see |\r@cipetitle| on page
 % \pageref{rectitlealign}.}
-% \item{Code optimisations.}
-% \item{Support for dual sets of quantities, for example using a command like
-% \verb|\ingredient{1}{oz}{25}{g}{butter}|.  This could be used where two
-% systems of measurement are used or for different numbers of servings.  The
-% display would then have to have two extra columns or else (more likely) 
-% there would have to be an option to select which one to display.}
+% \item{There is no support for dual sets of quantities, for example  where two
+% systems of measurement are used or for different numbers of servings.  
+% You can write \verb|\ingredient{<4 oz>/<100 g>}{butter}|, but I 
+% don't think implementing commands such as 
+% \verb|\ingredient[1]{oz}[25]{g}{butter}| would be worthwhile.}
 % \end{itemize}
 % Please e-mail me at \myemailaddress\ if you can help find or solve any 
 % problems with this package.
