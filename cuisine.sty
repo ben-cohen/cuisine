@@ -203,9 +203,13 @@
   \endminipage\end{lrbox}%
   % fill in the method box in case there isn't one yet:
   \ifdim\wd\st@pmethodbox=0in%
-    \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
+    \ifnum\value{ingr@dnumber}>0%
+      \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
+      \DisplaySt@p%
+    \fi
+  \else  
+    \DisplaySt@p%
   \fi%
-  \DisplaySt@p%
   \ifnum\value{st@pnumber}=0%
     % don't need to do much here...
   \else%
