@@ -853,13 +853,13 @@
           \raggedright\recipeunitfont%
           \setlength{\parindent}{-\R@cipeOutdent}%
           \rule{0pt}{\baselineskip}%
-          #2}%
+          \strut #2\strut}%
         \rule{0.2cm}{0cm}%
         \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{\raggedright%
           \recipeingredientfont%
           \setlength{\parindent}{-\R@cipeOutdent}%
-          #3}%
+          \strut #3\strut}%
       }%
     }%
   \else
@@ -877,13 +877,13 @@
           \raggedright\recipeunitfont%
           \setlength{\parindent}{-\R@cipeOutdent}%
           \rule{0pt}{\baselineskip}%
-          #2\hfill}%
+          \strut #2\strut\hfill}%
         \rule{0.2cm}{0cm}%
         \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{%
           \raggedright\recipeingredientfont%
           \setlength{\parindent}{-\R@cipeOutdent}%
-          #3}%
+          \strut #3\strut}%
       }%
     }% 
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth][t]{%
@@ -891,7 +891,7 @@
         \lineskip0pt\mbox{}\\[-\baselineskip]%
         \parbox[b]{\R@cipeQuantityWidth}{\rule{0pt}{\baselineskip}\hfill %
           \raggedright\recipequantityfont%
-          #1%
+          \strut #1\strut%
           \rule{0.1cm}{0cm}}%
         \usebox{\st@pingrtmpbox}%
       }%
@@ -904,7 +904,7 @@
   \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
         \ifnum\value{ingr@dnumber}>0%
-          \strut\usebox{\st@pingrtmpbox}\par%
+          \usebox{\st@pingrtmpbox}\par%
         \fi%
         \usebox{\st@pIQUbox}\strut%
     \end{minipage}%
