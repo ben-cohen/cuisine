@@ -19,7 +19,7 @@
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage[units,nonumber]{cuisine}
+\usepackage[nonumber]{cuisine}
 \GetFileInfo{cuisine.sty} % defines \filename, \filedate, \fileversion, 
                           % \fileinfo from cuisine.sty
 \begin{document}
@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{601} 
+% \CheckSum{587} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -73,10 +73,6 @@
 % \item{|nocontents|}\ \ Recipe titles will not be written to the document
 % contents.
 % (This is the default.)
-% \item{|nounits|}\ \ The notation |<|\dots|>| for quantities with units 
-% will not be allowed.
-% (This is the default.)
-% \item{|units|}\ \ The notation |<|\dots|>| will be recognised.
 % \end{itemize}
 % You will need the package |nicefrac|; 
 % it comes
@@ -194,18 +190,6 @@
 % To typeset text across the whole width of the recipe instead of just the
 % width of the method, use the |\freeform| command.  This is equivalent to 
 % |\noalign| in tables.  Freeform text is not given a step number.
-%
-% \medskip
-% \DescribeMacro{<\dots>}
-% The recipe environment has a command for typesetting quantities with units
-% nicely and easily if the |units| package option has been used; 
-% the syntax is:
-% \begin{quote}
-%   |<|{\it Number\/}{\tt\char`\ }{\it Unit\/}|>|
-% \end{quote}
-% For example, |<4 oz>| gives ``<4 oz>''.
-% Note that this will clash with other uses of the |<| symbol so it is
-% disabled by default.
 %
 % \medskip
 % The recipe environment has an optional first parameter with which you can
@@ -402,7 +386,7 @@
 % \item[\sl v0.5]Written---release on CTAN. 
 % \item[\sl v0.6]Fixed vertical alignment problem.
 %                Labelling of recipes for |\ref|. |\X| (times) macro.
-%                Different index and contents options. |<|\dots|>| notation.
+%                Different index and contents options.
 %                If |recipe|'s |#4| is empty, don't leave a blank line.
 % \end{itemize}
 % \end{small}
@@ -481,11 +465,6 @@
 % page.
 %    \begin{macrocode}
 \newif\ifn@wpaging
-%    \end{macrocode}
-%
-% |if@units| determines whether or not to use the |<|\dots|>| notation.
-%    \begin{macrocode}
-\newif\if@units
 %    \end{macrocode}
 %
 % |\R@cipeWidth| is the total width of the recipe.
@@ -685,16 +664,9 @@
 \DeclareOption{noindex}{\ind@xingfalse}
 %    \end{macrocode}
 %
-% This is for typesetting quantities with units if required.  (The default is
-%                                                                       not.)
-%    \begin{macrocode}
-\DeclareOption{nounits}{\@unitsfalse}
-\DeclareOption{units}{\@unitstrue}
-%    \end{macrocode}
-%
 % Process the options, using the defaults if necessary.
 %    \begin{macrocode}
-\ExecuteOptions{number,noindex,nocontents,nounits}
+\ExecuteOptions{number,noindex,nocontents}
 \ProcessOptions\relax
 %    \end{macrocode}
 %
@@ -1167,16 +1139,6 @@
 \DeclareRobustCommand{\fr@ction}[2]{%
   \nicefrac#1#2%
 }%
-%    \end{macrocode}
-%\end{macro}
-%
-%\begin{macro}{<\dots>}
-% This is to typeset units using the notation |<|\dots|>|.
-%    \begin{macrocode}
-\if@units
-  \catcode`\<=13 %
-  \def<#1 #2>{#1$\,$#2}%
-\fi
 %    \end{macrocode}
 %\end{macro}
 %
