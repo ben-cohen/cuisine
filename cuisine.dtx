@@ -71,9 +71,9 @@
 \newlength{\R@cipeIngredientWidth}
 \newlength{\R@cipeQuantityWidth}
 \newlength{\R@cipeUnitsWidth}
-\newlength{\R@cipeQandUWidth}   % total of the obvious two...
-\newlength{\R@cipeIandUWidth}   % total of the obvious two...
-\newlength{\R@cipeIQUWidth}   % total 
+\newlength{\R@cipeQandUWidth}
+\newlength{\R@cipeIandUWidth}
+\newlength{\R@cipeIQUWidth}
 %
 % Width of the method text
 \newlength{\R@cipeMethodWidth}
@@ -204,18 +204,18 @@
   \emergencystretch 3em%
   \hfuzz.5pt%
   \vfuzz.5pt%
-  %  Also, this is not in \sloppy.  Avoid warning on underfull boxes.
-  %  This value may need to be adjusted...
+%  Also, this is not in \sloppy.  Avoid warning on underfull boxes.
+%  This value may need to be adjusted...
   \hbadness 1500%   
 }%
 %
 %  This happens at the start of ingredients (= end of method)
 \DeclareRobustCommand{\pr@ingred}{%
   \endminipage\end{lrbox}%
-  % Here we compare the width of the \st@pmethodbox with zero to determine
-  % whether anything was entered into it.
-  %
-  % (Idea for determining whether box is empty, Donald Arseneau, comp.text.tex)
+% Here we compare the width of the \st@pmethodbox with zero to determine
+% whether anything was entered into it.
+%
+% (Idea for determining whether box is empty, Donald Arseneau, comp.text.tex)
   \ifdim\wd\st@pmethodbox=0in%
 %    \PackageWarning{cuisine}{No text}%  % use for testing
   \else%
@@ -225,26 +225,26 @@
 }%
 %  And at the end of ingredients (= start of method)
 \DeclareRobustCommand{\p@stingred}{%
-  %
-  %  This is very odd.  Using \begin{lrbox}...\end{lrbox} isn't
-  %  supposed to work properly over an environment definition (and doesn't
-  %  seem to, either).  So we use \lrbox...\endlrbox.  But we want to nest
-  %  a \minipage inside this, which fails.  But it does work with 
-  %  \begin{lrbox}\minipage...\endminipage\end{lrbox}.  WHY????!!!
-  %
+%
+%  This is very odd.  Using \begin{lrbox}...\end{lrbox} isn't
+%  supposed to work properly over an environment definition (and doesn't
+%  seem to, either).  So we use \lrbox...\endlrbox.  But we want to nest
+%  a \minipage inside this, which fails.  But it does work with 
+%  \begin{lrbox}\minipage...\endminipage\end{lrbox}.  WHY????!!!
+%
   \fr@eformingfalse%
   \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeMethodWidth}%
-  \noindent%    might be sensible...
+  \noindent%
   \ignorespaces%
   \r@cipesloppy%
 }%
 %
 %  The \m@thodend command (which is \nextstep in the environment)
 \DeclareRobustCommand{\m@thodend}{%
-  % we want to *force* the new step unless there is no method AND no 
-  % ingredients
+% we want to *force* the new step unless there is no method AND no 
+% ingredients
   \endminipage\end{lrbox}%
-  % fill in the method box in case there isn't one yet:
+% fill in the method box in case there isn't one yet:
   \ifdim\wd\st@pmethodbox=0in%
     \ifnum\value{ingr@dnumber}>0%
       \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
@@ -259,10 +259,10 @@
 %
 %  For freeform text.  Like \noalign in tables.
 \DeclareRobustCommand{\fr@eform}{%
-  % we want to *force* the new step unless there is no method AND no 
-  % ingredients  (as for \m@thodend)
+% we want to *force* the new step unless there is no method AND no 
+% ingredients  (as for \m@thodend)
   \endminipage\end{lrbox}%
-  % fill in the method box in case there isn't one yet:
+% fill in the method box in case there isn't one yet:
   \ifdim\wd\st@pmethodbox=0in%
     \ifnum\value{ingr@dnumber}>0%
       \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{\mbox{}}%
@@ -271,10 +271,10 @@
   \else%  
     \DisplaySt@p%
   \fi% 
-  % like \p@stingred
+% like \p@stingred
   \fr@eformingtrue% 
   \begin{lrbox}{\st@pmethodbox}\minipage[t]{\R@cipeStepWidth}%
-  \noindent%    might be sensible...
+  \noindent%
   \ignorespaces%
   \r@cipesloppy%
 }%
@@ -291,7 +291,7 @@
 %
 % hack to see if #1 is empty (Patrick Guio, comp.text.tex)
   \ifx\relax#1\relax%
-    % if it is empty we typeset #2 in the whole QandU width:    
+% if it is empty we typeset #2 in the whole QandU width:    
     \savebox{\st@pIQUbox}[\R@cipeIQUWidth]{%
       \parbox[t]{\R@cipeIQUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
@@ -301,7 +301,7 @@
       }%
     }%
   \else
-    % if #1 was not empty, typeset #1 and #2 separately:
+% if #1 was not empty, typeset #1 and #2 separately:
     \savebox{\m@thodtempbox}[\R@cipeIandUWidth]{%
       \parbox[t]{\R@cipeIandUWidth}{%
         \lineskip0pt\mbox{}\\[-\baselineskip]%
@@ -320,7 +320,8 @@
     }%
   \fi%
 %\PackageWarning{cuisine}{(C)}% 
-  \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}% % temporary holding box
+% use \m@thodtempbox as a temporary holding box
+  \savebox{\m@thodtempbox}{\usebox{\m@thodbox}}%
   \savebox{\m@thodbox}{%
     \begin{minipage}[t]{\R@cipeIQUWidth}%
         \ifnum\value{ingr@dnumber}>0%
@@ -342,7 +343,7 @@
 
   \bigskip
   \pagebreak[0]
-  % ---- line 1
+% ---- line 1
   \mbox{%
     \ifnumb@ring%
       \makebox[\R@cipeNumberWidth][l]{\arabic{r@cipenumber}}%
@@ -353,32 +354,33 @@
     \fi%
     \parbox[b]{\R@cipeServingsWidth}{\hfill #2}%
   }\par%
-  \nopagebreak    % we don't want page breaks during the title
-  %
-  %  (NOTE: I want to get the recipe number aligned with the TOP of the title
-  %   in the case of multi-line titles, but I can seem to get it to work.  Why?)
-  %
-  % ---- rule
+% we don't want page breaks during the title
+  \nopagebreak   
+%
+%  (NOTE: I want to get the recipe number aligned with the TOP of the title
+%   in the case of multi-line titles, but I can seem to get it to work.  Why?)
+%
+% ---- rule
   \vspace{\R@cipeTitleVerticalAdjustTop}%
   \nopagebreak
   \rule{\RecipeWidth}{0.4pt}\par%
   \nopagebreak
   \vspace{\R@cipeTitleVerticalAdjustBot}%
   \nopagebreak
-  %
-  % ---- line 2
+%
+% ---- line 2
   \makebox[\RecipeWidth][r]{#3}\par%
   \nopagebreak
-  %
+%
 }%
 %
 % ------------------------------------------------
 % The recipe environment
 %   #1 = title, #2 = portions, #3 = preparation time
 \newenvironment{recipe}[3]{%
-  % These are the things that are put at the start of recipes:
-  %
-  % -- set-up things
+% These are the things that are put at the start of recipes:
+%
+% -- set-up things
 %  \sloppy % don't be too fussy about line-breaks (is this working?)
   \stepcounter{r@cipenumber}
   \let\nextstep\m@thodend
@@ -391,25 +393,25 @@
   \setlength{\parindent}{0pt}
   \savebox{\m@thodbox}[\R@cipeIQUWidth]{}
   \savebox{\st@pmethodbox}[\R@cipeMethodWidth]{}
-  % -- deal with index entry
+% -- deal with index entry
   \ifind@xing
      \addcontentsline{toc}{subsection}{#1}     
   \fi
-  %
-  % -- and the actual displayed title
+%
+% -- and the actual displayed title
   \r@cipetitle{#1}{#2}{#3}
-  %
+%
   \p@stingred%
 }%
-{% --------
-  % And these are the things put at the end of recipes:  
+{% 
+% And these are the things put at the end of recipes:  
   \pr@ingred%
   \ifnum\value{st@pnumber}=0%  then complain!
     \PackageWarning{cuisine}{The recipe did not have any method details}%
   \else%
   \fi%
-  %
-  % -- tidying up
+%
+% -- tidying up
   \bigskip
 %  \setlength{\parindent}{\R@cipeTempParindent} % not apparently necessary
 % Undo \let\*  -- but this seems to be handled automatically by LaTeX
