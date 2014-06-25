@@ -23,7 +23,7 @@
 \GetFileInfo{cuisine.sty} % defines \filename, \filedate, \fileversion, 
                           % \fileinfo from cuisine.sty
 \begin{document}
-  \def\myemailaddress{\texttt{benc@cus.org.uk}}
+  \def\myemailaddress{\texttt{ben\_c\@tiscali.co.uk}}
   \title{The \texttt{cuisine} package}
   \author{Ben Cohen}
   \date{\filedate, \fileversion}
@@ -35,7 +35,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{655} 
+% \CheckSum{739} 
 %
 % \begin{abstract}
 % This package provides an environment for typesetting recipes in steps
@@ -123,6 +123,23 @@
 %   |\ingredient{a pinch}{salt}|\\
 %   |\ingredient[4]{oz}{sugar}|
 % \end{quote}
+%
+% \medskip
+% \DescribeMacro{\Ingredient}
+% \DescribeMacro{\Ing}
+% There is an alternative way to specify ingredients using a single 
+% description for both the quantity and the ingredient, as follows:
+% \begin{quote}
+%   |\Ingredient{|\textit{Ingredient and quantity}|}|
+% \end{quote}
+% This can be used where describing awkward descriptions of units.  It would 
+% also be preferable if you simply don't like the appearance of separating 
+% units from ingredients as required by |\ingredient|.  (My taste has
+% apparently changed over the last decade and a half!)  For example:
+% \begin{quote}
+%   |\Ingredient{zest and juice of 2 lemons}|\\
+% \end{quote}
+%
 %
 % \medskip
 % \DescribeMacro{\fr}
@@ -368,8 +385,13 @@
 %
 % \section{Bugs, Issues, Features, \dots}
 % \begin{itemize}
+% \item{Method steps can't be split across pages.  This means you can get
+% lots of empty white space at the bottom of pages, especially if you have 
+% long methods.}
 % \item{There may be alignment problems if the recipe fonts differ much in
 % height.}
+% \item{Formatting doesn't work very well when the ingredient quantity is 
+% too wide for its box.}
 % \item{There is no support for dual sets of quantities, for example  where two
 % systems of measurement are used or for different numbers of servings.  
 % You can write \verb|\ingredient{<4 oz>/<100 g>}{butter}|, but I 
@@ -489,6 +511,13 @@
 \newlength{\R@cipeOutdent}
 %    \end{macrocode}
 %
+% These are the horizontal spaces between the quantity and units, and between 
+% the unit and the ingredient.
+%    \begin{macrocode}
+\newlength{\R@cipeIngQUSpace}
+\newlength{\R@cipeIngUISpace}
+%    \end{macrocode}
+%
 % These are the vertical distances for the recipe title-to-rule adjustments 
 % (usually negative).
 %    \begin{macrocode}
@@ -505,6 +534,7 @@
 \newlength{\R@cipeQandUWidth}
 \newlength{\R@cipeIandUWidth}
 \newlength{\R@cipeIQUWidth}
+\newlength{\R@cipeSingleIngWidth}
 %    \end{macrocode}
 %
 % |\R@cipeMethodWidth| is the width of the method text.
@@ -525,7 +555,7 @@
 % \begin{macro}{\R@cipeMethodWidths}
 % |\R@cipeMethodWidths| is to set the widths of the boxes/columns used in the
 % recipe steps.
-% There are three parameters:  |#2| is the step number width, |#2| is the
+% There are four parameters:  |#1| is the step number width, |#2| is the
 % ingredient width, |#3| the quantity width, |#4| the units width.  
 % The other lengths below are deduced from these and |\R@cipeMethodWidth|.  
 % The |0.5cm| values are to leave a little space between the columns.
@@ -548,12 +578,16 @@
   \addtolength{\R@cipeMethodWidth}{-\R@cipeIngredientWidth}%
   \addtolength{\R@cipeMethodWidth}{-\R@cipeQandUWidth}%
   \addtolength{\R@cipeMethodWidth}{-0.5cm}%
+  \setlength{\R@cipeSingleIngWidth}{\R@cipeIQUWidth}%
 %    \end{macrocode}
 %  Allow for the ingredient paragraph outdenting.
 %    \begin{macrocode}
   \addtolength{\R@cipeIngredientWidth}{-\R@cipeOutdent}
   \addtolength{\R@cipeUnitsWidth}{-\R@cipeOutdent}
   \addtolength{\R@cipeQandUWidth}{-\R@cipeOutdent}
+  \addtolength{\R@cipeSingleIngWidth}{-\R@cipeOutdent}
+  \addtolength{\R@cipeSingleIngWidth}{-\R@cipeIngQUSpace}
+  \addtolength{\R@cipeSingleIngWidth}{-\R@cipeIngUISpace}
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -596,6 +630,8 @@
 %     I don't think the LaTeX default width is good for a recipe book though!
 %    \begin{macrocode}
 \setlength{\R@cipeOutdent}{0.3cm}%
+\setlength{\R@cipeIngQUSpace}{0.1cm}%
+\setlength{\R@cipeIngUISpace}{0.2cm}%
 \setlength{\R@cipeTitleVerticalAdjustTop}{-0.25cm}
 \setlength{\R@cipeTitleVerticalAdjustBot}{-0.25cm}
 \RecipeWidths{\textwidth}{3cm}{0.8cm}{3.5cm}{1cm}{1.7cm}
@@ -993,7 +1029,7 @@
             \strut #2\hfill\strut%
           \fi%
         }%
-        \rule{0.2cm}{0cm}%
+        \rule{\R@cipeIngUISpace}{0cm}%
         \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{\raggedright%
           \recipeingredientfont%
@@ -1017,7 +1053,7 @@
           \setlength{\parindent}{-\R@cipeOutdent}%
           \rule{0pt}{\baselineskip}%
           \strut #2\strut\hfill}%
-        \rule{0.2cm}{0cm}%
+        \rule{\R@cipeIngUISpace}{0cm}%
         \rule{\R@cipeOutdent}{0cm}%
         \parbox[t]{\R@cipeIngredientWidth}{%
           \raggedright\recipeingredientfont%
@@ -1032,11 +1068,59 @@
           \hfill %
           \raggedright\recipequantityfont%
           \strut #1\strut%
-          \rule{0.1cm}{0cm}}%
+          \rule{\R@cipeIngQUSpace}{0cm}}%
         \usebox{\st@pingrtmpbox}%
       }%
     }%
   \fi%
+%    \end{macrocode}
+% Use |\st@pingrtmpbox| as a temporary holding box.  The |\lineskip0pt|
+% and the |\strut|s
+% ensure that the ingredients' and the method text's baselines 
+% are aligned correctly.
+%    \begin{macrocode}
+  \savebox{\st@pingrtmpbox}[\R@cipeIQUWidth][t]{\usebox{\st@pingrbox}}%
+  \savebox{\st@pingrbox}[\R@cipeIQUWidth][t]{%
+    \begin{minipage}[t]{\R@cipeIQUWidth}%
+        \lineskip0pt%   
+        \ifnum\value{ingr@dnumber}>0%
+          \usebox{\st@pingrtmpbox}\par%
+          \usebox{\st@pIQUbox}\strut%
+        \else%
+          \usebox{\st@pIQUbox}\strut%
+        \fi%
+    \end{minipage}%
+  }%
+%  \usebox{\st@pingrbox}    % For testing: show cumulative boxes.
+  \stepcounter{ingr@dnumber}%
+  \p@stingred%
+}%
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\Ingr@dient}
+%The |\Ingr@dient| command takes just one parameter.  It fits in the same 
+%final box as |\ingr@dient| but is much simpler.  Start by ending the method
+%box.
+%    \begin{macrocode}
+\DeclareRobustCommand{\Ingr@dient}[1]{%
+  \pr@ingred%
+%    \end{macrocode}
+%
+%We typeset |#1| in the single ingredient width, which is the IQU width minus
+%the outdent. Use ragged right because the
+%column is too narrow for flush right.
+%    \begin{macrocode}
+  \savebox{\st@pIQUbox}[\R@cipeSingleIngWidth][t]{%
+    \parbox[t]{\R@cipeSingleIngWidth}{%
+      \lineskip0pt\mbox{}\\[-\baselineskip]%
+      \rule{\R@cipeOutdent}{0cm}%
+      \parbox[t]{\R@cipeSingleIngWidth}{\raggedright%
+        \recipeingredientfont%
+        \setlength{\parindent}{-\R@cipeOutdent}%
+        \strut #1\strut}%
+    }%
+  }%
 %    \end{macrocode}
 % Use |\st@pingrtmpbox| as a temporary holding box.  The |\lineskip0pt|
 % and the |\strut|s
@@ -1092,6 +1176,8 @@
   \let\fr\fr@ction
   \let\ing\ingr@dient
   \let\ingredient\ingr@dient
+  \let\Ing\Ingr@dient
+  \let\Ingredient\Ingr@dient
   \let\freeform\fr@eform
   \n@wpagingfalse%
   \setlength{\parindent}{0pt}
